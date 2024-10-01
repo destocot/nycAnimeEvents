@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { GridIcon, PrinterIcon } from "lucide-react";
+import { GridIcon, ListIcon, PrinterIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Event = {
@@ -41,7 +41,11 @@ export function EventList({ events }: EventListProps) {
             onClick={() => setTile((prev) => !prev)}
             className="print:hidden"
           >
-            <GridIcon className="size-4" />
+            {tile ? (
+              <GridIcon className="size-4" />
+            ) : (
+              <ListIcon className="size-4" />
+            )}
           </Button>
           <Button onClick={handlePrint} className="print:hidden">
             <PrinterIcon className="mr-2 h-4 w-4" /> Print
