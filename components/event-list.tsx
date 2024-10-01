@@ -27,7 +27,7 @@ export function EventList({ events }: EventListProps) {
 
   return (
     <div className="container mx-auto p-4 max-w-3xl min-h-screen">
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-background/80 z-10 p-2 backdrop-blur">
+      <div className="flex justify-between items-center mb-4 sticky rounded-b top-0 bg-background/10 z-10 p-2 backdrop-blur-lg">
         <h2 className="text-2xl font-semibold tracking-tight">
           Upcoming NYC Anime Events
         </h2>
@@ -35,7 +35,7 @@ export function EventList({ events }: EventListProps) {
           <PrinterIcon className="mr-2 h-4 w-4" /> Print
         </Button>
       </div>
-      <div ref={contentRef} className="space-y-3">
+      <div ref={contentRef} className="space-y-3 px-2.5">
         {events.map((event, index) => (
           <Card key={index} className="w-full">
             <div className="sm:flex">
