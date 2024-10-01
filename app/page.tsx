@@ -313,6 +313,95 @@ const events = [
       "https://www.newyorkcomiccon.com/content/dam/sitebuilder/rna/new-york-comic-con/metadata/seo/hotels-travel-nycc-new-york-comic-con.jpg/_jcr_content/renditions/original.image_file.375.211.67,0,1134,600.file/715480127/hotels-travel-nycc-new-york-comic-con.jpg",
     href: "https://www.newyorkcomiccon.com/en-us.html",
   },
+  {
+    title: "Manga Book Club",
+    date: [new Date("2024-10-09")],
+    description:
+      "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you're a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c666f964-f30e-4077-3d86-3070550a3f00/public",
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Movie Night: Blame!",
+    date: [new Date("2024-10-10")],
+    description:
+      "6:30 P.M. - Welcome to Manga Movie Night: Blame! Join us in our mezannine screening room for this exclusive viewing of the Netflix anime motion picture based on Tsutomu Nihei's visionary science-fiction manga. Come with your friends and immerse yourselves in the world of Blame!",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/3b58b607-f8b5-40ed-4917-52a129129e00/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Movie Night: Blue Lock: Episode Nagi",
+    date: [new Date("2024-10-12")],
+    description:
+      "6:30 P.M. - Welcome to Manga Movie Night: Blue Lock: Episode Nagi! Join us in our mezannine screening room for this exclusive viewing of this past summer's biggest anime movie blockbuster, based on Muneyuki Kaneshiro and Yusuke Nomurmanga's smash-hit soccer manga. Come with your friends and get ready for some intensity!",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/a9cdcc37-47c0-479d-0a94-52ecf5eca000/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Trivia Night",
+    date: [new Date("2024-10-13")],
+    description:
+      "7 P.M. - Join us for a fun-filled evening of true manga knowledge and exclusive prizes! Gather your friends and form a team or come solo and make new friends!",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/f80812da-acaa-4413-ae00-c2d540657f00/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Book Club",
+    date: [new Date("2024-10-16")],
+    description:
+      "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you\re a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c666f964-f30e-4077-3d86-3070550a3f00/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Movie Night: Ghost In The Shell",
+    date: [new Date("2024-10-17")],
+    description:
+      "6:30 P.M. - Welcome to Manga Movie Night: Ghost in the Shell! Join us in our mezannine screening room for this exclusive viewing of the iconic anime motion picture based on Masamune Shirow's classic science-fiction manga. Come with your friends and get ready to relive the cyberpunk future!",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/b8bbf395-a7e2-422f-ecda-e6c8bb7ce600/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Speed Friending",
+    date: [new Date("2024-10-19")],
+    description:
+      "7 P.M. - Ready to meet someone in person? Don’t miss out on this opportunity to connect with a new manga friend!",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c5d592de-9bd3-4cb8-5f25-04e6fd7a6600/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Book Club",
+    date: [new Date("2024-10-23")],
+    description:
+      "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you're a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c666f964-f30e-4077-3d86-3070550a3f00/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
+  {
+    title: "Manga Marketplace",
+    date: [new Date("2024-10-26")],
+    description:
+      "1 P.M. - Bring the coolest items from your collection (that you can bear to part with) and see what you can trade for it with fellow enthusiasts in this open manga marketplace! No RSVP required to attend.",
+    image:
+      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/4b579efa-5eec-4333-f321-ab7eff02f700/public",
+
+    href: "https://kodansha.us/manga-meets/#events",
+  },
 ];
 
 // filter if date.at(-1) is before today
