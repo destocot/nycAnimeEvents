@@ -315,7 +315,11 @@ const events = [
   },
   {
     title: "Manga Book Club",
-    date: [new Date("2024-10-09")],
+    date: [
+      new Date("2024-10-09"),
+      new Date("2024-10-16"),
+      new Date("2024-10-23"),
+    ],
     description:
       "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you're a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
     image:
@@ -353,16 +357,6 @@ const events = [
     href: "https://kodansha.us/manga-meets/#events",
   },
   {
-    title: "Manga Book Club",
-    date: [new Date("2024-10-16")],
-    description:
-      "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you\re a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
-    image:
-      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c666f964-f30e-4077-3d86-3070550a3f00/public",
-
-    href: "https://kodansha.us/manga-meets/#events",
-  },
-  {
     title: "Manga Movie Night: Ghost In The Shell",
     date: [new Date("2024-10-17")],
     description:
@@ -379,16 +373,6 @@ const events = [
       "7 P.M. - Ready to meet someone in person? Don’t miss out on this opportunity to connect with a new manga friend!",
     image:
       "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c5d592de-9bd3-4cb8-5f25-04e6fd7a6600/public",
-
-    href: "https://kodansha.us/manga-meets/#events",
-  },
-  {
-    title: "Manga Book Club",
-    date: [new Date("2024-10-23")],
-    description:
-      "7 P.M. - Join us for a fun and interactive event where we discuss all things manga. Whether you're a seasoned manga reader or just getting started, this club is the place to discover something new to read and connect with fellow fans.",
-    image:
-      "https://imagedelivery.net/gbfTL37HXewiIoqsZv9WzQ/c666f964-f30e-4077-3d86-3070550a3f00/public",
 
     href: "https://kodansha.us/manga-meets/#events",
   },
