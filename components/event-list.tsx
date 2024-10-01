@@ -42,9 +42,9 @@ export function EventList({ events }: EventListProps) {
             className="print:hidden"
           >
             {tile ? (
-              <GridIcon className="size-4" />
-            ) : (
               <ListIcon className="size-4" />
+            ) : (
+              <GridIcon className="size-4" />
             )}
           </Button>
           <Button onClick={handlePrint} className="print:hidden">
