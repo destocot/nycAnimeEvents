@@ -278,6 +278,27 @@ const events = [
       "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F859963869%2F313226374217%2F1%2Foriginal.20240926-121625?crop=focalpoint&fit=crop&w=940&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=f0ed201a01338f2070b6540d3a20ebda",
     href: "https://www.eventbrite.com/e/manga-book-club-de-presented-by-japanklyn-tickets-1029351928327?aff=ebdssbdestsearch",
   },
+  {
+    title: "ONE PIECE MUSIC SYMPHONY",
+    date: [new Date("2024-10-11")],
+    description:
+      'FRIDAY, OCTOBER 11 8:00 PM | Doors open 7:00 PM - Celebrate the 25th anniversary of “One Piece" with a special orchestra concert – the ONE PIECE Music Symphony! The most memorable moments of the beloved TV series will be projected on a giant screen to the sound of a 50-musician orchestra!',
+    image:
+      "https://res.cloudinary.com/dwzhqvxaz/image/upload/c_pad,w_1800,ar_3,q_auto,f_auto,b_auto/umbraco-prod/ma5czkxh/20240810_opms4_new-york_web-1800-x-600.jpg",
+    href: "https://www.kingstheatre.com/events/one-piece-friday/",
+  },
+  {
+    title: "ATTACK on TITAN: The Musical",
+    date: [
+      new Date("2024-10-11"),
+      new Date("2024-10-12"),
+      new Date("2024-10-13"),
+    ],
+    description:
+      "Fri 7:30pm, Sat 2 & 7:30pm, Sun 2pm - ATTACK on TITAN: The Musical is based on one of the best-selling manga series of all time (140 million copies sold worldwide). This adaptation of the Japanese comic/graphic novel by Hajime Isayama combines traditional musical theater techniques with state-of-the-art technology and features a cast of 35 actors.",
+    image: "https://attackontitan-themusical.com/img/NY_shingeki_mv.jpg",
+    href: "https://www.nycitycenter.org/pdps/2024-2025/attack-on-titan-the-musical/",
+  },
 ];
 
 // filter if date.at(-1) is before today
