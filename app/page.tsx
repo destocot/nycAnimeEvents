@@ -386,6 +386,21 @@ const events = [
 
     href: "https://kodansha.us/manga-meets/#events",
   },
+  {
+    title: "SHONEN JUMP Pop-Uo Store",
+    date: [
+      new Date("2024-10-17"),
+      new Date("2024-10-18"),
+      new Date("2024-10-19"),
+      new Date("2024-10-20"),
+    ],
+    description:
+      "12 P.M. - 8 P.M. - Fully immersive Naruto and BLEACH experience, with exclusive Shonen Jump Store and Jump Shop merchandise, a first look at upcoming major Brand Collaborations, Voice Actor appearances, and a lot more!",
+    image:
+      "hhttps://d3m889aznlr23d.cloudfront.net/img/events/id/459/459048170/assets/e21b1645528d8c962fb884dc197f9796.Untitled-1-.png",
+
+    href: "https://newyork.shopify.com/bleachanniversaryevent",
+  },
 ];
 
 // filter if date.at(-1) is before today
