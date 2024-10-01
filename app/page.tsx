@@ -299,6 +299,20 @@ const events = [
     image: "https://attackontitan-themusical.com/img/NY_shingeki_mv.jpg",
     href: "https://www.nycitycenter.org/pdps/2024-2025/attack-on-titan-the-musical/",
   },
+  {
+    title: "NYCC (New York Comic Con)",
+    date: [
+      new Date("2024-10-17"),
+      new Date("2024-10-18"),
+      new Date("2024-10-19"),
+      new Date("2024-10-20"),
+    ],
+    description:
+      "New York Comic Con (NYCC) is the biggest comic and pop culture event on the East Coast. From meeting celebrities to surprise appearances, to comic creators from every corner of the globe to the top anime, cosplay, and gaming stars … it’s always one hell of a 4-day weekend.",
+    image:
+      "https://www.newyorkcomiccon.com/content/dam/sitebuilder/rna/new-york-comic-con/metadata/seo/hotels-travel-nycc-new-york-comic-con.jpg/_jcr_content/renditions/original.image_file.375.211.67,0,1134,600.file/715480127/hotels-travel-nycc-new-york-comic-con.jpg",
+    href: "https://www.newyorkcomiccon.com/en-us.html",
+  },
 ];
 
 // filter if date.at(-1) is before today
