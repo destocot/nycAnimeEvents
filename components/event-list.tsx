@@ -25,7 +25,7 @@ type EventListProps = { events: Array<Event> };
 export function EventList({ events }: EventListProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = () => void window.print();
-  const [tile, setTile] = useState(true);
+  const [tile, setTile] = useState(false);
 
   return (
     <div className="container mx-auto p-4 max-w-3xl min-h-screen">
