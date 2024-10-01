@@ -43,7 +43,7 @@ export function EventList({ events }: EventListProps) {
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="object-cover w-full h-full"
+                  className="object-cover object-top w-full h-full"
                 />
               </div>
               <div className="sm:w-2/3 p-4">
@@ -75,14 +75,16 @@ export function EventList({ events }: EventListProps) {
                       )
                       .join(", ")}
                   </p>
-                  <p className="text-xs">{event.description}</p>
+                  <p className="text-xs line-clamp-4 min-h-[4.05rem]">
+                    {event.description}
+                  </p>
                 </CardContent>
               </div>
             </div>
           </Card>
         ))}
       </div>
-      <div className="h-8" />
+      <div className="h-8 my-4" />
     </div>
   );
 }
