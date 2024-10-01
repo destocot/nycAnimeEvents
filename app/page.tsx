@@ -314,6 +314,8 @@ const filteredEvents = events.filter((event) => {
   return !isBeforeToday;
 });
 
+console.log("# of Events", filteredEvents.length);
+
 filteredEvents.sort((a, b) => a.date[0].getTime() - b.date[0].getTime());
 
 const HomePage = () => {
