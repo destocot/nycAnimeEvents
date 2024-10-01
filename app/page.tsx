@@ -224,7 +224,7 @@ const events = [
     description:
       "Anime NYC is New York City’s anime convention! A showcase of the best of Japanese pop culture in the biggest city in America, Anime NYC brings anime fans and publishers together for three days of unique exhibits, exclusive screenings, extensive panels, and appearances by some of the biggest creators in Japan. Join us for a celebration of Japanese animation, manga, and cosplay in the heart of NYC!",
     image:
-      "hhttps://animenyc.com/wp-content/uploads/2024/08/ANYC-Slider-2025_joinus-1.jpg",
+      "https://animenyc.com/wp-content/uploads/2024/08/ANYC-Slider-2025_joinus-1.jpg",
     href: "https://animenyc.com/",
   },
   {
@@ -257,8 +257,8 @@ const events = [
     date: [new Date("2024-10-12")],
     description: "HARU NEMURI - U.S. leg of her Flee from the Sanctuary Tour.",
     image:
-      "https://dice.fm/event/ry2eny-haru-nemuri-chanpan-12th-oct-elsewhere-the-hall-new-york-tickets?cid1=&cid2=42020652&pid=f5e6ac52",
-    href: "https://jrocknews.com/wp-content/uploads/2024/06/haru-nemuri-us-tour-2024-566x800.png",
+      "https://jrocknews.com/wp-content/uploads/2024/06/haru-nemuri-us-tour-2024-566x800.png",
+    href: "https://dice.fm/event/ry2eny-haru-nemuri-chanpan-12th-oct-elsewhere-the-hall-new-york-tickets?cid1=&cid2=42020652&pid=f5e6ac52",
   },
   {
     title: "Tsubasa Yamaguchi celebrates BLUE PERIOD 15",
