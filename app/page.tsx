@@ -214,43 +214,70 @@ const events = [
       "https://yattatachi.com/wp-content/uploads/2024/07/babymetal-film.jpg",
     href: "#",
   },
-  /* {
-    title: "AXCN: Mobile Suit Gundam III: Encounters in Space",
-    date: [new Date("2024-10-23"), new Date("2024-10-27")],
+  {
+    title: "AnimeNYC",
+    date: [
+      new Date("2025-08-22"),
+      new Date("2025-08-23"),
+      new Date("2025-08-24"),
+    ],
     description:
-      "Having officially been inducted into the Federation Forces as the 13th Independent Unit, the White Base enters the neutral colony Side 6 to serve as a decoy. There Amuro reunites with his father Tem, and meets a mysterious girl named Lalah Sune.",
+      "Anime NYC is New York City’s anime convention! A showcase of the best of Japanese pop culture in the biggest city in America, Anime NYC brings anime fans and publishers together for three days of unique exhibits, exclusive screenings, extensive panels, and appearances by some of the biggest creators in Japan. Join us for a celebration of Japanese animation, manga, and cosplay in the heart of NYC!",
     image:
-      "https://d2alu56i91c6gw.cloudfront.net/iconicreleasing/GUNDAM3_720x1015_A1.jpg",
-    href: "https://www.iconicreleasing.com/events/mobile-suit-gundam-2/tickets/",
+      "hhttps://animenyc.com/wp-content/uploads/2024/08/ANYC-Slider-2025_joinus-1.jpg",
+    href: "https://animenyc.com/",
   },
   {
-    title: "AXCN: Mobile Suit Gundam III: Encounters in Space",
-    date: [new Date("2024-10-23"), new Date("2024-10-27")],
-    description:
-      "Having officially been inducted into the Federation Forces as the 13th Independent Unit, the White Base enters the neutral colony Side 6 to serve as a decoy. There Amuro reunites with his father Tem, and meets a mysterious girl named Lalah Sune.",
+    title: "JILUKA US TOUR 2024",
+    date: [new Date("2024-11-07")],
+    description: " JILUKA’s first official US tour hits 4 major cities.",
     image:
-      "https://d2alu56i91c6gw.cloudfront.net/iconicreleasing/GUNDAM3_720x1015_A1.jpg",
-    href: "https://www.iconicreleasing.com/events/mobile-suit-gundam-2/tickets/",
+      "https://jrocknews.com/wp-content/uploads/2024/08/jiluka-us-tour-2024-640x800.jpg",
+    href: "https://dice.fm/partner/23-meadow-llc-dba-the-monarch-new-york/event/k6xnyq-jiluka-7th-nov-the-meadows-new-york-tickets?dice_id=3880623&dice_channel=web&dice_tags=organic&dice_campaign=23+Meadow+LLC+dba+The+Monarch+New+York&dice_feature=mio_marketing",
   },
   {
-    title: "AXCN: Mobile Suit Gundam III: Encounters in Space",
-    date: [new Date("2024-10-23"), new Date("2024-10-27")],
-    description:
-      "Having officially been inducted into the Federation Forces as the 13th Independent Unit, the White Base enters the neutral colony Side 6 to serve as a decoy. There Amuro reunites with his father Tem, and meets a mysterious girl named Lalah Sune.",
+    title: "BABYMETAL WORLD TOUR 2024 - US TOUR",
+    date: [new Date("2024-11-18"), new Date("2024-11-19")],
+    description: "BABYMETAL tours US for “BABYMETAL WORLD TOUR 2024”",
     image:
-      "https://d2alu56i91c6gw.cloudfront.net/iconicreleasing/GUNDAM3_720x1015_A1.jpg",
-    href: "https://www.iconicreleasing.com/events/mobile-suit-gundam-2/tickets/",
+      "https://jrocknews.com/wp-content/uploads/2024/06/babymetal-us-tour-2024-promo-640x800.jpg",
+    href: "https://babymetal.com/mob/news/diarKijiShw.php?site=TO&id=270749",
   },
   {
-    title: "AXCN: Mobile Suit Gundam III: Encounters in Space",
-    date: [new Date("2024-10-23"), new Date("2024-10-27")],
+    title: "HYDE [INSIDE] LIVE 2024 WORLD TOUR",
+    date: [new Date("2024-11-27")],
     description:
-      "Having officially been inducted into the Federation Forces as the 13th Independent Unit, the White Base enters the neutral colony Side 6 to serve as a decoy. There Amuro reunites with his father Tem, and meets a mysterious girl named Lalah Sune.",
+      "HYDE’s album “HYDE [INSIDE]” boasts composers from notable bands, prompts world tour",
     image:
-      "https://d2alu56i91c6gw.cloudfront.net/iconicreleasing/GUNDAM3_720x1015_A1.jpg",
-    href: "https://www.iconicreleasing.com/events/mobile-suit-gundam-2/tickets/",
+      "https://images.squarespace-cdn.com/content/v1/667f15ab425efa2bc6e47b05/5a6ae948-12cf-4558-a4e4-0320ff7f2284/b97fa1f9-7c65-4aae-a7ea-61e87cb8f8f8.JPG?format=500w",
+    href: "https://hyde.infinitent.com/",
   },
-  */
+  {
+    title: "HARU NEMURI Tour 2024 Flee from the Sanctuary",
+    date: [new Date("2024-10-12")],
+    description: "HARU NEMURI - U.S. leg of her Flee from the Sanctuary Tour.",
+    image:
+      "https://dice.fm/event/ry2eny-haru-nemuri-chanpan-12th-oct-elsewhere-the-hall-new-york-tickets?cid1=&cid2=42020652&pid=f5e6ac52",
+    href: "https://jrocknews.com/wp-content/uploads/2024/06/haru-nemuri-us-tour-2024-566x800.png",
+  },
+  {
+    title: "Tsubasa Yamaguchi celebrates BLUE PERIOD 15",
+    date: [new Date("2024-10-12")],
+    description:
+      "Barnes & Noble Union Square in NYC welcomes Tsubasa Yamaguchi to celebrate BLUE PERIOD 15 on Saturday, October 12th at 2PM",
+    image:
+      "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F853971889%2F825115679133%2F1%2Foriginal.20240919-004333?crop=focalpoint&fit=crop&w=940&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.852272727273&fp-y=0.707089552239&s=37d982e899dce5f3a44468f1963bc7ba",
+    href: "https://www.eventbrite.com/e/tsubasa-yamaguchi-celebrates-blue-period-15-at-bn-union-square-tickets-1020852215457?aff=ebdssbdestsearch",
+  },
+  {
+    title: "Manga Book Club - Presented by Japanklyn",
+    date: [new Date("2024-11-27")],
+    description:
+      'Saturday, October 12 · 3 - 4pm EDT. Join the "Manga Book Club - 漫画 de あそぼ" on October 12th at Japan Village 2nd Floor, Hosted by Kiara 先輩 @kiaranycjp',
+    image:
+      "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F859963869%2F313226374217%2F1%2Foriginal.20240926-121625?crop=focalpoint&fit=crop&w=940&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=f0ed201a01338f2070b6540d3a20ebda",
+    href: "https://www.eventbrite.com/e/manga-book-club-de-presented-by-japanklyn-tickets-1029351928327?aff=ebdssbdestsearch",
+  },
 ];
 
 // filter if date.at(-1) is before today
