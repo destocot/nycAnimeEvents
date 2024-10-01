@@ -123,8 +123,8 @@ export function EventList({ events }: EventListProps) {
                       .join(", ")}
                   </p>
                   <p
-                    className={cn("text-xs line-clamp-4 min-h-[4.05rem]", {
-                      "min-h-0 line-clamp-2 sm:line-clamp-4": tile,
+                    className={cn("text-xs line-clamp-3 min-h-[3rem]", {
+                      "min-h-0 line-clamp-2 sm:line-clamp-3": tile,
                     })}
                   >
                     {event.description}
