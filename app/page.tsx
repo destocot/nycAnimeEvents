@@ -401,6 +401,35 @@ const events = [
 
     href: "https://newyork.shopify.com/bleachanniversaryevent",
   },
+  {
+    title: "My Hero Academia: You’re Next New York Premiere",
+    date: [new Date("2024-10-09")],
+    description:
+      "7:00 pm - Boku no Hiro Akademia THE MOVIE Yua Nekusuto - This special event is in partnership with Toho International and Animation.",
+    image:
+      "https://japansociety.org/wp-content/uploads/2024/09/hero-acad-1920x1080-1.jpg",
+
+    href: "https://japansociety.org/events/my-hero-academia-youre-next-immersive-light-stick-cheer-screening/",
+  },
+  {
+    title: "Voices of BLEACH: A Fireside Chat with Ichigo and Uryu",
+    date: [new Date("2024-10-15")],
+    description:
+      "7:00 pm - This special event is in partnership with VIZ Media. Join VIZ Media at Japan Society for a very special evening with Ichigo Kurosaki and Uryu Ishida voice actors Masakazu Morita and Noriaki Sugiyama! Coming to NYC to celebrate the launch of BLEACH: Thousand-Year Blood War Part 3, both legendary voice actors will take the stage to introduce an early preview screening and a very rare live script reading. ",
+    image:
+      "https://japansociety.org/wp-content/uploads/2024/09/bleach-mobile-2.jpg",
+    href: "https://japansociety.org/events/voices-of-bleach-a-fireside-chat-with-ichigo-and-uryu/",
+  },
+  {
+    title: "Digimon Adventure: Last Evolution Kizuna",
+    date: [new Date("2024-10-16")],
+    description:
+      "7:00 pm - Digimon 25th Anniversary Celebration with Introduction by Original Producer Hiromi Seki",
+    image:
+      "https://japansociety.org/wp-content/uploads/2024/09/DALE_KV_notext-1920x1080-1.jpg",
+
+    href: "https://japansociety.org/events/digimon-25th-anniversary-celebration-digimon-adventure-last-evolution-kizuna/",
+  },
 ];
 
 // filter if date.at(-1) is before today
@@ -415,8 +444,6 @@ const filteredEvents = events.filter((event) => {
 
   return !isBeforeToday;
 });
-
-console.log("# of Events", filteredEvents.length);
 
 filteredEvents.sort((a, b) => a.date[0].getTime() - b.date[0].getTime());
 

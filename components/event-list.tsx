@@ -29,10 +29,13 @@ export function EventList({ events }: EventListProps) {
 
   return (
     <div className="container mx-auto p-4 max-w-3xl min-h-screen">
-      <div className="flex justify-between items-center mb-4 sticky rounded-b top-0 bg-background/10 z-10 p-2 backdrop-blur-lg">
-        <h2 className="text-2xl font-semibold tracking-tight">
+      <div className="flex justify-between items-center mb-4 sticky rounded-b top-0 bg-background/10 z-10 p-2 gap-2 backdrop-blur-lg">
+        <h2 className="text-xl text-balance sm:text-2xl font-semibold tracking-tight">
           Upcoming NYC Anime Events
         </h2>
+        <Button variant="secondary" asChild>
+          <span>{events.length} Events</span>
+        </Button>
         <div className="flex items-center gap-x-2">
           <Button
             onClick={() => setTile((prev) => !prev)}
@@ -111,20 +114,10 @@ export function EventList({ events }: EventListProps) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
-                    {event.date
-                      .map((date) =>
-                        date.toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          timeZone: "UTC",
-                        })
-                      )
-                      .join(", ")}
-                  </p>
+                  <GenerateDates dates={event.date} />
                   <p
                     className={cn("text-xs line-clamp-3 min-h-[3rem]", {
-                      "min-h-0 line-clamp-2 sm:line-clamp-3": tile,
+                      "min-h-0": tile,
                     })}
                   >
                     {event.description}
@@ -139,3 +132,52 @@ export function EventList({ events }: EventListProps) {
     </div>
   );
 }
+
+export const GenerateDates = ({ dates }: { dates: Array<Date> }) => {
+  let isSequential = true;
+
+  for (let i = 0; i < dates.length - 1; i++) {
+    const current = dates[i];
+    const next = dates[i + 1];
+
+    const timeDiff = next.getTime() - current.getTime();
+    const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+    if (dayDiff !== 1) {
+      isSequential = false;
+      break;
+    }
+  }
+
+  if (isSequential && dates.length > 1) {
+    return (
+      <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
+        {dates[0].toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        })}{" "}
+        -{" "}
+        {dates[dates.length - 1].toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        })}
+      </p>
+    );
+  }
+
+  return (
+    <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
+      {dates
+        .map((date) =>
+          date.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            timeZone: "UTC",
+          })
+        )
+        .join(", ")}
+    </p>
+  );
+};
