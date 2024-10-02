@@ -1,0 +1,43 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Event {
+  eventId   String   @id @default(cuid()) @map("event_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  title       String
+  source      String
+  description String?
+  image       String?
+
+  eventDates EventDate[]
+
+  @@map("events")
+}
+
+model EventDate {
+  event   Event  @relation(fields: [eventId], references: [eventId])
+  eventId String @map("event_id")
+  date    Date   @relation(fields: [dateId], references: [dateId])
+  dateId  Int    @map("date_id")
+
+  @@unique([eventId, dateId])
+  @@map("event_dates")
+}
+
+model Date {
+  dateId Int      @id @default(autoincrement()) @map("date_id")
+  date   DateTime @unique
+
+  eventDates EventDate[]
+
+  @@map("dates")
+}

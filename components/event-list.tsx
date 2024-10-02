@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
   Card,
   CardContent,
@@ -9,23 +9,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { GridIcon, ListIcon, PrinterIcon } from "lucide-react";
+import { PrinterIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EventWithDate } from "@/lib/types";
+import { type Date } from "@prisma/client";
 
-type Event = {
-  title: string;
-  date: Array<Date>;
-  description: string;
-  image: string;
-  href: string;
-};
-
-type EventListProps = { events: Array<Event> };
+type EventListProps = { events: Array<EventWithDate> };
 
 export function EventList({ events }: EventListProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+
   const handlePrint = () => void window.print();
-  const [tile, setTile] = useState(false);
+
+  events.forEach((e) => {
+    if (e.title.toLowerCase().startsWith("h")) {
+      console.log(e);
+    }
+  });
 
   return (
     <div className="container mx-auto p-4 max-w-3xl min-h-screen">
@@ -36,75 +36,34 @@ export function EventList({ events }: EventListProps) {
         <Button variant="secondary" asChild>
           <span>{events.length} Events</span>
         </Button>
-        <div className="flex items-center gap-x-2">
-          <Button
-            onClick={() => setTile((prev) => !prev)}
-            className="print:hidden"
-          >
-            {tile ? (
-              <ListIcon className="size-4" />
-            ) : (
-              <GridIcon className="size-4" />
-            )}
-          </Button>
-          <Button onClick={handlePrint} className="print:hidden">
-            <PrinterIcon className="mr-2 h-4 w-4" /> Print
-          </Button>
-        </div>
+
+        <Button onClick={handlePrint} className="print:hidden">
+          <PrinterIcon className="mr-2 h-4 w-4" /> Print
+        </Button>
       </div>
-      <div
-        ref={contentRef}
-        className={cn("grid grid-col-1 gap-3 px-2.5", {
-          "grid-cols-2 md:grid-cols-3": tile,
-        })}
-      >
+      <div ref={contentRef} className="space-y-3.5">
         {events.map((event, index) => (
-          <Card
-            key={index}
-            className={cn("w-full h-full", {
-              "aspect-square relative": tile,
-            })}
-          >
-            {tile && (
-              <div
-                style={{ backgroundImage: `url(${event.image})` }}
-                className="inset-0 absolute opacity-15 bg-no-repeat bg-cover rounded-lg overflow-hidden"
-              />
-            )}
+          <Card key={index}>
             <div className="sm:flex">
               <div
                 className={cn(
-                  "sm:w-1/3 aspect-video relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none",
-                  {
-                    hidden: tile,
-                  }
+                  "sm:w-1/3 aspect-video relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
                 )}
               >
                 <img
-                  src={event.image}
+                  src={event.image ?? ""}
                   alt={event.title}
                   className="object-cover object-top w-full h-full"
                 />
               </div>
-              <div
-                className={cn("sm:w-2/3 p-4", {
-                  "sm:w-full": tile,
-                })}
-              >
-                <CardHeader
-                  className={cn(
-                    "p-0 pb-2 flex-row items-center space-y-0 justify-between",
-                    {
-                      "flex-col": tile,
-                    }
-                  )}
-                >
+              <div className="sm:w-2/3 p-4">
+                <CardHeader className="p-0 pb-2 flex-row items-center space-y-0 justify-between">
                   <CardTitle className="text-lg line-clamp-1">
                     {event.title}
                   </CardTitle>
                   <CardDescription>
                     <a
-                      href={event.href}
+                      href={event.source}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={buttonVariants({
@@ -118,12 +77,8 @@ export function EventList({ events }: EventListProps) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <GenerateDates dates={event.date} />
-                  <p
-                    className={cn("text-xs line-clamp-3 min-h-[3rem]", {
-                      "min-h-0": tile,
-                    })}
-                  >
+                  <GenerateDates dates={event.eventDates} />
+                  <p className="text-xs line-clamp-3 min-h-[3rem]">
                     {event.description}
                   </p>
                 </CardContent>
@@ -141,8 +96,8 @@ export const GenerateDates = ({ dates }: { dates: Array<Date> }) => {
   let isSequential = true;
 
   for (let i = 0; i < dates.length - 1; i++) {
-    const current = dates[i];
-    const next = dates[i + 1];
+    const current = dates[i].date.date;
+    const next = dates[i + 1].date.date;
 
     const timeDiff = next.getTime() - current.getTime();
     const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
@@ -156,13 +111,13 @@ export const GenerateDates = ({ dates }: { dates: Array<Date> }) => {
   if (isSequential && dates.length > 1) {
     return (
       <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
-        {dates[0].toLocaleDateString("en-US", {
+        {dates[0].date.date.toLocaleDateString("en-US", {
           month: "long",
           day: "numeric",
           timeZone: "UTC",
         })}{" "}
         -{" "}
-        {dates[dates.length - 1].toLocaleDateString("en-US", {
+        {dates[dates.length - 1].date.date.toLocaleDateString("en-US", {
           month: "long",
           day: "numeric",
           timeZone: "UTC",
@@ -175,7 +130,7 @@ export const GenerateDates = ({ dates }: { dates: Array<Date> }) => {
     <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
       {dates
         .map((date) =>
-          date.toLocaleDateString("en-US", {
+          date.date.date.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             timeZone: "UTC",
