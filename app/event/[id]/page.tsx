@@ -20,7 +20,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
 
   const event = await db.event.findUnique({
     where: { eventId },
-    include: { eventDates: { include: { date: true } } },
+    include: { eventDates: true },
   });
 
   if (!event) notFound();
@@ -50,6 +50,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={event.image ?? ""} alt={event.title} className="w-full" />
           </CardContent>
           <CardFooter>

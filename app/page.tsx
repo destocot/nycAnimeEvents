@@ -1,27 +1,18 @@
 import { EventList } from "@/components/event-list";
 import { PrintButton } from "@/components/print-button";
 import { Button } from "@/components/ui/button";
+import { TAKE_EVENTS_LIMIT } from "@/lib/constants";
 import db from "@/lib/db";
 
 const HomePage = async () => {
-  const events = await db.event.findMany({
+  const initialEvents = await db.event.findMany({
     include: {
       eventDates: {
-        orderBy: {
-          date: {
-            date: "asc",
-          },
-        },
-        include: { date: true },
+        orderBy: { date: "asc" },
       },
     },
-  });
-
-  const sortedEvents = events.sort((a, b) => {
-    const aDate = a.eventDates[0].date.date.getTime();
-    const bDate = b.eventDates[0].date.date.getTime();
-
-    return aDate - bDate;
+    orderBy: { earliestDate: "asc" },
+    take: TAKE_EVENTS_LIMIT,
   });
 
   return (
@@ -30,13 +21,11 @@ const HomePage = async () => {
         <h2 className="text-xl text-balance sm:text-2xl font-semibold tracking-tight">
           Upcoming NYC Anime Events
         </h2>
-        <Button variant="secondary" asChild>
-          <span>{events.length} Events</span>
-        </Button>
+        <Button variant="secondary" asChild></Button>
 
         <PrintButton />
       </div>
-      <EventList events={sortedEvents} />
+      <EventList initialEvents={initialEvents} />
       <div className="h-8 my-4" />
     </div>
   );

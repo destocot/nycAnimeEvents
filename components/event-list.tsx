@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import {
   Card,
   CardContent,
@@ -10,17 +9,52 @@ import {
 } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { EventWithDate } from "@/lib/types";
-import { type Date } from "@prisma/client";
+import type { EventWithDate } from "@/lib/types";
 import Link from "next/link";
+import { DatesAggregator } from "./dates-aggregator";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { LoaderIcon } from "lucide-react";
 
-type EventListProps = { events: Array<EventWithDate> };
+type EventListProps = { initialEvents: Array<EventWithDate> };
 
-export function EventList({ events }: EventListProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
+export function EventList({ initialEvents }: EventListProps) {
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["events"],
+      queryFn: async ({
+        pageParam = "",
+      }: {
+        pageParam: string;
+      }): Promise<{
+        data: Array<EventWithDate>;
+        nextId: string | undefined;
+      }> => {
+        const response = await fetch(`/api/events?cursor=${pageParam}`);
+        const json = await response.json();
+        return json;
+      },
+      initialPageParam: "",
+      getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
+      initialData: {
+        pages: [{ data: initialEvents, nextId: undefined }],
+        pageParams: [""],
+      },
+    });
+
+  const { inView, ref } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
+
+  const events = data.pages.flatMap((page) => page.data);
 
   return (
-    <div ref={contentRef} className="space-y-3.5">
+    <div className="space-y-3.5">
       {events.map((event) => (
         <Card key={event.eventId}>
           <div className="sm:flex">
@@ -29,6 +63,7 @@ export function EventList({ events }: EventListProps) {
                 "sm:w-1/3 aspect-video relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
               )}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={event.image ?? ""}
                 alt={event.title}
@@ -56,7 +91,7 @@ export function EventList({ events }: EventListProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
-                <GenerateDates dates={event.eventDates} />
+                <DatesAggregator dates={event.eventDates} />
                 <p className="text-xs line-clamp-3 min-h-[3rem]">
                   {event.description}
                 </p>
@@ -65,55 +100,12 @@ export function EventList({ events }: EventListProps) {
           </div>
         </Card>
       ))}
+      {isFetchingNextPage && (
+        <div className="flex w-full justify-center items-center py-4">
+          <LoaderIcon className="animate-spin" />
+        </div>
+      )}
+      <div className="mx-auto flex max-w-6xl justify-center" ref={ref} />
     </div>
   );
 }
-
-export const GenerateDates = ({ dates }: { dates: Array<Date> }) => {
-  let isSequential = true;
-
-  for (let i = 0; i < dates.length - 1; i++) {
-    const current = dates[i].date.date;
-    const next = dates[i + 1].date.date;
-
-    const timeDiff = next.getTime() - current.getTime();
-    const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
-
-    if (dayDiff !== 1) {
-      isSequential = false;
-      break;
-    }
-  }
-
-  if (isSequential && dates.length > 1) {
-    return (
-      <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
-        {dates[0].date.date.toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          timeZone: "UTC",
-        })}{" "}
-        -{" "}
-        {dates[dates.length - 1].date.date.toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          timeZone: "UTC",
-        })}
-      </p>
-    );
-  }
-
-  return (
-    <p className="text-xs text-muted-foreground mb-1 line-clamp-4">
-      {dates
-        .map((date) =>
-          date.date.date.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            timeZone: "UTC",
-          })
-        )
-        .join(", ")}
-    </p>
-  );
-};
