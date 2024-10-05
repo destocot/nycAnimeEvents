@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import { PrintButton } from "@/components/print-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +13,7 @@ import db from "@/lib/db";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 
 type EventPageProps = { params: { id: string } };
 
@@ -26,22 +28,12 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
   if (!event) notFound();
 
   return (
-    <div className="container mx-auto p-4 max-w-3xl min-h-screen">
-      {/* HEADER */}
-      <div className="mb-4 sticky rounded-b top-0 bg-background/10 z-10 p-2 gap-2 backdrop-blur-lg">
-        <div className="flex justify-between">
-          <Link
-            href="/"
-            className="text-xl text-balance sm:text-2xl font-semibold tracking-tight"
-          >
-            Upcoming NYC Anime Events
-          </Link>
-          <PrintButton />
-        </div>
-      </div>
+    <Fragment>
+      <Header>
+        <PrintButton />
+      </Header>
 
-      {/* MAIN */}
-      <main>
+      <main className="px-2 py-4 container mx-auto max-w-4xl">
         <Card>
           <CardHeader className="space-y-2">
             <CardTitle>{event.title}</CardTitle>
@@ -51,9 +43,13 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
           </CardHeader>
           <CardContent>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={event.image ?? ""} alt={event.title} className="w-full" />
+            <img
+              src={event.image ?? "/placeholder.jpg"}
+              alt={event.title}
+              className="w-full aspect-video rounded object-cover object-top"
+            />
           </CardContent>
-          <CardFooter>
+          <CardFooter className="justify-end">
             <Button asChild>
               <Link href={event.source}>
                 More details
@@ -63,10 +59,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
           </CardFooter>
         </Card>
       </main>
-
-      {/* FOOTER */}
-      <div className="h-8 my-4" />
-    </div>
+    </Fragment>
   );
 };
 

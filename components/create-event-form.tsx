@@ -16,12 +16,19 @@ export const CreateEventForm = () => {
           formData.append("dates", date.toISOString());
         });
 
+        formData.set("title", "Puppy Adoption");
+        formData.set("source", "https://example.com");
+        formData.set("image", "https://example.com/puppy.jpg");
+        formData.set("description", "Adopt a puppy today!");
+
         await createEvent(formData);
       }}
-      className="space-y-4"
+      className="space-y-4 max-w-sm"
     >
       <div className="flex flex-col gap-2">
-        <label htmlFor="title">Title</label>
+        <label htmlFor="title" className="text-sm font-medium">
+          Title
+        </label>
         <input
           type="text"
           id="title"
@@ -31,7 +38,9 @@ export const CreateEventForm = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="source">Source</label>
+        <label htmlFor="source" className="text-sm font-medium">
+          Source
+        </label>
         <input
           type="text"
           id="source"
@@ -41,7 +50,9 @@ export const CreateEventForm = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="image">Image</label>
+        <label htmlFor="image" className="text-sm font-medium">
+          Image
+        </label>
         <input
           type="text"
           id="image"
@@ -51,17 +62,20 @@ export const CreateEventForm = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="description">Description</label>
-        <input
-          type="text"
+        <label htmlFor="description" className="text-sm font-medium">
+          Description
+        </label>
+        <textarea
           id="description"
           name="description"
-          className="py-2 px-4 rounded bg-background/20 ring ring-muted"
-        />
+          className="py-2 px-4 rounded bg-background/20 ring ring-muted resize-none"
+        ></textarea>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="dates">Dates</label>
+        <label htmlFor="dates" className="text-sm font-medium">
+          Dates
+        </label>
         <input
           type="date"
           id="dates"
@@ -71,7 +85,7 @@ export const CreateEventForm = () => {
             setDates((prevDates) => [...prevDates, date]);
           }}
         />
-        <ul className="flex gap-2">
+        <ul className="flex gap-1 flex-wrap">
           {dates.map((date) => (
             <li
               key={date.toISOString()}

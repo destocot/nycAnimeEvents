@@ -30,7 +30,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="flex flex-col min-h-screen">
+            <div className="flex-1">{children}</div>
+            <footer>
+              <div className="container max-w-4xl mx-auto px-2 py-4">
+                <span className="text-sm opacity-50">
+                  © 2024 Khurram Ali. All rights reserved.
+                </span>
+              </div>
+            </footer>
+          </div>
+        </Providers>
       </body>
     </html>
   );

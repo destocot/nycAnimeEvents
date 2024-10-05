@@ -65,7 +65,7 @@ export function EventList({ initialEvents }: EventListProps) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={event.image ?? ""}
+                src={event.image ?? "/placeholder.jpg"}
                 alt={event.title}
                 className="object-cover object-top w-full h-full"
               />

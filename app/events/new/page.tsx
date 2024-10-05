@@ -1,35 +1,32 @@
+import { auth } from "@/auth";
 import { CreateEventForm } from "@/components/create-event-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Header } from "@/components/header";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Fragment } from "react";
 
-const CreateEventPage = () => {
+const CreateEventPage = async () => {
+  const authenticated = await auth();
+
+  if (!authenticated?.user?.name) {
+    throw new Error("Unauthorized");
+  }
+
   return (
-    <div className="container mx-auto p-4 max-w-3xl min-h-screen">
-      {/* HEADER */}
-      <div className="mb-4 sticky rounded-b top-0 bg-background/10 z-10 p-2 gap-2 backdrop-blur-lg">
-        <Link
-          href="/"
-          className="text-xl text-balance sm:text-2xl font-semibold tracking-tight"
-        >
-          Upcoming NYC Anime Events
-        </Link>
-      </div>
+    <Fragment>
+      <Header>
+        <Button asChild>
+          <Link href="/">Home</Link>
+        </Button>
+      </Header>
 
-      {/* MAIN */}
-      <main>
-        <Card>
-          <CardHeader>
-            <CardTitle>Create Event</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CreateEventForm />
-          </CardContent>
-        </Card>
+      <main className="px-2 py-4 container mx-auto max-w-4xl">
+        <div className="space-y-4">
+          <h1 className="text-3xl font-bold tracking-tight">Create Event</h1>
+          <CreateEventForm />
+        </div>
       </main>
-
-      {/* FOOTER */}
-      <div className="h-8 my-4" />
-    </div>
+    </Fragment>
   );
 };
 

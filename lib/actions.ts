@@ -2,10 +2,10 @@
 
 import { safeParse, flatten } from "valibot";
 
-// import db from "@/lib/db";
+import db from "@/lib/db";
 import { CreateEventSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-// import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export const createEvent = async (values: FormData) => {
   const input = {
@@ -30,26 +30,31 @@ export const createEvent = async (values: FormData) => {
     return { success: false };
   }
 
-  // const output = parsedValues.output;
+  const output = parsedValues.output;
 
-  // const newEvent = await db.event.create({
-  //   data: {
-  //     title: output.title,
-  //     source: output.source,
-  //     ...(output.image ? { image: output.image } : {}),
-  //     ...(output.description ? { description: output.description } : {}),
-  //   },
-  // });
+  const earliestDate = output.dates.reduce(
+    (earliest: Date | null, date: Date) => {
+      if (earliest === null) return date;
+      return date < earliest ? date : earliest;
+    },
+    null as Date | null
+  );
 
-  // for (const date of output.dates) {
-  //   await db.eventDate.create({
-  //     data: {
-  //       date: { connectOrCreate: { create: { date }, where: { date } } },
-  //       event: { connect: { eventId: newEvent.eventId } },
-  //     },
-  //   });
-  // }
+  const newEvent = await db.event.create({
+    data: {
+      title: output.title,
+      source: output.source,
+      ...(output.image ? { image: output.image } : {}),
+      ...(output.description ? { description: output.description } : {}),
+      earliestDate,
+      eventDates: {
+        createMany: {
+          data: output.dates.map((date) => ({ date })),
+        },
+      },
+    },
+  });
 
   revalidatePath("/");
-  // redirect(`/event/${newEvent.eventId}`);
+  redirect(`/event/${newEvent.eventId}`);
 };
