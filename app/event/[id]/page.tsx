@@ -34,7 +34,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
       </Header>
 
       <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <Card>
+        <Card className="border-0 sm:border">
           <CardHeader className="space-y-2">
             <CardTitle>{event.title}</CardTitle>
             <CardDescription className="leading-normal">

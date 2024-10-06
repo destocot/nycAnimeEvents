@@ -60,7 +60,7 @@ export function EventList({ initialEvents }: EventListProps) {
           <div className="sm:flex">
             <div
               className={cn(
-                "sm:w-1/3 aspect-video relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
+                "sm:w-1/3 aspect-video w-full relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
               )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

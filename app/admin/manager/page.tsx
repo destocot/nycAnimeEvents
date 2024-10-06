@@ -54,13 +54,13 @@ const Page = async () => {
               {events.map((event) => (
                 <tr key={event.eventId}>
                   <td className="border-b align-top border-neutral-100 p-4 pl-8 text-neutral-500">
-                    {event.title}
+                    <Link href={`/event/${event.eventId}`}>{event.title}</Link>
                   </td>
                   <td className="border-b border-neutral-100 py-4 pr-2 pl-8 text-neutral-500">
                     <ul className="space-y-0.5">
                       {event.eventDates.map((eventDate) => (
                         <li key={eventDate.dateId}>
-                          <p className="h-6">
+                          <p className="h-6 whitespace-nowrap">
                             {formatDate(eventDate.date, {
                               includeYear: true,
                             })}

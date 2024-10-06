@@ -1,20 +1,28 @@
 "use client";
 
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
-import { Button } from "./ui/button";
 import { MenuIcon, XCircleIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type MobileNavProps = PropsWithChildren;
 
 export const MobileNav = ({ children }: MobileNavProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const themeTogglerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
     const handleClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+
+      if (
+        ref.current &&
+        !ref.current.contains(target) &&
+        themeTogglerRef.current &&
+        !themeTogglerRef.current.contains(target)
+      ) {
         setOpen(false);
       }
     };
@@ -24,44 +32,38 @@ export const MobileNav = ({ children }: MobileNavProps) => {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [open]); // Re-run effect when `open` changes
+  }, [open]);
 
   if (!children) return null;
 
-  return (
-    <div className="sm:hidden">
-      {open ? (
-        <div
-          ref={ref}
-          className="p-4 bg-background/90 flex-col fixed w-1/2 top-0 right-0 z-20 flex items-center h-full"
-        >
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent close on button click
-              setOpen(false); // Close modal
-            }}
-            className="self-end"
-          >
-            <XCircleIcon />
-          </Button>
-          <ul className="mt-4 flex flex-col gap-4 w-full">{children}</ul>
-        </div>
-      ) : (
-        <div className="absolute top-0 right-0 z-20 flex items-center h-20">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent closing the modal immediately
-              setOpen(true); // Open modal
-            }}
-          >
-            <MenuIcon />
-          </Button>
-        </div>
-      )}
+  return open ? (
+    <div
+      ref={ref}
+      className="py-3 px-6 bg-background/90 flex-col fixed w-1/3 top-0 right-0 z-30 flex items-center h-full animate-slideInRight"
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => {
+          setOpen(false);
+        }}
+        className="self-end"
+      >
+        <XCircleIcon />
+      </Button>
+      <ul className="mt-4 flex flex-col gap-2 w-full">{children}</ul>
+    </div>
+  ) : (
+    <div className="sm:hidden fixed top-0 right-2 z-20 flex items-center h-20">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        <MenuIcon />
+      </Button>
     </div>
   );
 };
