@@ -2,9 +2,11 @@ import { auth } from "@/auth";
 import { DeleteEventButton } from "@/components/delete-event-button";
 import { DeleteQueuedEventButton } from "@/components/delete-queued-event";
 import { Header } from "@/components/header";
+import { LinkButton } from "@/components/link-button";
 import { Button } from "@/components/ui/button";
 import db from "@/lib/db";
 import { formatDate } from "@/lib/utils";
+import { HomeIcon } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
@@ -29,9 +31,7 @@ const Page = async () => {
   return (
     <Fragment>
       <Header>
-        <Button asChild>
-          <Link href="/">Home</Link>
-        </Button>
+        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
       </Header>
 
       <main className="px-2 py-4 container mx-auto max-w-4xl">

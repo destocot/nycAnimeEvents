@@ -1,16 +1,14 @@
 import { CreateEventForm } from "@/components/create-event-form";
 import { Header } from "@/components/header";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { LinkButton } from "@/components/link-button";
+import { HomeIcon } from "lucide-react";
 import { Fragment } from "react";
 
 const CreateEventPage = async () => {
   return (
     <Fragment>
       <Header>
-        <Button asChild>
-          <Link href="/">Home</Link>
-        </Button>
+        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
       </Header>
 
       <main className="px-2 py-4 container mx-auto max-w-4xl">

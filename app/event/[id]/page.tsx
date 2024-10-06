@@ -1,19 +1,10 @@
+import { EditEventDialog } from "@/components/admin/edit-event-dialog";
 import { Header } from "@/components/header";
+import { LinkButton } from "@/components/link-button";
 import { PrintButton } from "@/components/print-button";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import db from "@/lib/db";
-import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
+import { ExternalLinkIcon, HomeIcon } from "lucide-react";
 import { notFound } from "next/navigation";
-import { Fragment } from "react";
 
 type EventPageProps = { params: { id: string } };
 
@@ -28,38 +19,42 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
   if (!event) notFound();
 
   return (
-    <Fragment>
+    <>
       <Header>
+        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
         <PrintButton />
       </Header>
 
       <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <Card className="border-0 sm:border">
-          <CardHeader className="space-y-2">
-            <CardTitle>{event.title}</CardTitle>
-            <CardDescription className="leading-normal">
-              {event.description}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={event.image ?? "/placeholder.jpg"}
-              alt={event.title}
-              className="w-full aspect-video rounded object-cover object-top"
-            />
-          </CardContent>
-          <CardFooter className="justify-end">
-            <Button asChild>
-              <Link href={event.source}>
-                More details
-                <ArrowRightIcon size={16} className="ml-2" />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
+        <div className="mt-4">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
+            <div>
+              <img
+                src={event.image ?? "/placeholder.jpg"}
+                alt={event.title}
+                className="w-full aspect-[16/7] rounded object-cover object-top"
+              />
+            </div>
+            <div className="flex gap-2 justify-between">
+              <p className="leading-relaxed opacity-80 w-full max-w-prose text-justify">
+                {event.description}
+              </p>
+              <div className="flex flex-col gap-2">
+                <LinkButton
+                  href={event.source}
+                  label="Source"
+                  rightIcon={ExternalLinkIcon}
+                  external
+                  variant="secondary"
+                />
+                <EditEventDialog event={event} />
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
-    </Fragment>
+    </>
   );
 };
 
