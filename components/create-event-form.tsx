@@ -5,9 +5,22 @@ import { Button } from "./ui/button";
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { XIcon } from "lucide-react";
+import Link from "next/link";
 
 export const CreateEventForm = () => {
   const [dates, setDates] = useState<Array<Date>>([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col max-w-sm">
+        Event is added to the queue and must be approved.
+        <Button asChild>
+          <Link href="/">Return Home</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -16,12 +29,10 @@ export const CreateEventForm = () => {
           formData.append("dates", date.toISOString());
         });
 
-        formData.set("title", "Puppy Adoption");
-        formData.set("source", "https://example.com");
-        formData.set("image", "https://example.com/puppy.jpg");
-        formData.set("description", "Adopt a puppy today!");
+        const { success } = await createEvent(formData);
 
-        await createEvent(formData);
+        console.log(success);
+        if (success) setIsSuccess(true);
       }}
       className="space-y-4 max-w-sm"
     >
@@ -70,6 +81,18 @@ export const CreateEventForm = () => {
           name="description"
           className="py-2 px-4 rounded bg-background/20 ring ring-muted resize-none"
         ></textarea>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="contact" className="text-sm font-medium">
+          Contact
+        </label>
+        <input
+          type="text"
+          id="contact"
+          name="contact"
+          className="py-2 px-4 rounded bg-background/20 ring ring-muted"
+        />
       </div>
 
       <div className="flex flex-col gap-2">

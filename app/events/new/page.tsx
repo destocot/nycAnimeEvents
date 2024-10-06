@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { CreateEventForm } from "@/components/create-event-form";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
@@ -6,12 +5,6 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 const CreateEventPage = async () => {
-  const authenticated = await auth();
-
-  if (!authenticated?.user?.name) {
-    throw new Error("Unauthorized");
-  }
-
   return (
     <Fragment>
       <Header>

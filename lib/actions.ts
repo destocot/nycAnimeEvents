@@ -5,7 +5,6 @@ import { safeParse, flatten } from "valibot";
 import db from "@/lib/db";
 import { CreateEventSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const createEvent = async (values: FormData) => {
   const input = {
@@ -14,11 +13,13 @@ export const createEvent = async (values: FormData) => {
     image: values.get("image"),
     description: values.get("description"),
     dates: values.getAll("dates"),
+    contact: values.get("contact"),
   };
 
   const parsedValues = safeParse(CreateEventSchema, {
     title: input.title,
     source: input.source,
+    contact: input.contact,
     ...(input.image ? { image: input.image } : {}),
     ...(input.description ? { description: input.description } : {}),
     dates: Array.isArray(input.dates) ? input.dates : [input.dates],
@@ -32,22 +33,22 @@ export const createEvent = async (values: FormData) => {
 
   const output = parsedValues.output;
 
-  const earliestDate = output.dates.reduce(
-    (earliest: Date | null, date: Date) => {
-      if (earliest === null) return date;
-      return date < earliest ? date : earliest;
-    },
-    null as Date | null
-  );
+  // const earliestDate = output.dates.reduce(
+  //   (earliest: Date | null, date: Date) => {
+  //     if (earliest === null) return date;
+  //     return date < earliest ? date : earliest;
+  //   },
+  //   null as Date | null
+  // );
 
-  const newEvent = await db.event.create({
+  await db.queuedEvent.create({
     data: {
       title: output.title,
       source: output.source,
+      contact: output.contact,
       ...(output.image ? { image: output.image } : {}),
       ...(output.description ? { description: output.description } : {}),
-      earliestDate,
-      eventDates: {
+      queuedEventDates: {
         createMany: {
           data: output.dates.map((date) => ({ date })),
         },
@@ -56,5 +57,5 @@ export const createEvent = async (values: FormData) => {
   });
 
   revalidatePath("/");
-  redirect(`/event/${newEvent.eventId}`);
+  return { success: true };
 };

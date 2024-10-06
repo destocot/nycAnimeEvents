@@ -25,6 +25,11 @@ export const CreateEventSchema = v.object({
       v.minLength(6, "Your description must have 6 characters or more.")
     )
   ),
+  contact: v.pipe(
+    v.string("Your contact must be a string."),
+    v.nonEmpty("Please enter your contact."),
+    v.minLength(6, "Your contact must have 6 characters or more.")
+  ),
   dates: v.pipe(
     v.array(v.union([v.date(), v.string()])),
     v.transform((dates) => {
