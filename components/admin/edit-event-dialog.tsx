@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { PencilIcon } from "lucide-react";
 import { auth } from "@/auth";
 import type { EventWithDate } from "@/lib/types";
+import { EventForm } from "../event-form";
 
 type EditEventDialogProps = {
   event: EventWithDate;
@@ -30,19 +31,21 @@ export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
           <PencilIcon size={16} className="ml-2" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="top-[25%]">
+      <DialogContent className="w-[95%] sm:w-full">
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>{event.eventId}</DialogDescription>
         </DialogHeader>
-        <div></div>
-        {/* <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter> */}
+        <EventForm>
+          <div className="grid grid-cols-2 gap-4">
+            <Button type="submit">Submit</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+          </div>
+        </EventForm>
       </DialogContent>
     </Dialog>
   );

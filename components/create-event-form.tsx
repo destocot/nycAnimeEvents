@@ -29,10 +29,10 @@ export const CreateEventForm = () => {
           formData.append("dates", date.toISOString());
         });
 
-        const { success } = await createEvent(formData);
+        // const { success } = await createEvent(formData);
 
-        console.log(success);
-        if (success) setIsSuccess(true);
+        // console.log(success);
+        // if (success) setIsSuccess(true);
       }}
       className="space-y-4 max-w-sm"
     >
