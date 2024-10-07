@@ -1,69 +1,43 @@
 "use client";
 
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
-import { MenuIcon, XCircleIcon } from "lucide-react";
+import { PropsWithChildren, useState } from "react";
+import { HomeIcon, MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { LinkButton } from "@/components/link-button";
 
 type MobileNavProps = PropsWithChildren;
 
 export const MobileNav = ({ children }: MobileNavProps) => {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const themeTogglerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as Node;
-
-      if (
-        ref.current &&
-        !ref.current.contains(target) &&
-        themeTogglerRef.current &&
-        !themeTogglerRef.current.contains(target)
-      ) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClick);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, [open]);
 
   if (!children) return null;
 
-  return open ? (
-    <div
-      ref={ref}
-      className="py-3 px-6 bg-background/90 flex-col fixed w-1/2 sm:w-1/3 top-0 right-0 z-30 flex items-center h-full animate-slideInRight"
-    >
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          setOpen(false);
-        }}
-        className="self-end"
-      >
-        <XCircleIcon />
-      </Button>
-      <ul className="mt-4 flex flex-col gap-2 w-full">{children}</ul>
-    </div>
-  ) : (
-    <div className="sm:hidden fixed top-0 right-2 z-20 flex items-center h-20">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        <MenuIcon />
-      </Button>
-    </div>
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MenuIcon />
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent className="w-1/2">
+        <SheetHeader>
+          <SheetTitle className="text-left">Nav</SheetTitle>
+        </SheetHeader>
+        <ul className="flex flex-col gap-2">
+          <li>
+            <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
+          </li>
+          {children}
+        </ul>
+      </SheetContent>
+    </Sheet>
   );
 };

@@ -4,7 +4,9 @@ import { PrinterIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
 export const PrintButton = () => {
-  const handlePrint = () => void window.print();
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <Button onClick={handlePrint} className="print:hidden">

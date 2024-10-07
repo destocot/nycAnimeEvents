@@ -25,14 +25,13 @@ export const Header = ({ children }: HeaderProps) => {
           <nav className="sm:flex items-center gap-2 hidden">
             <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
             {children}
-            <ThemeToggler />
+            <ThemeToggler className="flex-shrink-0" />
           </nav>
+          <div className="block sm:hidden">
+            <MobileNav>{children}</MobileNav>
+          </div>
         </div>
       </header>
-      <MobileNav>
-        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
-        {children}
-      </MobileNav>
     </>
   );
 };

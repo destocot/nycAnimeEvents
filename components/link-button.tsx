@@ -23,7 +23,7 @@ export const LinkButton = ({
   const RightIcon = rightIcon ? rightIcon : null;
 
   if (external) {
-    <Button variant={variant} asChild>
+    <Button variant={variant} className="w-full" asChild>
       <a href={href} target="_blank">
         {LeftIcon && <LeftIcon size={16} className="mr-2" />}
         {label}
@@ -33,7 +33,7 @@ export const LinkButton = ({
   }
 
   return (
-    <Button variant={variant} asChild>
+    <Button variant={variant} className="w-full" asChild>
       <Link href={href}>
         {LeftIcon && <LeftIcon size={16} className="mr-2" />}
         {label}
