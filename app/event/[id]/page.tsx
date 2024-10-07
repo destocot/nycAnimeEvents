@@ -1,3 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react";
+import { notFound } from "next/navigation";
+
 import { DeleteEventDialog } from "@/components/admin/delete-event-dialog";
 import { EditEventDialog } from "@/components/admin/edit-event-dialog";
 import { Header } from "@/components/header";
@@ -6,24 +9,30 @@ import { PrintButton } from "@/components/print-button";
 import { Badge } from "@/components/ui/badge";
 import db from "@/lib/db";
 import { formatDate } from "@/lib/utils";
-import { ExternalLinkIcon } from "lucide-react";
-import { notFound } from "next/navigation";
+import { TAKE_EVENTS_LIMIT } from "@/lib/constants";
 
 type EventPageProps = { params: { id: string } };
 
 export async function generateStaticParams() {
   const events = await db.event.findMany({
     select: { eventId: true },
+    where: { isApproved: true },
+    orderBy: { earliestDate: "asc" },
+    take: TAKE_EVENTS_LIMIT * 2,
   });
 
-  return events.map((event) => ({ params: { id: event.eventId } }));
+  const staticParams = events.map((event) => ({
+    id: event.eventId,
+  }));
+
+  return staticParams;
 }
 
 const CreateEventPage = async ({ params }: EventPageProps) => {
   const eventId = params.id;
 
   const event = await db.event.findUnique({
-    where: { eventId },
+    where: { eventId, isApproved: true },
     include: { eventDates: { orderBy: { date: "asc" } } },
   });
 

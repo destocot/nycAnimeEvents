@@ -1,4 +1,4 @@
-import { EventForm } from "@/components/event-form";
+// import { EventForm } from "@/components/event-form";
 import { Header } from "@/components/header";
 
 const SubmitEventPage = async () => {
