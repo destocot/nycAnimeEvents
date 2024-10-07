@@ -29,7 +29,10 @@ export const Header = ({ children }: HeaderProps) => {
           </nav>
         </div>
       </header>
-      <MobileNav>{children}</MobileNav>
+      <MobileNav>
+        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
+        {children}
+      </MobileNav>
     </>
   );
 };
