@@ -1,1 +1,1 @@
-export const TAKE_EVENTS_LIMIT = 6;
+export const TAKE_EVENTS_LIMIT = 7;
