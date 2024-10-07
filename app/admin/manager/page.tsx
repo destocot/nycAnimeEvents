@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import { DeleteEventButton } from "@/components/delete-event-button";
-import { DeleteQueuedEventButton } from "@/components/delete-queued-event";
+// import { DeleteEventButton } from "@/components/delete-event-button";
+// import { DeleteQueuedEventButton } from "@/components/delete-queued-event";
 import { Header } from "@/components/header";
 import { LinkButton } from "@/components/link-button";
 import { Button } from "@/components/ui/button";
@@ -17,16 +17,26 @@ const Page = async () => {
     throw new Error("Unauthorized");
   }
 
-  const events = await db.event.findMany({
-    include: {
-      eventDates: {
-        orderBy: { date: "asc" },
+  const [queuedEvents, events] = await db.$transaction([
+    db.event.findMany({
+      where: { isApproved: false },
+      include: {
+        eventDates: {
+          orderBy: { date: "asc" },
+        },
       },
-    },
-    orderBy: { earliestDate: "asc" },
-  });
-
-  const queuedEvents = await db.queuedEvent.findMany();
+      orderBy: { earliestDate: "asc" },
+    }),
+    db.event.findMany({
+      where: { isApproved: true },
+      include: {
+        eventDates: {
+          orderBy: { date: "asc" },
+        },
+      },
+      orderBy: { earliestDate: "asc" },
+    }),
+  ]);
 
   return (
     <Fragment>
@@ -66,7 +76,7 @@ const Page = async () => {
               </thead>
               <tbody>
                 {queuedEvents.map((event) => (
-                  <tr key={event.queuedEventId}>
+                  <tr key={event.eventId}>
                     <td className="border-b align-top border-muted p-4 pl-8">
                       {event.title}
                     </td>
@@ -84,9 +94,10 @@ const Page = async () => {
                         <Button className="h-6" variant="success">
                           Approve
                         </Button>
-                        <DeleteQueuedEventButton
+                        DeleteQueuedEventButton
+                        {/* <DeleteQueuedEventButton
                           eventId={event.queuedEventId}
-                        />
+                        /> */}
                       </div>
                     </td>
                   </tr>
@@ -139,7 +150,8 @@ const Page = async () => {
                     <ul className="space-y-0.5">
                       {event.eventDates.map((eventDate) => (
                         <li key={eventDate.dateId}>
-                          <DeleteEventButton eventDateId={eventDate.dateId} />
+                          DeleteEventButton
+                          {/* <DeleteEventButton eventDateId={eventDate.dateId} /> */}
                         </li>
                       ))}
                     </ul>

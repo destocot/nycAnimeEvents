@@ -60,7 +60,7 @@ export function EventList({ initialEvents }: EventListProps) {
           <div className="sm:flex">
             <div
               className={cn(
-                "sm:w-1/3 aspect-video w-full relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
+                "sm:w-1/3 aspect-[16/7] w-full relative overflow-hidden rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none"
               )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -92,9 +92,7 @@ export function EventList({ initialEvents }: EventListProps) {
               </CardHeader>
               <CardContent className="p-0">
                 <DatesAggregator dates={event.eventDates} />
-                <p className="text-xs line-clamp-3 min-h-[3rem]">
-                  {event.description}
-                </p>
+                <p className="text-xs line-clamp-2">{event.description}</p>
               </CardContent>
             </div>
           </div>

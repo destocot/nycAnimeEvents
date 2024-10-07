@@ -3,7 +3,6 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,8 +19,7 @@ type EditEventDialogProps = {
 
 export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
   const session = await auth();
-
-  if (!session?.user?.name) return null;
+  if (!session?.user) return null;
 
   return (
     <Dialog>
@@ -36,15 +34,17 @@ export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>{event.eventId}</DialogDescription>
         </DialogHeader>
-        <EventForm>
-          <div className="grid grid-cols-2 gap-4">
-            <Button type="submit">Submit</Button>
-            <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Close
-              </Button>
-            </DialogClose>
-          </div>
+        <EventForm defaultEvent={event}>
+          <DialogClose asChild>
+            <Button
+              id="closeEditEventDialogBtn"
+              type="button"
+              variant="secondary"
+              className="w-full"
+            >
+              Close
+            </Button>
+          </DialogClose>
         </EventForm>
       </DialogContent>
     </Dialog>

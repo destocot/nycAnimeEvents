@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
   const cursor = cursorQuery ? { eventId: cursorQuery } : undefined;
 
   const events = await db.event.findMany({
+    where: { isApproved: true },
     include: {
       eventDates: {
         orderBy: { date: "asc" },

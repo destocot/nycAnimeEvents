@@ -9,15 +9,17 @@ datasource db {
 }
 
 model Event {
-  eventId      String    @id @default(cuid()) @map("event_id")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
-  earliestDate DateTime? @map("earliest_date")
+  eventId      String   @id @default(cuid()) @map("event_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  earliestDate DateTime @map("earliest_date")
 
   title       String
   source      String
   description String?
   image       String?
+  contact     String?
+  isApproved  Boolean @default(false) @map("is_approved")
 
   eventDates EventDate[]
 
@@ -35,33 +37,4 @@ model EventDate {
   eventId String @map("event_id")
 
   @@map("event_dates")
-}
-
-model QueuedEvent {
-  queuedEventId String   @id @default(cuid()) @map("queued_event_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
-
-  title       String
-  source      String
-  contact     String
-  description String?
-  image       String?
-
-  queuedEventDates QueuedEventDate[]
-
-  @@map("queued_events")
-}
-
-model QueuedEventDate {
-  queuedDateId Int      @id @default(autoincrement()) @map("queued_date_id")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
-
-  date DateTime
-
-  queuedEvent   QueuedEvent @relation(fields: [queuedEventId], references: [queuedEventId], onDelete: Cascade)
-  queuedEventId String      @map("queued_event_id")
-
-  @@map("queued_event_dates")
 }

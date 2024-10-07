@@ -39,7 +39,7 @@ export const MobileNav = ({ children }: MobileNavProps) => {
   return open ? (
     <div
       ref={ref}
-      className="py-3 px-6 bg-background/90 flex-col fixed w-1/3 top-0 right-0 z-30 flex items-center h-full animate-slideInRight"
+      className="py-3 px-6 bg-background/90 flex-col fixed w-1/2 sm:w-1/3 top-0 right-0 z-30 flex items-center h-full animate-slideInRight"
     >
       <Button
         variant="ghost"

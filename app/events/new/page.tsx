@@ -1,24 +1,31 @@
-import { CreateEventForm } from "@/components/create-event-form";
+import { EventForm } from "@/components/event-form";
 import { Header } from "@/components/header";
-import { LinkButton } from "@/components/link-button";
-import { HomeIcon } from "lucide-react";
-import { Fragment } from "react";
 
-const CreateEventPage = async () => {
+const SubmitEventPage = async () => {
   return (
-    <Fragment>
-      <Header>
-        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
-      </Header>
+    <>
+      <Header></Header>
 
       <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <div className="space-y-4">
-          <h1 className="text-3xl font-bold tracking-tight">Create Event</h1>
-          <CreateEventForm />
+        <div className="mt-4">
+          <div className="space-y-4">
+            {/* <h1 className="text-3xl font-bold tracking-tight">Submit Event</h1> */}
+            <h1 className="text-3xl font-bold tracking-tight">
+              Under Construction
+            </h1>
+            {/* <p className="opacity-50 text-sm max-w-prose">
+              Please fill out the form below to submit an event to the calendar.
+              All events are subject to approval.
+            </p>
+            <div className="max-w-md">
+              <EventForm />
+            </div>
+            */}
+          </div>
         </div>
       </main>
-    </Fragment>
+    </>
   );
 };
 
-export default CreateEventPage;
+export default SubmitEventPage;
