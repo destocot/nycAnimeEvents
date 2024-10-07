@@ -36,7 +36,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
     include: { eventDates: { orderBy: { date: "asc" } } },
   });
 
-  if (!event) notFound();
+  if (!event || !event.isApproved) notFound();
 
   return (
     <>
