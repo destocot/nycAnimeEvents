@@ -9,8 +9,8 @@ export const PrintButton = () => {
   };
 
   return (
-    <Button onClick={handlePrint} className="print:hidden">
-      <PrinterIcon className="mr-2 h-4 w-4" /> Print
+    <Button size="sm" onClick={handlePrint} className="print:hidden">
+      <PrinterIcon size={16} className="mr-2" /> Print
     </Button>
   );
 };

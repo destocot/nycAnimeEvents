@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 import { flatten, safeParse } from "valibot";
 
 export const updateEventAction = async (values: unknown) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const session = await auth();
   if (!session?.user) throw new Error("Unauthorized");
 

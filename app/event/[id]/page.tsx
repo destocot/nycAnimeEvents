@@ -47,19 +47,21 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
       <main className="px-2 py-4 container mx-auto max-w-4xl">
         <div className="mt-4">
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              {event.title}
+            </h1>
             <div>
               <img
                 src={event.image ?? "/placeholder.jpg"}
                 alt={event.title}
-                className="w-full aspect-[16/7] rounded object-cover object-top"
+                className="w-full aspect-[16/7] rounded object-cover object-[0_20%]"
               />
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-between">
               <p className="leading-relaxed opacity-80 w-full max-w-prose text-justify">
                 {event.description}
               </p>
-              <div className="flex sm:flex-col gap-2">
+              <div className="flex sm:flex-col gap-2 print:hidden">
                 <LinkButton
                   href={event.source}
                   label="Source"

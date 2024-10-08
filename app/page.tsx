@@ -1,34 +1,28 @@
-import Link from "next/link";
-
-import { EventList } from "@/components/event-list";
+import { SrvrEventList } from "@/components/srvr-event-list";
 import { Header } from "@/components/header";
 import { PrintButton } from "@/components/print-button";
-import { Button } from "@/components/ui/button";
-import { TAKE_EVENTS_LIMIT } from "@/lib/constants";
-import db from "@/lib/db";
+import { Suspense } from "react";
+import { EventListSkeleton } from "@/components/skeletons/event-list-skeleton";
+import { LinkButton } from "@/components/link-button";
+import { PencilIcon } from "lucide-react";
 
-const HomePage = async () => {
-  const initialEvents = await db.event.findMany({
-    where: { isApproved: true },
-    include: {
-      eventDates: {
-        orderBy: { date: "asc" },
-      },
-    },
-    orderBy: { earliestDate: "asc" },
-    take: TAKE_EVENTS_LIMIT,
-  });
-
+const HomePage = () => {
   return (
     <>
       <Header>
-        <Button asChild>
-          <Link href="/events/new">Submit Event</Link>
-        </Button>
+        <LinkButton
+          size="sm"
+          href="/events/new"
+          label="Submit Event"
+          leftIcon={PencilIcon}
+        />
         <PrintButton />
       </Header>
+
       <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <EventList initialEvents={initialEvents} />
+        <Suspense fallback={<EventListSkeleton />}>
+          <SrvrEventList />
+        </Suspense>
       </main>
     </>
   );

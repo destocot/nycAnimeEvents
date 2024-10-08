@@ -13,14 +13,11 @@ const SubmitEventPage = async () => {
             <h1 className="text-3xl font-bold tracking-tight">
               Under Construction
             </h1>
-            {/* <p className="opacity-50 text-sm max-w-prose">
+            <p className="opacity-50 text-sm max-w-prose">
               Please fill out the form below to submit an event to the calendar.
               All events are subject to approval.
             </p>
-            <div className="max-w-md">
-              <EventForm />
-            </div>
-            */}
+            <div className="max-w-md">{/* <EventForm /> */}</div>
           </div>
         </div>
       </main>

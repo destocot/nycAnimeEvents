@@ -15,8 +15,6 @@ import { LinkButton } from "@/components/link-button";
 type MobileNavProps = PropsWithChildren;
 
 export const MobileNav = ({ children }: MobileNavProps) => {
-  const [open, setOpen] = useState(false);
-
   if (!children) return null;
 
   return (
@@ -29,11 +27,17 @@ export const MobileNav = ({ children }: MobileNavProps) => {
 
       <SheetContent className="w-1/2">
         <SheetHeader>
-          <SheetTitle className="text-left">Nav</SheetTitle>
+          <SheetTitle className="text-left">Navigation</SheetTitle>
         </SheetHeader>
+        <div className="h-1 bg-muted my-2.5" />
         <ul className="flex flex-col gap-2">
           <li>
-            <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
+            <LinkButton
+              className="w-full"
+              href="/"
+              label="Home"
+              leftIcon={HomeIcon}
+            />
           </li>
           {children}
         </ul>
