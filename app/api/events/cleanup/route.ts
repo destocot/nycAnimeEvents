@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(req: NextRequest) {
   console.log('Cleaning up events...')
   console.log('req', req)
+  const isFromVercelCron = req.headers.get('vercel-cron/1.0')
 
   const now = new Date()
   const yesterdayMidnight = new Date(
@@ -23,5 +24,6 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     data: eventDates,
+    isFromVercelCron,
   })
 }
