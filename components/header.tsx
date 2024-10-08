@@ -26,12 +26,12 @@ export const Header = ({ children }: HeaderProps) => {
             </div>
             <ThemeToggler className="sm:hidden" />
           </div>
-          <nav className="sm:flex items-center gap-2 hidden print:hidden">
+          <nav className="md:flex items-center gap-2 hidden print:hidden">
             <LinkButton size="sm" href="/" label="Home" leftIcon={HomeIcon} />
             {children}
             <ThemeToggler />
           </nav>
-          <div className="block sm:hidden">
+          <div className="block md:hidden">
             <MobileNav>{children}</MobileNav>
           </div>
         </div>

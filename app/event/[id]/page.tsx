@@ -1,42 +1,42 @@
-import { ExternalLinkIcon } from "lucide-react";
-import { notFound } from "next/navigation";
+import { ExternalLinkIcon } from 'lucide-react'
+import { notFound } from 'next/navigation'
 
-import { DeleteEventDialog } from "@/components/admin/delete-event-dialog";
-import { EditEventDialog } from "@/components/admin/edit-event-dialog";
-import { Header } from "@/components/header";
-import { LinkButton } from "@/components/link-button";
-import { PrintButton } from "@/components/print-button";
-import { Badge } from "@/components/ui/badge";
-import db from "@/lib/db";
-import { formatDate } from "@/lib/utils";
-import { TAKE_EVENTS_LIMIT } from "@/lib/constants";
+import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
+import { EditEventDialog } from '@/components/admin/edit-event-dialog'
+import { Header } from '@/components/header'
+import { LinkButton } from '@/components/link-button'
+import { PrintButton } from '@/components/print-button'
+import { Badge } from '@/components/ui/badge'
+import db from '@/lib/db'
+import { formatDate } from '@/lib/utils'
+import { TAKE_EVENTS_LIMIT } from '@/lib/constants'
 
-type EventPageProps = { params: { id: string } };
+type EventPageProps = { params: { id: string } }
 
 export async function generateStaticParams() {
   const events = await db.event.findMany({
     select: { eventId: true },
     where: { isApproved: true },
-    orderBy: { earliestDate: "asc" },
+    orderBy: { earliestDate: 'asc' },
     take: TAKE_EVENTS_LIMIT * 2,
-  });
+  })
 
   const staticParams = events.map((event) => ({
     id: event.eventId,
-  }));
+  }))
 
-  return staticParams;
+  return staticParams
 }
 
 const CreateEventPage = async ({ params }: EventPageProps) => {
-  const eventId = params.id;
+  const eventId = params.id
 
   const event = await db.event.findUnique({
     where: { eventId, isApproved: true },
-    include: { eventDates: { orderBy: { date: "asc" } } },
-  });
+    include: { eventDates: { orderBy: { date: 'asc' } } },
+  })
 
-  if (!event || !event.isApproved) notFound();
+  if (!event || !event.isApproved) notFound()
 
   return (
     <>
@@ -44,44 +44,44 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
         <PrintButton />
       </Header>
 
-      <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <div className="mt-4">
-          <div className="space-y-4">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+      <main className='container mx-auto max-w-4xl px-2 py-4'>
+        <div className='mt-4'>
+          <div className='mx-auto max-w-3xl space-y-4'>
+            <h1 className='text-2xl font-bold tracking-tight sm:text-3xl'>
               {event.title}
             </h1>
             <div>
               <img
-                src={event.image ?? "/placeholder.jpg"}
+                src={event.image ?? '/placeholder.jpg'}
                 alt={event.title}
-                className="w-full aspect-[16/7] rounded object-cover object-[0_20%]"
+                className='aspect-[16/7] w-full rounded object-cover object-[0_20%]'
               />
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-between">
-              <p className="leading-relaxed opacity-80 w-full max-w-prose text-justify">
+            <div className='flex flex-col justify-between gap-4 sm:flex-row'>
+              <p className='w-full max-w-prose text-justify leading-relaxed opacity-80'>
                 {event.description}
               </p>
-              <div className="flex sm:flex-col gap-2 print:hidden">
+              <div className='flex gap-2 sm:flex-col print:hidden'>
                 <LinkButton
                   href={event.source}
-                  label="Source"
+                  label='Source'
                   rightIcon={ExternalLinkIcon}
                   external
-                  variant="secondary"
+                  variant='secondary'
                 />
                 <EditEventDialog event={event} />
                 <DeleteEventDialog eventId={event.eventId} />
               </div>
             </div>
-            <div className="h-1 bg-muted" />
-            <h3 className="text-xl font-bold tracking-tight">Upcoming Dates</h3>
-            <ul className="flex flex-wrap gap-2">
+            <div className='h-1 bg-muted' />
+            <h3 className='text-xl font-bold tracking-tight'>Upcoming Dates</h3>
+            <ul className='flex flex-wrap gap-2'>
               {event.eventDates.map((date, i) => (
                 <li key={date.dateId}>
                   <Badge
                     key={date.dateId}
-                    variant={i === 0 ? "default" : "secondary"}
-                    className="text-sm"
+                    variant={i === 0 ? 'default' : 'secondary'}
+                    className='text-sm'
                   >
                     {formatDate(date.date)}
                   </Badge>
@@ -92,7 +92,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
         </div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default CreateEventPage;
+export default CreateEventPage

@@ -4,7 +4,7 @@ import { PrintButton } from "@/components/print-button";
 import { Suspense } from "react";
 import { EventListSkeleton } from "@/components/skeletons/event-list-skeleton";
 import { LinkButton } from "@/components/link-button";
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, SearchIcon } from "lucide-react";
 
 const HomePage = () => {
   return (
@@ -15,6 +15,12 @@ const HomePage = () => {
           href="/events/new"
           label="Submit Event"
           leftIcon={PencilIcon}
+        />
+        <LinkButton
+          size="sm"
+          href="/events"
+          label="Search"
+          leftIcon={SearchIcon}
         />
         <PrintButton />
       </Header>
