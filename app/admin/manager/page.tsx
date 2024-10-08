@@ -1,20 +1,29 @@
-import { auth } from "@/auth";
-// import { DeleteEventButton } from "@/components/delete-event-button";
-// import { DeleteQueuedEventButton } from "@/components/delete-queued-event";
-import { Header } from "@/components/header";
-import { LinkButton } from "@/components/link-button";
-import { Button } from "@/components/ui/button";
-import db from "@/lib/db";
-import { formatDate } from "@/lib/utils";
-import { HomeIcon } from "lucide-react";
-import Link from "next/link";
-import { Fragment } from "react";
+import { auth } from '@/auth'
+import { Header } from '@/components/header'
+import { LinkButton } from '@/components/link-button'
+import db from '@/lib/db'
+import { ArrowLeftFromLineIcon, ExternalLinkIcon } from 'lucide-react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { formatDate } from '@/lib/utils'
+import { deleteEventDateAction } from '@/actions/delete-event-date-action'
+import { EditEventDialog } from '@/components/admin/edit-event-dialog'
+import { approveEventAction } from '@/actions/approve-event'
+import { deleteEventAction } from '@/actions/delete-event-action'
+import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
 
 const Page = async () => {
-  const authenticated = await auth();
+  const session = await auth()
 
-  if (!authenticated?.user?.name) {
-    throw new Error("Unauthorized");
+  if (!session?.user) {
+    throw new Error('Unauthorized')
   }
 
   const [queuedEvents, events] = await db.$transaction([
@@ -22,148 +31,190 @@ const Page = async () => {
       where: { isApproved: false },
       include: {
         eventDates: {
-          orderBy: { date: "asc" },
+          orderBy: { date: 'asc' },
         },
       },
-      orderBy: { earliestDate: "asc" },
+      orderBy: { earliestDate: 'asc' },
     }),
     db.event.findMany({
       where: { isApproved: true },
       include: {
         eventDates: {
-          orderBy: { date: "asc" },
+          orderBy: { date: 'asc' },
         },
       },
-      orderBy: { earliestDate: "asc" },
+      orderBy: { earliestDate: 'asc' },
     }),
-  ]);
+  ])
 
   return (
-    <Fragment>
-      <Header>
-        <LinkButton href="/" label="Home" leftIcon={HomeIcon} />
-      </Header>
+    <>
+      <Header></Header>
 
-      <main className="px-2 py-4 container mx-auto max-w-4xl">
-        <h1 className="text-3xl font-bold tracking-tight capitalize">
-          {authenticated.user.name}
-        </h1>
+      <main className='container mx-auto max-w-4xl px-2 py-4'>
+        <div className='mt-4'>
+          <div className='mx-auto max-w-3xl space-y-4'>
+            <div className='flex items-center justify-between gap-4'>
+              <h1 className='text-2xl font-bold tracking-tight sm:text-3xl'>
+                Admin Manager
+              </h1>
+              <LinkButton
+                href='/admin'
+                label='Back'
+                leftIcon={ArrowLeftFromLineIcon}
+              />
+            </div>
+            <div className='h-1 bg-muted' />
+            <div className='space-y-2'>
+              <h2 className='text-2xl font-bold tracking-tight sm:text-xl'>
+                Queued Events
+              </h2>
+              {queuedEvents.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Event</TableHead>
+                      <TableHead>Dates</TableHead>
+                      <TableHead className='text-center'>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {queuedEvents.map((event) => (
+                      <TableRow key={event.eventId}>
+                        <TableCell>
+                          <div className='space-y-2'>
+                            <div className='flex flex-col'>
+                              <span className='text-sm font-medium'>Title</span>
+                              {event.title}
+                            </div>
 
-        <div className="mt-4 space-y-2">
-          <h2 className="w-fit text-2xl font-bold tracking-tight px-1.5 rounded text-black bg-yellow-500">
-            Queued Events
-          </h2>
-          {queuedEvents.length > 0 ? (
-            <table className="border-collapse table-auto w-full text-sm">
-              <thead>
-                <tr>
-                  <th className="border-b flex-1 font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                    Title
-                  </th>
-                  <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                    Source
-                  </th>
-                  <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                    Contact
-                  </th>
-                  <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                    Description
-                  </th>
-                  <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {queuedEvents.map((event) => (
-                  <tr key={event.eventId}>
-                    <td className="border-b align-top border-muted p-4 pl-8">
-                      {event.title}
-                    </td>
-                    <td className="border-b align-top border-muted p-4 pl-8">
-                      {event.source}
-                    </td>
-                    <td className="border-b align-top border-muted p-4 pl-8">
-                      {event.contact}
-                    </td>
-                    <td className="border-b align-top border-muted p-4 pl-8">
-                      {event.description}
-                    </td>
-                    <td className="border-b align-top border-muted p-4 pl-8">
-                      <div className="flex gap-2 justify-center">
-                        <Button className="h-6" variant="success">
-                          Approve
-                        </Button>
-                        DeleteQueuedEventButton
-                        {/* <DeleteQueuedEventButton
-                          eventId={event.queuedEventId}
-                        /> */}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No queued events</p>
-          )}
-        </div>
+                            <div className='flex flex-col'>
+                              <span className='text-sm font-medium'>
+                                Contact
+                              </span>
+                              {event.contact}
+                            </div>
 
-        <div className="mt-4 space-y-2">
-          <h2 className="w-fit text-2xl font-bold tracking-tight px-1.5 rounded text-black bg-green-500">
-            Approved Events
-          </h2>
-          <table className="border-collapse table-auto w-full text-sm">
-            <thead>
-              <tr>
-                <th className="border-b flex-1 font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                  Title
-                </th>
-                <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                  Event Dates
-                </th>
-                <th className="border-b font-medium p-4 pl-8 pt-0 pb-3 text-neutral-400 text-left">
-                  Delete
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((event) => (
-                <tr key={event.eventId}>
-                  <td className="border-b align-top border-muted p-4 pl-8 text-neutral-500">
-                    <Link href={`/event/${event.eventId}`}>{event.title}</Link>
-                  </td>
-                  <td className="border-b border-muted py-4 pr-2 pl-8 text-neutral-500">
-                    <ul className="space-y-0.5">
-                      {event.eventDates.map((eventDate) => (
-                        <li key={eventDate.dateId}>
-                          <p className="h-6 whitespace-nowrap">
-                            {formatDate(eventDate.date, {
-                              includeYear: true,
-                            })}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td className="border-b border-muted p-4 pl-2 text-neutral-500">
-                    <ul className="space-y-0.5">
-                      {event.eventDates.map((eventDate) => (
-                        <li key={eventDate.dateId}>
-                          DeleteEventButton
-                          {/* <DeleteEventButton eventDateId={eventDate.dateId} /> */}
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                            <a
+                              className='flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500'
+                              href={event.source}
+                            >
+                              Source <ExternalLinkIcon size={16} />
+                            </a>
+                          </div>
+                        </TableCell>
+                        <TableCell className='align-top'>
+                          {event.eventDates.map((date) => (
+                            <div key={date.dateId}>
+                              <time>{formatDate(date.date)}</time>
+                            </div>
+                          ))}
+                        </TableCell>
+                        <TableCell className='align-top'>
+                          <div className='mx-auto flex w-28 flex-col justify-center gap-4'>
+                            <form
+                              action={approveEventAction.bind(null, {
+                                eventId: event.eventId,
+                              })}
+                            >
+                              <button
+                                type='submit'
+                                className='h-9 w-full rounded-md border bg-green-600 px-1.5 text-background shadow transition-colors hover:bg-green-600/80'
+                              >
+                                Approve
+                              </button>
+                            </form>
+
+                            <DeleteEventDialog
+                              className='h-9 rounded-md px-1.5'
+                              eventId={event.eventId}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className='italic'>No queued events.</p>
+              )}
+            </div>
+
+            <div className='h-1 bg-muted' />
+            <div className='space-y-2'>
+              <h2 className='text-2xl font-bold tracking-tight sm:text-xl'>
+                Events
+              </h2>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Event</TableHead>
+                    <TableHead className='pr-2 text-right'>Dates</TableHead>
+                    <TableHead className='text-center'>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {events.map((event) => (
+                    <TableRow key={event.eventId}>
+                      <TableCell>
+                        <div className='space-y-2'>
+                          <div className='flex flex-col'>
+                            <span className='text-sm font-medium'>Title</span>
+                            {event.title}
+                          </div>
+
+                          <a
+                            className='flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-500'
+                            href={event.source}
+                          >
+                            Source <ExternalLinkIcon size={16} />
+                          </a>
+                        </div>
+                      </TableCell>
+                      <TableCell className='pr-2 text-right align-top'>
+                        <div className='space-y-2'>
+                          {event.eventDates.map((date) => (
+                            <div key={date.dateId} className='h-6'>
+                              <time>{formatDate(date.date)}</time>
+                            </div>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className='align-top'>
+                        <div className='flex justify-center gap-4'>
+                          <div className='space-y-2'>
+                            {event.eventDates.map((date) => (
+                              <form
+                                action={deleteEventDateAction.bind(null, {
+                                  dateId: date.dateId,
+                                })}
+                                key={date.dateId}
+                              >
+                                <button
+                                  type='submit'
+                                  className='h-6 rounded-md border border-destructive px-1.5 text-destructive shadow transition-colors hover:bg-destructive/5'
+                                >
+                                  Delete
+                                </button>
+                              </form>
+                            ))}
+                          </div>
+                          <EditEventDialog
+                            event={event}
+                            className='h-6 rounded-md px-1.5'
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </div>
       </main>
-    </Fragment>
-  );
-};
+    </>
+  )
+}
 
-export default Page;
+export default Page

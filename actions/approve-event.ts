@@ -3,11 +3,10 @@
 import { auth } from '@/auth'
 import db from '@/lib/db'
 import { ParseEventIdSchema } from '@/lib/validators'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { flatten, safeParse } from 'valibot'
 
-export const deleteEventAction = async (values: unknown) => {
+export async function approveEventAction(values: unknown) {
   const session = await auth()
   if (!session?.user) throw new Error('Unauthorized')
 
@@ -21,11 +20,11 @@ export const deleteEventAction = async (values: unknown) => {
 
   const eventId = parsedValues.output.eventId
 
-  await db.$transaction([
-    db.eventDate.deleteMany({ where: { eventId } }),
-    db.event.delete({ where: { eventId } }),
-  ])
+  await db.event.update({
+    where: { eventId },
+    data: { isApproved: true },
+  })
 
+  revalidateTag('event-count')
   revalidatePath('/')
-  redirect('/')
 }

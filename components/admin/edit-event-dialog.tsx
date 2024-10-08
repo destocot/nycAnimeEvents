@@ -6,30 +6,34 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { PencilIcon } from "lucide-react";
-import { auth } from "@/auth";
-import type { EventWithDate } from "@/lib/types";
-import { EventForm } from "../event-form";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { PencilIcon } from 'lucide-react'
+import { auth } from '@/auth'
+import type { EventWithDate } from '@/lib/types'
+import { EventForm } from '../event-form'
 
 type EditEventDialogProps = {
-  event: EventWithDate;
-};
+  event: EventWithDate
+  className?: string
+}
 
-export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
-  const session = await auth();
-  if (!session?.user) return null;
+export const EditEventDialog = async ({
+  event,
+  className,
+}: EditEventDialogProps) => {
+  const session = await auth()
+  if (!session?.user) return null
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button className={className}>
           Edit
-          <PencilIcon size={16} className="ml-2" />
+          <PencilIcon size={16} className='ml-2' />
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95%] sm:w-full">
+      <DialogContent className='w-[95%] sm:w-full'>
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>{event.eventId}</DialogDescription>
@@ -37,10 +41,10 @@ export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
         <EventForm defaultEvent={event}>
           <DialogClose asChild>
             <Button
-              id="closeEditEventDialogBtn"
-              type="button"
-              variant="secondary"
-              className="w-full"
+              id='closeEditEventDialogBtn'
+              type='button'
+              variant='secondary'
+              className='w-full'
             >
               Close
             </Button>
@@ -48,5 +52,5 @@ export const EditEventDialog = async ({ event }: EditEventDialogProps) => {
         </EventForm>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

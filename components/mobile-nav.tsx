@@ -1,47 +1,43 @@
-"use client";
+'use client'
 
-import { PropsWithChildren, useState } from "react";
-import { HomeIcon, MenuIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PropsWithChildren, useState } from 'react'
+import { HomeIcon, MenuIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { LinkButton } from "@/components/link-button";
+} from '@/components/ui/sheet'
+import { LinkButton } from '@/components/link-button'
 
-type MobileNavProps = PropsWithChildren;
+type MobileNavProps = PropsWithChildren
 
 export const MobileNav = ({ children }: MobileNavProps) => {
-  if (!children) return null;
-
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant='ghost' size='icon'>
           <MenuIcon />
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="w-1/2">
+      <SheetContent className='w-1/2'>
         <SheetHeader>
-          <SheetTitle className="text-left">Navigation</SheetTitle>
+          <SheetTitle className='text-left'>Navigation</SheetTitle>
         </SheetHeader>
-        <div className="h-1 bg-muted my-2.5" />
-        <ul className="flex flex-col gap-2">
-          <li>
-            <LinkButton
-              className="w-full"
-              href="/"
-              label="Home"
-              leftIcon={HomeIcon}
-            />
-          </li>
+        <div className='my-2.5 h-1 bg-muted' />
+        <div className='flex flex-col gap-2'>
+          <LinkButton
+            className='w-full'
+            href='/'
+            label='Home'
+            leftIcon={HomeIcon}
+          />
           {children}
-        </ul>
+        </div>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

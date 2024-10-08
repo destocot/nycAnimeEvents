@@ -1,34 +1,34 @@
-"use server";
+'use server'
 
-import { auth } from "@/auth";
-import db from "@/lib/db";
-import { UpdateEventSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
-import { flatten, safeParse } from "valibot";
+import { auth } from '@/auth'
+import db from '@/lib/db'
+import { UpdateEventSchema } from '@/lib/validators'
+import { revalidatePath } from 'next/cache'
+import { flatten, safeParse } from 'valibot'
 
 export const updateEventAction = async (values: unknown) => {
-  const session = await auth();
-  if (!session?.user) throw new Error("Unauthorized");
+  const session = await auth()
+  if (!session?.user) throw new Error('Unauthorized')
 
-  const parsedValues = safeParse(UpdateEventSchema, values);
+  const parsedValues = safeParse(UpdateEventSchema, values)
 
   if (!parsedValues.success) {
-    const flatErrors = flatten<typeof UpdateEventSchema>(parsedValues.issues);
-    return { data: null, error: flatErrors };
+    const flatErrors = flatten<typeof UpdateEventSchema>(parsedValues.issues)
+    return { data: null, error: flatErrors }
   }
 
-  const output = parsedValues.output;
+  const output = parsedValues.output
 
   const earliestDate = output.dates?.reduce(
     (earliest: Date | null, date: Date) => {
-      if (earliest === null) return date;
-      return date < earliest ? date : earliest;
+      if (earliest === null) return date
+      return date < earliest ? date : earliest
     },
-    null as Date | null
-  );
+    null as Date | null,
+  )
 
   if (!earliestDate) {
-    throw new Error("Please enter at least one date.");
+    throw new Error('Please enter at least one date.')
   }
 
   const updatedEvent = await db.event.update({
@@ -47,8 +47,8 @@ export const updateEventAction = async (values: unknown) => {
       },
     },
     select: { eventId: true },
-  });
+  })
 
-  revalidatePath(`/event/${updatedEvent.eventId}`);
-  return { data: null, error: null };
-};
+  revalidatePath(`/event/${updatedEvent.eventId}`)
+  return { data: null, error: null }
+}
