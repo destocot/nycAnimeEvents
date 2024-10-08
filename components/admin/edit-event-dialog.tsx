@@ -1,3 +1,5 @@
+import { PencilIcon } from 'lucide-react'
+
 import {
   Dialog,
   DialogClose,
@@ -8,10 +10,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { PencilIcon } from 'lucide-react'
 import { auth } from '@/auth'
 import type { EventWithDate } from '@/lib/types'
-import { EventForm } from '../event-form'
+import { EventForm } from '@/components/event-form'
 
 type EditEventDialogProps = {
   event: EventWithDate
