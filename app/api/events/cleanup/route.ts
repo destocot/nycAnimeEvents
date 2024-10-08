@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
   console.log('Cleaning up events...')
-  console.log('req', req)
-  const isFromVercelCron = req.headers.get('vercel-cron/1.0')
+
+  const isFromVercelCron = req.headers
+    .get('user-agent')
+    ?.startsWith('vercel-cron')
 
   const now = new Date()
   const yesterdayMidnight = new Date(
