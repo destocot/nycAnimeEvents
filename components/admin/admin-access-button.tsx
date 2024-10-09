@@ -34,7 +34,7 @@ export const AdminAccessButton = () => {
         href='/admin'
         label='Admin'
         srOnlyLabel
-        className='absolute left-[40%] top-1/2 hidden size-8 -translate-x-[40%] -translate-y-1/2 transition-transform hover:scale-105 sm:inline-flex'
+        className='absolute left-1/2 top-1/2 hidden size-8 -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-105 md:inline-flex'
         rightIcon={ShieldIcon}
         size='icon'
         variant='ghost'
