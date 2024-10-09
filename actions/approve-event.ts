@@ -25,6 +25,6 @@ export async function approveEventAction(values: unknown) {
     data: { isApproved: true },
   })
 
-  revalidateTag('event-count')
   revalidatePath('/')
+  revalidateTag('event-count')
 }

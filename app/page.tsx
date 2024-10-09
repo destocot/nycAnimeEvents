@@ -12,15 +12,15 @@ const HomePage = () => {
       <Header>
         <LinkButton
           size='sm'
-          href='/events/new'
-          label='Submit Event'
-          leftIcon={PencilIcon}
-        />
-        <LinkButton
-          size='sm'
           href='/events'
           label='Search'
           leftIcon={SearchIcon}
+        />
+        <LinkButton
+          size='sm'
+          href='/events/new'
+          label='Submit Event'
+          leftIcon={PencilIcon}
         />
         <PrintButton />
       </Header>

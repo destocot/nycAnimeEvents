@@ -1,56 +1,56 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";
+import { useEffect } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer'
 
-import type { EventWithDate } from "@/lib/types";
-import { EventCard } from "@/components/event-card";
-import { EventListSkeleton } from "@/components/skeletons/event-list-skeleton";
+import type { EventWithDate } from '@/lib/types'
+import { EventCard } from '@/components/event-card'
+import { EventListSkeleton } from '@/components/skeletons/event-list-skeleton'
 
-type EventListProps = { initialEvents: Array<EventWithDate> };
+type EventListProps = { initialEvents: Array<EventWithDate> }
 
 export function EventList({ initialEvents }: EventListProps) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["events"],
+      queryKey: ['events'],
       queryFn: async ({
-        pageParam = "",
+        pageParam = '',
       }: {
-        pageParam: string;
+        pageParam: string
       }): Promise<{
-        data: Array<EventWithDate>;
-        nextId: string | undefined;
+        data: Array<EventWithDate>
+        nextId: string | undefined
       }> => {
-        const response = await fetch(`/api/events?cursor=${pageParam}`);
-        const json = await response.json();
-        return json;
+        const response = await fetch(`/api/events?cursor=${pageParam}`)
+        const json = await response.json()
+        return json
       },
-      initialPageParam: "",
+      initialPageParam: '',
       getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
       initialData: {
         pages: [{ data: initialEvents, nextId: undefined }],
-        pageParams: [""],
+        pageParams: [''],
       },
-    });
+    })
 
-  const { inView, ref } = useInView();
+  const { inView, ref } = useInView()
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      fetchNextPage();
+      fetchNextPage()
     }
-  }, [inView, hasNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, fetchNextPage])
 
-  const events = data.pages.flatMap((page) => page.data);
+  const events = data.pages.flatMap((page) => page.data)
 
   return (
-    <div className="space-y-3.5 max-w-3xl mx-auto">
+    <div className='mx-auto max-w-3xl space-y-3.5'>
       {events.map((event) => (
         <EventCard key={event.eventId} event={event} />
       ))}
       {isFetchingNextPage && <EventListSkeleton />}
-      <div className="mx-auto flex max-w-6xl justify-center" ref={ref} />
+      <div className='mx-auto flex max-w-6xl justify-center' ref={ref} />
     </div>
-  );
+  )
 }

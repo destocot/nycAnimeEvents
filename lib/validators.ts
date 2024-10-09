@@ -1,56 +1,5 @@
 import * as v from 'valibot'
 
-const TitleSchema = v.pipe(
-  v.string('Your title must be a string.'),
-  v.nonEmpty('Please enter your title.'),
-  v.minLength(6, 'Your title must have 6 characters or more.'),
-)
-
-const SourceSchema = v.pipe(
-  v.string('Your source must be a string.'),
-  v.nonEmpty('Please enter your source.'),
-  v.minLength(6, 'Your source must have 6 characters or more.'),
-)
-
-const ImageSchema = v.union([
-  v.pipe(
-    v.literal(''),
-    v.transform(() => undefined),
-  ),
-  v.optional(
-    v.pipe(
-      v.string('Your image must be a string.'),
-      v.nonEmpty('Please enter your image.'),
-      v.minLength(6, 'Your image must have 6 characters or more.'),
-    ),
-  ),
-])
-
-const DescriptionSchema = v.union([
-  v.pipe(
-    v.literal(''),
-    v.transform(() => undefined),
-  ),
-  v.optional(
-    v.pipe(
-      v.string('Your description must be a string.'),
-      v.nonEmpty('Please enter your description.'),
-      v.minLength(6, 'Your description must have 6 characters or more.'),
-    ),
-  ),
-])
-
-const DatesSchema = v.pipe(
-  v.array(v.union([v.date(), v.string()])),
-  v.transform((dates) => {
-    return dates.map((d) => {
-      if (d instanceof Date) return d
-      return new Date(d)
-    })
-  }),
-  v.minLength(1, 'Please enter at least one date.'),
-)
-
 const EventIdSchema = v.pipe(
   v.string('Your eventId must be a string.'),
   v.nonEmpty('Please enter your eventId.'),
@@ -60,54 +9,83 @@ const EventIdSchema = v.pipe(
 export const ParseEventIdSchema = v.object({
   eventId: EventIdSchema,
 })
-export type ParseEventIdInput = v.InferInput<typeof ParseEventIdSchema>
-export type ParseEventIdOutput = v.InferOutput<typeof ParseEventIdSchema>
 
-export const CreateEventSchema = v.pipe(
-  v.object({
-    title: TitleSchema,
-    source: SourceSchema,
-    image: ImageSchema,
-    description: DescriptionSchema,
-    dates: DatesSchema,
-    contact: v.pipe(
+const BaseEventSchema = v.object({
+  title: v.optional(
+    v.pipe(
+      v.string('Your title must be a string.'),
+      v.nonEmpty('Please enter your title.'),
+      v.minLength(6, 'Your title must have 6 characters or more.'),
+    ),
+  ),
+  source: v.optional(
+    v.pipe(
+      v.string('Your source must be a string.'),
+      v.nonEmpty('Please enter your source.'),
+      v.minLength(6, 'Your source must have 6 characters or more.'),
+    ),
+  ),
+  image: v.optional(
+    v.union([
+      v.pipe(
+        v.literal(''),
+        v.transform(() => undefined),
+      ),
+      v.pipe(
+        v.string('Your image must be a string.'),
+        v.nonEmpty('Please enter your image.'),
+        v.minLength(6, 'Your image must have 6 characters or more.'),
+      ),
+    ]),
+  ),
+  description: v.optional(
+    v.union([
+      v.pipe(
+        v.literal(''),
+        v.transform(() => undefined),
+      ),
+      v.pipe(
+        v.string('Your description must be a string.'),
+        v.nonEmpty('Please enter your description.'),
+        v.minLength(6, 'Your description must have 6 characters or more.'),
+      ),
+    ]),
+  ),
+  dates: v.optional(
+    v.pipe(
+      v.array(v.union([v.date(), v.string()])),
+      v.transform((dates) => {
+        return dates.map((d) => {
+          if (d instanceof Date) return d
+          return new Date(d)
+        })
+      }),
+      v.minLength(1, 'Please enter at least one date.'),
+    ),
+  ),
+  contact: v.optional(
+    v.pipe(
       v.string('Your contact must be a string.'),
       v.nonEmpty('Please enter your contact.'),
       v.email('Please enter a valid email.'),
+      v.regex(
+        /@(?:gmail|outlook|yahoo)\.com$/,
+        'Please enter a valid email domain. (gmail, outlook, yahoo)',
+      ),
     ),
-  }),
-  v.forward(
-    v.partialCheck(
-      [['contact']],
-      (input) => {
-        const domain = input.contact.split('@')[1]
-        const allowedDomains = [
-          'gmail.com',
-          'yahoo.com',
-          'hotmail.com',
-          'outlook.com',
-        ]
-
-        return allowedDomains.includes(domain)
-      },
-      'Please enter a valid email domain.',
-    ),
-    ['contact'],
   ),
-)
-export type CreateEventInput = v.InferInput<typeof CreateEventSchema>
-export type CreateEventOutput = v.InferOutput<typeof CreateEventSchema>
-
-export const UpdateEventSchema = v.object({
-  title: v.optional(TitleSchema),
-  source: v.optional(SourceSchema),
-  image: ImageSchema,
-  description: DescriptionSchema,
-  dates: DatesSchema,
-  eventId: EventIdSchema,
+  eventId: v.optional(EventIdSchema),
 })
-export type UpdateEventInput = v.InferInput<typeof UpdateEventSchema>
-export type UpdateEventOutput = v.InferOutput<typeof UpdateEventSchema>
+
+export const CreateEventSchema = v.omit(
+  v.required(BaseEventSchema, ['title', 'source', 'dates', 'contact']),
+  ['eventId'],
+)
+
+export const UpdateEventSchema = v.omit(
+  v.required(BaseEventSchema, ['eventId', 'dates']),
+  ['contact'],
+)
 
 const EventDateIdSchema = v.pipe(
   v.number('Your dateId must be a number.'),
@@ -118,6 +96,13 @@ const EventDateIdSchema = v.pipe(
 export const ParseEventDateIdSchema = v.object({
   dateId: EventDateIdSchema,
 })
+
+export type ParseEventIdInput = v.InferInput<typeof ParseEventIdSchema>
+export type ParseEventIdOutput = v.InferOutput<typeof ParseEventIdSchema>
+export type CreateEventInput = v.InferInput<typeof CreateEventSchema>
+export type CreateEventOutput = v.InferOutput<typeof CreateEventSchema>
+export type UpdateEventInput = v.InferInput<typeof UpdateEventSchema>
+export type UpdateEventOutput = v.InferOutput<typeof UpdateEventSchema>
 export type ParseEventDateIdInput = v.InferInput<typeof ParseEventDateIdSchema>
 export type ParseEventDateIdOutput = v.InferOutput<
   typeof ParseEventDateIdSchema

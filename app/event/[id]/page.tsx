@@ -54,7 +54,7 @@ const CreateEventPage = async ({ params }: EventPageProps) => {
               <img
                 src={event.image ?? '/placeholder.jpg'}
                 alt={event.title}
-                className='aspect-[16/7] w-full rounded object-cover object-[0_20%]'
+                className='hover:animate-panImageToBottom aspect-[16/7] w-full rounded object-cover object-[0_20%]'
               />
             </div>
             <div className='flex flex-col justify-between gap-4 sm:flex-row'>

@@ -84,6 +84,7 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
     if (error) {
       console.log('error', error)
     } else {
+      router.refresh()
       if (defaultEvent) {
         document.getElementById('closeEditEventDialogBtn')?.click()
       } else {

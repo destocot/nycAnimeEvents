@@ -2,7 +2,11 @@ import { auth } from '@/auth'
 import { Header } from '@/components/header'
 import { LinkButton } from '@/components/link-button'
 import db from '@/lib/db'
-import { ArrowLeftFromLineIcon, ExternalLinkIcon } from 'lucide-react'
+import {
+  ArrowLeftFromLineIcon,
+  ExternalLinkIcon,
+  ThumbsUpIcon,
+} from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -12,12 +16,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { formatDate } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import { deleteEventDateAction } from '@/actions/delete-event-date-action'
 import { EditEventDialog } from '@/components/admin/edit-event-dialog'
 import { approveEventAction } from '@/actions/approve-event'
 import { deleteEventAction } from '@/actions/delete-event-action'
 import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
+import { badgeVariants } from '@/components/ui/badge'
 
 const Page = async () => {
   const session = await auth()
@@ -119,9 +124,10 @@ const Page = async () => {
                             >
                               <button
                                 type='submit'
-                                className='h-9 w-full rounded-md border bg-green-600 px-1.5 text-background shadow transition-colors hover:bg-green-600/80'
+                                className='flex h-9 w-full items-center justify-center gap-2 rounded-md border bg-green-600 px-1.5 text-white shadow transition-colors hover:bg-green-600/80'
                               >
                                 Approve
+                                <ThumbsUpIcon size={16} />
                               </button>
                             </form>
 
@@ -172,7 +178,7 @@ const Page = async () => {
                         </div>
                       </TableCell>
                       <TableCell className='pr-2 text-right align-top'>
-                        <div className='space-y-2'>
+                        <div className='space-y-1.5'>
                           {event.eventDates.map((date) => (
                             <div key={date.dateId} className='h-6'>
                               <time>{formatDate(date.date)}</time>
@@ -192,7 +198,9 @@ const Page = async () => {
                               >
                                 <button
                                   type='submit'
-                                  className='h-6 rounded-md border border-destructive px-1.5 text-destructive shadow transition-colors hover:bg-destructive/5'
+                                  className={cn(
+                                    badgeVariants({ variant: 'destructive' }),
+                                  )}
                                 >
                                   Delete
                                 </button>

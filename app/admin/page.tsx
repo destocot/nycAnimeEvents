@@ -39,7 +39,7 @@ const Page = async () => {
               {!!session.user.image && (
                 <div className='flex flex-col'>
                   <span className='text-sm font-medium'>image</span>
-                  <img src={session.user.image} />
+                  <img src={session.user.image} alt='user image' />
                 </div>
               )}
               {!!session.user.id && (
