@@ -1,3 +1,4 @@
+import { auth } from '@/auth'
 import db from '@/lib/db'
 import { EventDate } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -10,7 +11,9 @@ export async function GET(req: NextRequest) {
     .get('user-agent')
     ?.startsWith('vercel-cron')
 
-  if (!isFromVercelCron) {
+  const session = await auth()
+
+  if (!isFromVercelCron && !session?.user) {
     return NextResponse.json({ mssg: 'Unauthorized' })
   }
 
