@@ -29,7 +29,9 @@ export async function generateMetadata(
     title: event?.title ? event.title : 'Not Found',
     openGraph: {
       description: event?.description
-        ? event.description
+        ? event.description.length > 128
+          ? event.description.slice(0, 128)
+          : event.description
         : 'The page you are looking for does not exist.',
       images: event?.image ? [event.image] : previousImages,
     },
@@ -79,7 +81,7 @@ const EventPage = async ({ params }: EventPageProps) => {
               <img
                 src={event.image ?? '/placeholder.jpg'}
                 alt={event.title}
-                className='hover:animate-panImageToMiddle aspect-[16/7] w-full rounded object-cover object-[0_20%]'
+                className='aspect-[16/7] w-full rounded object-cover object-[0_20%] hover:animate-panImageToMiddle'
               />
             </div>
             <div className='flex flex-col justify-between gap-4 sm:flex-row'>

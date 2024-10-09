@@ -15,7 +15,10 @@ type EventCardProps = { event: EventWithDate }
 
 export const EventCard = ({ event }: EventCardProps) => {
   return (
-    <Card key={event.eventId} className='group shadow transition hover:scale-[1.02]'>
+    <Card
+      key={event.eventId}
+      className='group shadow transition hover:scale-[1.02]'
+    >
       <div className='sm:flex'>
         <div
           className={cn(
@@ -25,7 +28,7 @@ export const EventCard = ({ event }: EventCardProps) => {
           <img
             src={event.image ?? '/placeholder.jpg'}
             alt={event.title}
-            className='group-hover:animate-panImageToMiddle h-full w-full object-cover object-[0_20%]'
+            className='h-full w-full object-cover object-[0_20%] group-hover:animate-panImageToMiddle'
             loading='lazy'
           />
         </div>
@@ -41,7 +44,7 @@ export const EventCard = ({ event }: EventCardProps) => {
                 href={`/event/${event.eventId}`}
                 size='sm'
                 label='Details'
-                className='h-6 rounded-md px-1.5 text-xs'
+                className='h-6 rounded-md px-1.5 text-xs transition-transform hover:scale-105'
               />
               <LinkButton
                 href={event.source}
@@ -49,7 +52,7 @@ export const EventCard = ({ event }: EventCardProps) => {
                 srOnlyLabel
                 variant='outline'
                 size='icon'
-                className='size-6'
+                className='size-6 transition-transform hover:scale-105'
                 rightIcon={ExternalLinkIcon}
                 external
               />
