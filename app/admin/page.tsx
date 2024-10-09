@@ -1,6 +1,11 @@
 import { Header } from '@/components/header'
 import { auth } from '@/auth'
 import { LinkButton } from '@/components/link-button'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Admin',
+}
 
 const Page = async () => {
   const session = await auth()

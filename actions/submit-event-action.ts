@@ -1,14 +1,22 @@
 'use server'
 
-import { auth } from '@/auth'
+// import { auth } from '@/auth'
 import db from '@/lib/db'
 import { CreateEventSchema } from '@/lib/validators'
 import { revalidatePath } from 'next/cache'
 import { flatten, safeParse } from 'valibot'
 
 export const submitEventAction = async (values: unknown) => {
-  const session = await auth()
-  if (!session?.user) throw new Error('Unauthorized')
+  // const session = await auth()
+  // if (!session?.user) throw new Error('Unauthorized')
+
+  const queuedEventsCount = await db.event.count({
+    where: { isApproved: false },
+  })
+
+  if (queuedEventsCount >= 25) {
+    return { data: null, error: 'Too many events are pending approval.' }
+  }
 
   const parsedValues = safeParse(CreateEventSchema, values)
 

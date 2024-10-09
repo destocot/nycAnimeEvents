@@ -11,7 +11,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -20,9 +19,13 @@ import { cn, formatDate } from '@/lib/utils'
 import { deleteEventDateAction } from '@/actions/delete-event-date-action'
 import { EditEventDialog } from '@/components/admin/edit-event-dialog'
 import { approveEventAction } from '@/actions/approve-event'
-import { deleteEventAction } from '@/actions/delete-event-action'
 import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
 import { badgeVariants } from '@/components/ui/badge'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Admin Manager',
+}
 
 const Page = async () => {
   const session = await auth()

@@ -6,6 +6,11 @@ import { SearchForm } from '@/components/search-form'
 import db from '@/lib/db'
 import { EventWithDate } from '@/lib/types'
 import { PencilIcon } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Search Events',
+}
 
 type PageProps = {
   searchParams: { query: string }

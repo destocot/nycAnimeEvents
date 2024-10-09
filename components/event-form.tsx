@@ -82,7 +82,8 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
     const { data, error } = await action(values)
 
     if (error) {
-      console.log('error', error)
+      // console.log('error', error)
+      alert(error)
     } else {
       router.refresh()
       if (defaultEvent) {

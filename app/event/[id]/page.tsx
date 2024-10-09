@@ -10,6 +10,31 @@ import { Badge } from '@/components/ui/badge'
 import db from '@/lib/db'
 import { formatDate } from '@/lib/utils'
 import { TAKE_EVENTS_LIMIT } from '@/lib/constants'
+import type { Metadata, ResolvingMetadata } from 'next'
+
+export async function generateMetadata(
+  { params }: EventPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const eventId = params.id
+
+  const event = await db.event.findUnique({
+    where: { eventId, isApproved: true },
+    select: { title: true, image: true, description: true },
+  })
+
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: event?.title ? event.title : 'Not Found',
+    openGraph: {
+      description: event?.description
+        ? event.description
+        : 'The page you are looking for does not exist.',
+      images: event?.image ? [event.image, ...previousImages] : previousImages,
+    },
+  }
+}
 
 type EventPageProps = { params: { id: string } }
 
