@@ -30,7 +30,7 @@ export async function generateMetadata(
     openGraph: {
       description: event?.description
         ? event.description.length > 128
-          ? event.description.slice(0, 128)
+          ? `${event.description.slice(0, 128)}...`
           : event.description
         : 'The page you are looking for does not exist.',
       images: event?.image ? [event.image] : previousImages,
