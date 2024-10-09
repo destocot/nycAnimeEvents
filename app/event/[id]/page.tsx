@@ -31,7 +31,7 @@ export async function generateMetadata(
       description: event?.description
         ? event.description
         : 'The page you are looking for does not exist.',
-      images: event?.image ? [event.image, ...previousImages] : previousImages,
+      images: event?.image ? [event.image] : previousImages,
     },
   }
 }
