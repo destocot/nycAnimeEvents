@@ -6,6 +6,7 @@ import { MobileNav } from '@/components/mobile-nav'
 import { ThemeToggler } from '@/components/theme-toggler'
 import { LinkButton } from '@/components/link-button'
 import { DisplayEventCount } from '@/components/display-event-count'
+import { AdminAccessButton } from '@/components/admin/admin-access-button'
 
 type HeaderProps = PropsWithChildren
 
@@ -22,6 +23,7 @@ export const Header = ({ children }: HeaderProps) => {
           </Link>
           <DisplayEventCount />
           <ThemeToggler className='sm:hidden' />
+          <AdminAccessButton />
         </div>
         <nav className='hidden items-center gap-2 md:flex print:hidden'>
           <LinkButton size='sm' href='/' label='Home' leftIcon={HomeIcon} />

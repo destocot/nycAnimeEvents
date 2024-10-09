@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren } from 'react'
 import { HomeIcon, MenuIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { LinkButton } from '@/components/link-button'
+import { MobileAdminAccessButton } from '@/components/admin/admin-access-button'
 
 type MobileNavProps = PropsWithChildren
 
@@ -36,6 +37,7 @@ export const MobileNav = ({ children }: MobileNavProps) => {
             leftIcon={HomeIcon}
           />
           {children}
+          <MobileAdminAccessButton />
         </div>
       </SheetContent>
     </Sheet>
