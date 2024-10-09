@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
+import { useDebouncedCallback } from 'use-debounce'
 
 import type { EventWithDate } from '@/lib/types'
 import { EventCard } from '@/components/event-card'
@@ -34,18 +35,24 @@ export function EventList({ initialEvents }: EventListProps) {
       },
     })
 
-  const { inView, ref } = useInView()
+  const { inView, ref } = useInView({
+    threshold: 0.5,
+  })
 
-  useEffect(() => {
+  const debouncedFetchNextPage = useDebouncedCallback(() => {
     if (inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, hasNextPage, fetchNextPage])
+  }, 200)
+
+  useEffect(() => {
+    debouncedFetchNextPage()
+  }, [inView, hasNextPage, debouncedFetchNextPage])
 
   const events = data.pages.flatMap((page) => page.data)
 
   return (
-    <div className='mx-auto max-w-3xl space-y-3.5'>
+    <div className='mx-auto max-w-3xl space-y-4'>
       {events.map((event) => (
         <EventCard key={event.eventId} event={event} />
       ))}

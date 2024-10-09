@@ -57,17 +57,17 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
-        panImageToBottom: {
-          '0%, 100%': {
-            objectPosition: '50% 0%',
+        panImageToMiddle: {
+          '0%': {
+            objectPosition: '50% 20%',
           },
-          '50%': {
-            objectPosition: '50% 100%',
+          '100%': {
+            objectPosition: '50% 70%',
           },
         },
       },
       animation: {
-        panImageToBottom: 'panImageToBottom 6s ease-in-out infinite',
+        panImageToMiddle: 'panImageToMiddle 2s ease-in-out',
         slowPulse: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; ',
       },
     },

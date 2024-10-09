@@ -15,7 +15,7 @@ type EventCardProps = { event: EventWithDate }
 
 export const EventCard = ({ event }: EventCardProps) => {
   return (
-    <Card key={event.eventId} className='shadow transition hover:scale-[1.02]'>
+    <Card key={event.eventId} className='group shadow transition hover:scale-[1.02]'>
       <div className='sm:flex'>
         <div
           className={cn(
@@ -25,12 +25,13 @@ export const EventCard = ({ event }: EventCardProps) => {
           <img
             src={event.image ?? '/placeholder.jpg'}
             alt={event.title}
-            className='hover:animate-panImageToBottom h-full w-full object-cover object-[0_20%]'
+            className='group-hover:animate-panImageToMiddle h-full w-full object-cover object-[0_20%]'
+            loading='lazy'
           />
         </div>
 
         <div className='p-4 sm:w-2/3'>
-          <CardHeader className='flex-row items-center justify-between space-y-0 p-0 pb-2'>
+          <CardHeader className='flex-row items-center justify-between gap-1.5 space-y-0 p-0 pb-2'>
             <CardTitle className='line-clamp-1 text-lg'>
               {event.title}
             </CardTitle>

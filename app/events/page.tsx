@@ -62,7 +62,7 @@ export default async function Page({ searchParams }: PageProps) {
             </h1>
             <SearchForm initialQuery={query} />
             {events.length > 0 ? (
-              <div className='space-y-3.5'>
+              <div className='space-y-4'>
                 {events.map((event) => (
                   <EventCard key={event.eventId} event={event} />
                 ))}
