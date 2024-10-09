@@ -63,6 +63,9 @@ export async function GET(req: NextRequest) {
   revalidatePath('/')
 
   return NextResponse.json({
-    data: { deletedCount: eventsToResync.length },
+    data: {
+      deleteEventsCount: eventsToResync.length,
+      deleteEventDatesCount: eventDates.length,
+    },
   })
 }
