@@ -19,9 +19,7 @@ export async function GET(req: NextRequest) {
 
   const now = new Date()
   const yesterdayMidnight = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() - 1,
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1),
   )
 
   const eventDates = await db.eventDate.findMany({
