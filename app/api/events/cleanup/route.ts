@@ -18,14 +18,14 @@ export async function GET(req: NextRequest) {
   }
 
   const now = new Date()
-  const yesterdayMidnight = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1),
+  const nowMidnight = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
   )
 
   const eventDates = await db.eventDate.findMany({
     where: {
       date: {
-        lt: yesterdayMidnight,
+        lt: nowMidnight,
       },
     },
     select: { dateId: true, date: true, eventId: true },
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
   const eventsToResync = eventDates.map((eventDate) => eventDate.eventId)
 
-  await db.eventDate.deleteMany({ where: { date: { lt: yesterdayMidnight } } })
+  await db.eventDate.deleteMany({ where: { date: { lt: nowMidnight } } })
 
   eventsToResync.forEach(async (eventId) => {
     const event = await db.event.findUniqueOrThrow({
