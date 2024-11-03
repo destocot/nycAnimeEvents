@@ -22,6 +22,7 @@ import { approveEventAction } from '@/actions/approve-event'
 import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
 import { badgeVariants } from '@/components/ui/badge'
 import type { Metadata } from 'next'
+import { CleanupEventsButton } from '@/components/admin/cleanup-events-button'
 
 export const metadata: Metadata = {
   title: 'Admin Manager',
@@ -66,11 +67,14 @@ const Page = async () => {
               <h1 className='text-2xl font-bold tracking-tight sm:text-3xl'>
                 Admin Manager
               </h1>
-              <LinkButton
-                href='/admin'
-                label='Back'
-                leftIcon={ArrowLeftFromLineIcon}
-              />
+              <div className='flex items-center gap-x-2'>
+                <LinkButton
+                  href='/admin'
+                  label='Back'
+                  leftIcon={ArrowLeftFromLineIcon}
+                />
+                <CleanupEventsButton />
+              </div>
             </div>
             <div className='h-1 bg-muted' />
             <div className='space-y-2'>
@@ -94,13 +98,6 @@ const Page = async () => {
                             <div className='flex flex-col'>
                               <span className='text-sm font-medium'>Title</span>
                               {event.title}
-                            </div>
-
-                            <div className='flex flex-col'>
-                              <span className='text-sm font-medium'>
-                                Contact
-                              </span>
-                              {event.contact}
                             </div>
 
                             <a

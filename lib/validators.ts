@@ -63,29 +63,18 @@ const BaseEventSchema = v.object({
       v.minLength(1, 'Please enter at least one date.'),
     ),
   ),
-  contact: v.optional(
-    v.pipe(
-      v.string('Your contact must be a string.'),
-      v.nonEmpty('Please enter your contact.'),
-      v.email('Please enter a valid email.'),
-      v.regex(
-        /@(?:gmail|outlook|yahoo)\.com$/,
-        'Please enter a valid email domain. (gmail, outlook, yahoo)',
-      ),
-    ),
-  ),
   eventId: v.optional(EventIdSchema),
 })
 
 export const CreateEventSchema = v.omit(
-  v.required(BaseEventSchema, ['title', 'source', 'dates', 'contact']),
+  v.required(BaseEventSchema, ['title', 'source', 'dates']),
   ['eventId'],
 )
 
-export const UpdateEventSchema = v.omit(
-  v.required(BaseEventSchema, ['eventId', 'dates']),
-  ['contact'],
-)
+export const UpdateEventSchema = v.required(BaseEventSchema, [
+  'eventId',
+  'dates',
+])
 
 const EventDateIdSchema = v.pipe(
   v.number('Your dateId must be a number.'),

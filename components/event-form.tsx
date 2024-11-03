@@ -1,6 +1,6 @@
 'use client'
 
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren } from 'react'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useForm } from 'react-hook-form'
 import {
@@ -13,7 +13,6 @@ import { EventWithDate } from '@/lib/types'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,11 +22,13 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { formatDate } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { XCircleIcon } from 'lucide-react'
+import { CalendarIcon, XCircleIcon } from 'lucide-react'
 import { Button } from './ui/button'
 import { updateEventAction } from '@/actions/update-event-action'
 import { submitEventAction } from '@/actions/submit-event-action'
 import { useRouter } from 'next/navigation'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Calendar } from './ui/calendar'
 
 type EventFormProps = PropsWithChildren<{
   defaultEvent?: EventWithDate
@@ -47,7 +48,6 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
       description: defaultEvent?.description ? defaultEvent.description : '',
       dates: defaultEvent?.eventDates.map((date) => date.date) ?? [],
       eventId: defaultEvent?.eventId,
-      contact: defaultEvent?.contact ? defaultEvent.contact : '',
     },
   })
 
@@ -61,8 +61,8 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
     )
   }
 
-  const handleAddDate = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(evt.target.value)
+  const handleAddDate = (value: Date) => {
+    const date = new Date(value)
 
     if (watchDates.some((d) => new Date(d).getTime() === date.getTime())) {
       return
@@ -73,7 +73,6 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
     })
 
     setValue('dates', newDates)
-    evt.target.value = ''
   }
 
   const submit = async (values: CreateEventInput | UpdateEventInput) => {
@@ -82,9 +81,9 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
     const { data, error } = await action(values)
 
     if (error) {
-      // console.log('error', error)
-      alert(error)
+      console.log('error', error)
     } else {
+      console.log('data', data)
       router.refresh()
       if (defaultEvent) {
         document.getElementById('closeEditEventDialogBtn')?.click()
@@ -153,38 +152,39 @@ export const EventForm = ({ children, defaultEvent }: EventFormProps) => {
             </FormItem>
           )}
         />
-        {defaultEvent ? (
-          <input type='hidden' {...register('eventId')} />
-        ) : (
-          <FormField
-            control={form.control}
-            name='contact'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Contact Email <span className='text-red-500'>*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  For internal use only. This will not be displayed.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+        {defaultEvent ? <input type='hidden' {...register('eventId')} /> : null}
         <FormField
           control={form.control}
           name='dates'
           render={({ field: { value, onChange, ...rest } }) => (
-            <FormItem>
+            <FormItem className='flex flex-col'>
               <FormLabel>Dates</FormLabel>
-              <FormControl>
-                <Input type='date' onChange={handleAddDate} {...rest} />
-              </FormControl>
-              <div className='h-1' />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className='w-[240px] pl-3 text-left font-normal'
+                    >
+                      <span className='text-muted-foreground'>
+                        Pick date(s)
+                      </span>
+                      <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className='w-auto p-0' align='start'>
+                  <Calendar
+                    mode='single'
+                    onSelect={(value) => {
+                      if (value instanceof Date) {
+                        handleAddDate(value)
+                      }
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <div className='flex flex-wrap gap-1'>
                 {value.map((date, index) => (
                   <Badge key={index} className='flex-row-reverse'>

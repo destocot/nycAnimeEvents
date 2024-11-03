@@ -47,7 +47,6 @@ export const submitEventAction = async (values: unknown) => {
       description: output.description,
       earliestDate,
       isApproved: false,
-      contact: output.contact,
       eventDates: {
         createMany: {
           data: output.dates.map((date) => ({ date })),

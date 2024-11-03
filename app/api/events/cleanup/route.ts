@@ -31,7 +31,9 @@ export async function GET(req: NextRequest) {
     select: { dateId: true, date: true, eventId: true },
   })
 
-  const eventsToResync = eventDates.map((eventDate) => eventDate.eventId)
+  const eventsToResync = Array.from(
+    new Set(eventDates.map((eventDate) => eventDate.eventId)),
+  )
 
   await db.eventDate.deleteMany({ where: { date: { lt: nowMidnight } } })
 

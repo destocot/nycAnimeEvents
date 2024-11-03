@@ -18,7 +18,6 @@ model Event {
   source      String
   description String?
   image       String?
-  contact     String?
   isApproved  Boolean @default(false) @map("is_approved")
 
   eventDates EventDate[]
