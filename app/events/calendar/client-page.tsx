@@ -60,23 +60,23 @@ export default function Component({ events }: CalendarProps) {
   const EventPreview = ({ event }: { event: Event }) => (
     <Link
       href={`/event/${event.eventId}`}
-      className='flex w-full items-center space-x-2 rounded p-1 hover:bg-gray-100'
+      className='group relative block h-7 w-full overflow-hidden rounded sm:h-9'
     >
-      <div className='aspect-[2/3] w-1/3 flex-shrink-0 overflow-hidden rounded'>
-        <img
-          src={event.image || '/placeholder.jpg'}
-          alt={event.title}
-          className='h-full w-full object-cover'
-        />
+      <div
+        className='absolute inset-0 bg-cover bg-center'
+        style={{ backgroundImage: `url(${event.image || '/placeholder.jpg'})` }}
+      />
+      <div className='absolute inset-0 bg-black bg-opacity-50 transition group-hover:bg-opacity-40' />
+      <div className='absolute inset-0 flex items-center px-1 text-xs font-semibold text-white sm:px-2 sm:text-sm'>
+        <p className='line-clamp-1'>{event.title}</p>
       </div>
-      <span className='flex-grow truncate text-xs'>{event.title}</span>
     </Link>
   )
 
   return (
-    <div className='container mx-auto p-4'>
+    <div className='container mx-auto p-2 sm:bg-transparent sm:p-4'>
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-2xl font-bold'>
+        <h2 className='text-lg font-bold sm:text-2xl'>
           {format(currentDate, 'MMMM yyyy')}
         </h2>
         <div>
@@ -93,9 +93,12 @@ export default function Component({ events }: CalendarProps) {
           </Button>
         </div>
       </div>
-      <div className='grid grid-cols-7 gap-2'>
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className='p-2 text-center font-bold'>
+      <div className='grid grid-cols-7 gap-1 sm:gap-2'>
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
+          <div
+            key={day}
+            className='p-1 text-center text-xs font-bold sm:p-2 sm:text-sm'
+          >
             {day}
           </div>
         ))}
@@ -104,29 +107,33 @@ export default function Component({ events }: CalendarProps) {
           return (
             <div
               key={day.toISOString()}
-              className={`h-48 border p-2 ${isSameMonth(day, currentDate) ? '' : 'bg-gray-100'}`}
+              className={`h-[8rem] border p-1 sm:h-[11rem] sm:p-2 ${
+                isSameMonth(day, currentDate) ? '' : 'bg-gray-100'
+              }`}
             >
-              <div className='mb-2 text-right'>{format(day, 'd')}</div>
-              <div className='flex h-36 flex-col space-y-1 overflow-hidden'>
-                {dayEvents.slice(0, 1).map((event) => (
+              <div className='mb-1 text-right text-xs sm:mb-2 sm:text-sm'>
+                {format(day, 'd')}
+              </div>
+              <div className='grid h-24 grid-cols-1 grid-rows-3 gap-y-0.5 overflow-hidden sm:h-[8rem]'>
+                {dayEvents.slice(0, 2).map((event) => (
                   <EventPreview key={event.dateId} event={event.event} />
                 ))}
-                {dayEvents.length > 1 ? (
+                {dayEvents.length > 2 && (
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button
                         variant='outline'
-                        className='flex h-8 w-full justify-center text-xs'
+                        className='flex h-7 w-full items-center justify-center rounded text-xs sm:h-9'
                       >
-                        <MoreHorizontal className='mr-1 size-4' />
-                        {dayEvents.length - 1} more
+                        <MoreHorizontal className='mr-1 h-3 w-3 sm:h-4 sm:w-4' />
+                        {dayEvents.length - 2} more
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className='max-h-[80vh] overflow-y-auto sm:max-w-[425px]'>
                       <DialogHeader>
                         <DialogTitle>{format(day, 'MMMM d, yyyy')}</DialogTitle>
                       </DialogHeader>
-                      <div className='flex flex-col space-y-2'>
+                      <div className='mt-4 flex flex-col space-y-2'>
                         {dayEvents.map((event) => (
                           <EventPreview
                             key={event.dateId}
@@ -136,7 +143,7 @@ export default function Component({ events }: CalendarProps) {
                       </div>
                     </DialogContent>
                   </Dialog>
-                ) : null}
+                )}
               </div>
             </div>
           )
