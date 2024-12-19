@@ -1,11 +1,9 @@
 import { ExternalLinkIcon } from 'lucide-react'
 import { notFound } from 'next/navigation'
 
-import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
-import { EditEventDialog } from '@/components/admin/edit-event-dialog'
-import { Header } from '@/components/header'
-import { LinkButton } from '@/components/link-button'
-import { PrintButton } from '@/components/print-button'
+// import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
+// import { EditEventDialog } from '@/components/admin/edit-event-dialog'
+// import { PrintButton } from '@/components/print-button'
 import { Badge } from '@/components/ui/badge'
 import db from '@/lib/db'
 import { formatDate } from '@/lib/utils'
@@ -82,15 +80,15 @@ const EventPage = async ({ params }: EventPageProps) => {
             {event.description}
           </p>
           <div className='flex gap-2 sm:flex-col print:hidden'>
-            <LinkButton
+            {/* <LinkButton
               href={event.source}
               label='Source'
               rightIcon={ExternalLinkIcon}
               external
               variant='secondary'
-            />
-            <EditEventDialog event={event} />
-            <DeleteEventDialog eventId={event.id} />
+            /> */}
+            {/* <EditEventDialog event={event} />
+            <DeleteEventDialog eventId={event.id} /> */}
           </div>
         </div>
         <div className='h-1 bg-muted' />

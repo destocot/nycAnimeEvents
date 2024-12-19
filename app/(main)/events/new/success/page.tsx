@@ -1,5 +1,6 @@
-import { LinkButton } from '@/components/link-button'
+import { Button } from '@/components/ui/button'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'New Event Success',
@@ -17,12 +18,13 @@ export default function NewEventSuccessPage() {
           subject to approval.
         </p>
         <div className='flex gap-2'>
-          <LinkButton href='/' label='Return to Home' />
-          <LinkButton
-            href='/events/new'
-            variant='secondary'
-            label='Submit Another Event'
-          />
+          <Button asChild>
+            <Link href='/'>Return to Home</Link>
+          </Button>
+
+          <Button variant='secondary' asChild>
+            <Link href='/events/new'>View All Events</Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -6,12 +6,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const events = await db.event.findMany({
     where: { isApproved: true },
-    select: { eventId: true, updatedAt: true },
+    select: { id: true, updatedAt: true },
   })
 
   // Switch to slugs in the future
   const eventUrls = events.map((event) => ({
-    url: `${BASE_URL}/event/${event.eventId}`,
+    url: `${BASE_URL}/event/${event.id}`,
     lastModified: event.updatedAt,
   }))
 

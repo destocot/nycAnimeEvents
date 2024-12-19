@@ -1,11 +1,7 @@
-import { EventWithDate } from '@/lib/types'
 import { formatDate } from '@/lib/utils'
+import { EventDate } from '@prisma/client'
 
-export const DatesAggregator = ({
-  dates,
-}: {
-  dates: EventWithDate['eventDates']
-}) => {
+export const DatesAggregator = ({ dates }: { dates: Array<EventDate> }) => {
   let isSequential = true
 
   for (let i = 0; i < dates.length - 1; i++) {

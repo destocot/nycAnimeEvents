@@ -1,9 +1,9 @@
 'use server'
 
 import { auth } from '@/auth'
-import db from '@/lib/db'
+// import db from '@/lib/db'
 import { UpdateEventSchema } from '@/lib/validators'
-import { revalidatePath } from 'next/cache'
+// import { revalidatePath } from 'next/cache'
 import { flatten, safeParse } from 'valibot'
 
 export const updateEventAction = async (values: unknown) => {
@@ -31,24 +31,24 @@ export const updateEventAction = async (values: unknown) => {
     throw new Error('Please enter at least one date.')
   }
 
-  const updatedEvent = await db.event.update({
-    where: { eventId: output.eventId },
-    data: {
-      ...(output.title ? { title: output.title } : {}),
-      ...(output.source ? { source: output.source } : {}),
-      ...(output.image ? { image: output.image } : {}),
-      ...(output.description ? { description: output.description } : {}),
-      earliestDate,
-      eventDates: {
-        deleteMany: {},
-        createMany: {
-          data: output.dates.map((date) => ({ date })),
-        },
-      },
-    },
-    select: { eventId: true },
-  })
+  // const updatedEvent = await db.event.update({
+  //   where: { eventId: output.eventId },
+  //   data: {
+  //     ...(output.title ? { title: output.title } : {}),
+  //     ...(output.source ? { source: output.source } : {}),
+  //     ...(output.image ? { image: output.image } : {}),
+  //     ...(output.description ? { description: output.description } : {}),
+  //     earliestDate,
+  //     eventDates: {
+  //       deleteMany: {},
+  //       createMany: {
+  //         data: output.dates.map((date) => ({ date })),
+  //       },
+  //     },
+  //   },
+  //   select: { eventId: true },
+  // })
 
-  revalidatePath(`/event/${updatedEvent.eventId}`)
+  // revalidatePath(`/event/${updatedEvent.eventId}`)
   return { data: null, error: null }
 }

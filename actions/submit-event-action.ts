@@ -39,22 +39,22 @@ export const submitEventAction = async (values: unknown) => {
     throw new Error('Please enter at least one date.')
   }
 
-  const submittedEvent = await db.event.create({
-    data: {
-      title: output.title,
-      source: output.source,
-      image: output.image,
-      description: output.description,
-      earliestDate,
-      isApproved: false,
-      eventDates: {
-        createMany: {
-          data: output.dates.map((date) => ({ date })),
-        },
-      },
-    },
-    select: { eventId: true },
-  })
+  // const submittedEvent = await db.event.create({
+  //   data: {
+  //     title: output.title,
+  //     source: output.source,
+  //     image: output.image,
+  //     description: output.description,
+  //     earliestDate,
+  //     isApproved: false,
+  //     eventDates: {
+  //       createMany: {
+  //         data: output.dates.map((date) => ({ date })),
+  //       },
+  //     },
+  //   },
+  //   select: { eventId: true },
+  // })
 
   revalidatePath('/')
   return { data: null, error: null }
