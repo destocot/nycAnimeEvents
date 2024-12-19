@@ -56,20 +56,6 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-      keyframes: {
-        panImageToMiddle: {
-          '0%': {
-            objectPosition: '50% 20%',
-          },
-          '100%': {
-            objectPosition: '50% 70%',
-          },
-        },
-      },
-      animation: {
-        panImageToMiddle: 'panImageToMiddle 2s ease-in-out',
-        slowPulse: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; ',
-      },
     },
   },
   plugins: [require('tailwindcss-animate')],

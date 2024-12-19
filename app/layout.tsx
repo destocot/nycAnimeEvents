@@ -1,18 +1,12 @@
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
+import { Titillium_Web } from 'next/font/google'
 import './globals.css'
 
 import Providers from '@/providers'
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-})
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const titilliumWeb = Titillium_Web({
+  weight: ['200', '300', '400', '600', '700', '900'],
+  subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
@@ -36,21 +30,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          <div className='flex min-h-screen flex-col'>
-            <div className='flex-1'>{children}</div>
-            <footer>
-              <div className='container mx-auto max-w-4xl px-2 py-4'>
-                <span className='text-sm opacity-50'>
-                  © 2024 Khurram Ali. All rights reserved.
-                </span>
-              </div>
-            </footer>
-          </div>
-        </Providers>
+      <body className={`${titilliumWeb.className} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

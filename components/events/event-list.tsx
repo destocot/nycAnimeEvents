@@ -1,30 +1,29 @@
 'use client'
 
-import { useEffect } from 'react'
+import type { Prisma } from '@prisma/client'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { EventCard } from '@/components/events/event-card'
 import { useInView } from 'react-intersection-observer'
 import { useDebouncedCallback } from 'use-debounce'
+import { useEffect } from 'react'
+import { LoaderIcon } from 'lucide-react'
 
-import { EventCard } from '@/components/event-card'
-import { EventListSkeleton } from '@/components/skeletons/event-list-skeleton'
+type EventListProps = {
+  initialEvents: Array<Prisma.EventGetPayload<{ include: { dates: true } }>>
+}
 
-type EventListProps = { initialEvents: Array<any> }
-
-export function EventList({ initialEvents }: EventListProps) {
+export const EventList = ({ initialEvents }: EventListProps) => {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ['events'],
       queryFn: async ({
         pageParam = '',
-      }: {
-        pageParam: string
       }): Promise<{
-        data: Array<any>
+        data: Array<Prisma.EventGetPayload<{ include: { dates: true } }>>
         nextId: string | undefined
       }> => {
-        const response = await fetch(`/api/events?cursor=${pageParam}`)
-        const json = await response.json()
-        return json
+        const res = await fetch(`/api/events?cursor=${pageParam}`)
+        return await res.json()
       },
       initialPageParam: '',
       getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
@@ -34,14 +33,10 @@ export function EventList({ initialEvents }: EventListProps) {
       },
     })
 
-  const { inView, ref } = useInView({
-    threshold: 0.5,
-  })
+  const { inView, ref } = useInView({ threshold: 0.5 })
 
   const debouncedFetchNextPage = useDebouncedCallback(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage()
-    }
+    if (inView && hasNextPage) fetchNextPage()
   }, 200)
 
   useEffect(() => {
@@ -51,11 +46,13 @@ export function EventList({ initialEvents }: EventListProps) {
   const events = data.pages.flatMap((page) => page.data)
 
   return (
-    <div className='mx-auto max-w-3xl space-y-4'>
-      {events.map((event) => (
-        <EventCard key={event.eventId} event={event} />
+    <div className='space-y-8'>
+      {events.map((e) => (
+        <EventCard key={e.id} event={e} />
       ))}
-      {isFetchingNextPage && <EventListSkeleton />}
+
+      {isFetchingNextPage && <LoaderIcon className='animate-spin' />}
+
       <div className='mx-auto flex max-w-6xl justify-center' ref={ref} />
     </div>
   )
