@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 
 export default function Page() {
   return (
-    <div className='container mx-auto h-full max-w-4xl px-4 pb-8 pt-16'>
+    <div className='container mx-auto h-full max-w-4xl px-4 py-8'>
       <Suspense fallback={'Loading...'}>
         <ServerEventList />
       </Suspense>

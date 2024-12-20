@@ -1,14 +1,15 @@
 import { ExternalLinkIcon } from 'lucide-react'
 import { notFound } from 'next/navigation'
 
-// import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
-// import { EditEventDialog } from '@/components/admin/edit-event-dialog'
+import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
+import { EditEventDialog } from '@/components/admin/edit-event-dialog'
 // import { PrintButton } from '@/components/print-button'
 import { Badge } from '@/components/ui/badge'
 import db from '@/lib/db'
 import { formatDate } from '@/lib/utils'
 import { TAKE_EVENTS_LIMIT } from '@/lib/constants'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { Button } from '@/components/ui/button'
 
 type EventPageProps = { params: { id: string } }
 
@@ -63,7 +64,7 @@ const EventPage = async ({ params }: EventPageProps) => {
   if (!event) notFound()
 
   return (
-    <div className='container mx-auto h-full max-w-4xl px-4 pb-8 pt-16'>
+    <div className='container mx-auto h-full max-w-4xl px-4 py-8'>
       <div className='space-y-4'>
         <h1 className='text-2xl font-bold tracking-tight sm:text-3xl'>
           {event.title}
@@ -80,15 +81,15 @@ const EventPage = async ({ params }: EventPageProps) => {
             {event.description}
           </p>
           <div className='flex gap-2 sm:flex-col print:hidden'>
-            {/* <LinkButton
-              href={event.source}
-              label='Source'
-              rightIcon={ExternalLinkIcon}
-              external
-              variant='secondary'
-            /> */}
-            {/* <EditEventDialog event={event} />
-            <DeleteEventDialog eventId={event.id} /> */}
+            <Button variant='secondary' size='sm' asChild>
+              <a href={event.source} target='_blank' rel='noreferrer'>
+                Source <ExternalLinkIcon />
+              </a>
+            </Button>
+
+            <EditEventDialog event={event} />
+
+            <DeleteEventDialog eventId={event.id} />
           </div>
         </div>
         <div className='h-1 bg-muted' />

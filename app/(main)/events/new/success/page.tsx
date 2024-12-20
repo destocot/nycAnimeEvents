@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function NewEventSuccessPage() {
   return (
-    <div className='container mx-auto h-full max-w-4xl px-4 pb-8 pt-16'>
+    <div className='container mx-auto h-full max-w-4xl px-4 py-8'>
       <div className='space-y-4'>
         <h1 className='text-3xl font-bold tracking-tight'>
           Event Successfully Submitted

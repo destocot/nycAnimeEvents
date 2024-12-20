@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-// import db from '@/lib/db'
+import db from '@/lib/db'
 import { ParseEventIdSchema } from '@/lib/validators'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -19,12 +19,12 @@ export const deleteEventAction = async (values: unknown) => {
     return
   }
 
-  // const eventId = parsedValues.output.eventId
+  const { output } = parsedValues
 
-  // await db.$transaction([
-  //   db.eventDate.deleteMany({ where: { eventId } }),
-  //   db.event.delete({ where: { eventId } }),
-  // ])
+  await db.$transaction([
+    db.eventDate.deleteMany({ where: { eventId: output.eventId } }),
+    db.event.delete({ where: { id: output.eventId } }),
+  ])
 
   revalidatePath('/')
   redirect('/')
