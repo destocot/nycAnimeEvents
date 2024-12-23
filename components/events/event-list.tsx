@@ -6,7 +6,7 @@ import { EventCard } from '@/components/events/event-card'
 import { useInView } from 'react-intersection-observer'
 import { useDebouncedCallback } from 'use-debounce'
 import { useEffect } from 'react'
-import { LoaderIcon } from 'lucide-react'
+import { EventCardSkeleton } from '@/components/skeletons/event-card-skeleton'
 
 type EventListProps = {
   initialEvents: Array<Prisma.EventGetPayload<{ include: { dates: true } }>>
@@ -51,7 +51,7 @@ export const EventList = ({ initialEvents }: EventListProps) => {
         <EventCard key={e.id} event={e} />
       ))}
 
-      {isFetchingNextPage && <LoaderIcon className='animate-spin' />}
+      {isFetchingNextPage && <EventCardSkeleton />}
 
       <div className='mx-auto flex max-w-6xl justify-center' ref={ref} />
     </div>
