@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const cursor = cursorQuery ? { id: cursorQuery } : undefined
 
   const events = await db.event.findMany({
-    // where: { isApproved: true },
+    where: { isApproved: true },
     include: { dates: true },
     take: TAKE_EVENTS_LIMIT,
     skip,
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     orderBy: { earliestAt: 'asc' },
   })
 
-  const nextId = events.at(-1)?.id
+  const nextId = events[TAKE_EVENTS_LIMIT - 1]?.id
 
   return Response.json({ data: events, nextId })
 }

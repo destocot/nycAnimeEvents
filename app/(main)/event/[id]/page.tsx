@@ -78,21 +78,22 @@ const EventPage = async ({ params }: EventPageProps) => {
             className='aspect-[16/7] w-full rounded object-cover'
           />
         </div>
-        <div className='flex flex-col justify-between gap-4 sm:flex-row'>
-          <p className='w-full max-w-prose text-justify leading-relaxed opacity-80'>
-            {event.description}
-          </p>
-          <div className='flex gap-2 sm:flex-col print:hidden'>
+        <div className='flex flex-col gap-y-4'>
+          <div className='flex items-center justify-end gap-x-2 print:hidden'>
+            <EditEventDialog event={event} />
+
+            <DeleteEventDialog eventId={event.id} />
+
             <Button variant='secondary' size='sm' asChild>
               <a href={event.source} target='_blank' rel='noreferrer'>
                 Source <ExternalLinkIcon />
               </a>
             </Button>
-
-            <EditEventDialog event={event} />
-
-            <DeleteEventDialog eventId={event.id} />
           </div>
+
+          <p className='w-full max-w-prose text-justify leading-relaxed opacity-80'>
+            {event.description}
+          </p>
         </div>
         <div className='h-1 bg-muted' />
         <h3 className='text-xl font-bold tracking-tight'>Upcoming Dates</h3>
