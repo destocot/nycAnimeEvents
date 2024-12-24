@@ -15,7 +15,6 @@ export default function Page() {
 }
 
 const ServerEventList = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
   const events = await db.event.findMany({
     // where: { isApproved: true },
     include: { dates: true },

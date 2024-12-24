@@ -1,6 +1,8 @@
 import Link from 'next/link'
-import { Button } from '../ui/button'
-import { ThemeToggler } from '../theme-toggler'
+import { Button } from '@/components/ui/button'
+import { ThemeToggler } from '@/components/layout/theme-toggler'
+import { MobileNav } from '@/components/layout/mobile-nav'
+import { DisplayEventCount } from '@/components/events/display-event-count'
 
 export const Header = () => {
   return (
@@ -14,22 +16,34 @@ export const Header = () => {
             NYC Anime Events
           </Link>
 
-          <nav className='flex items-center gap-x-4'>
-            <Button size='sm' className='font-semibold' asChild>
-              <Link href='/'>Home</Link>
-            </Button>
+          <div className='flex items-center gap-x-4'>
+            <nav className='hidden items-center gap-x-4 sm:flex'>
+              <Button size='sm' className='font-semibold' asChild>
+                <Link href='/'>Home</Link>
+              </Button>
 
-            <Button
-              size='sm'
-              className='font-semibold'
-              variant='secondary'
-              asChild
-            >
-              <Link href='/events/new'>Create Event</Link>
-            </Button>
+              <Button size='sm' className='font-semibold' asChild>
+                <Link href='/events'>Search</Link>
+              </Button>
+
+              <Button
+                size='sm'
+                className='font-semibold'
+                variant='secondary'
+                asChild
+              >
+                <Link href='/events/new'>Create Event</Link>
+              </Button>
+            </nav>
+
+            <DisplayEventCount />
+
+            <div className='sm:hidden'>
+              <MobileNav />
+            </div>
 
             <ThemeToggler />
-          </nav>
+          </div>
         </div>
       </div>
     </header>

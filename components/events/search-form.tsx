@@ -27,8 +27,8 @@ export const SearchForm = ({ initialQuery }: SearchFormProps) => {
       params.delete('query')
     }
     router.replace(`${pathname}?${params.toString()}`)
-    setTimeout(() => setIsSearching(false), 500)
-  }, 300)
+    setTimeout(() => void setIsSearching(false), 1000)
+  }, 500)
 
   return (
     <form>
