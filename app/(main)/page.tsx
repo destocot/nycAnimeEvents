@@ -16,7 +16,7 @@ export default function Page() {
 
 const ServerEventList = async () => {
   const events = await db.event.findMany({
-    // where: { isApproved: true },
+    where: { isApproved: true },
     include: { dates: true },
     take: TAKE_EVENTS_LIMIT,
     orderBy: { earliestAt: 'asc' },

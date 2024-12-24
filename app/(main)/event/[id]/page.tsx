@@ -42,7 +42,7 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const events = await db.event.findMany({
     select: { id: true },
-    // where: { isApproved: true },
+    where: { isApproved: true },
     orderBy: { earliestAt: 'asc' },
     take: TAKE_EVENTS_LIMIT,
   })
@@ -58,7 +58,7 @@ const EventPage = async ({ params }: EventPageProps) => {
   const event = await db.event.findUnique({
     where: {
       id: params.id,
-      //  isApproved: true
+      isApproved: true,
     },
     include: { dates: true },
   })

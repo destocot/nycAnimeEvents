@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: PageProps) {
     query
       ? await db.event.findMany({
           where: {
-            // isApproved: true,
+            isApproved: true,
             OR: [
               { title: { contains: query } },
               { description: { contains: query } },
