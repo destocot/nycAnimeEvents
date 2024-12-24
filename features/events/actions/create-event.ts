@@ -39,6 +39,6 @@ export const createEventAction = async (values: unknown) => {
     select: { id: true },
   })
 
-  revalidatePath('/m/events')
-  redirect('/m/events/new/success')
+  revalidatePath('/')
+  redirect('/events/new/success')
 }

@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -34,31 +35,31 @@ export const EventCard = ({ event }: EventCardProps) => {
           />
         </div>
 
-        <div className='p-4 sm:w-2/3'>
-          <CardHeader className='flex-row items-center justify-between gap-1.5 space-y-0 p-0 pb-2'>
+        <div className='flex flex-col p-4 sm:w-2/3'>
+          <CardHeader className='flex-row items-center justify-between gap-1.5 space-y-0 p-0'>
             <CardTitle className='line-clamp-1 text-lg'>
               {event.title}
             </CardTitle>
-
-            <CardDescription className='flex items-center gap-x-2'>
-              <Button size='xs' asChild>
-                <Link href={`/event/${event.id}`}>Details</Link>
-              </Button>
-
-              <Button size='xs' asChild>
-                <a href={event.source} target='_blank' rel='noreferrer'>
-                  Source
-                  <ExternalLinkIcon />
-                </a>
-              </Button>
-            </CardDescription>
           </CardHeader>
 
-          <CardContent className='p-0'>
+          <CardContent className='flex-grow p-0'>
             <DatesAggregator dates={event.dates} />
 
             <p className='line-clamp-3 text-xs'>{event.description}</p>
           </CardContent>
+
+          <CardFooter className='ml-auto mt-2 flex items-center gap-x-2 p-0 sm:mt-0'>
+            <Button size='xs' asChild>
+              <Link href={`/event/${event.id}`}>Details</Link>
+            </Button>
+
+            <Button size='xs' asChild>
+              <a href={event.source} target='_blank' rel='noreferrer'>
+                Source
+                <ExternalLinkIcon />
+              </a>
+            </Button>
+          </CardFooter>
         </div>
       </div>
     </Card>
