@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 
 import { DeleteEventDialog } from '@/components/admin/delete-event-dialog'
 import { EditEventDialog } from '@/components/admin/edit-event-dialog'
-// import { PrintButton } from '@/components/print-button'
 import { Badge } from '@/components/ui/badge'
 import db from '@/lib/db'
 import { formatDate } from '@/lib/utils'
@@ -18,7 +17,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const event = await db.event.findUnique({
-    where: { id: params.id, isApproved: true },
+    where: {
+      id: params.id,
+      //  isApproved: true
+    },
     select: { title: true, image: true, description: true },
   })
 
@@ -40,7 +42,7 @@ export async function generateMetadata(
 export async function generateStaticParams() {
   const events = await db.event.findMany({
     select: { id: true },
-    where: { isApproved: true },
+    // where: { isApproved: true },
     orderBy: { earliestAt: 'asc' },
     take: TAKE_EVENTS_LIMIT,
   })
