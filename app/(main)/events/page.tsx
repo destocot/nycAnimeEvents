@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: PageProps) {
             ],
           },
           include: { dates: { orderBy: { date: 'asc' } } },
-          orderBy: { earliestAt: 'asc' },
+          // orderBy: { earliestAt: 'asc' },
         })
       : []
 

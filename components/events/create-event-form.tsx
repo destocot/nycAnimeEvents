@@ -10,18 +10,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+} from '@ui/form'
+import { Input } from '@ui/input'
+import { Textarea } from '@ui/textarea'
 import { formatDate } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import { CalendarIcon, XCircleIcon } from 'lucide-react'
-import { createEventAction } from '@/features/events/actions/create-event'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
-import { Calendar } from '../ui/calendar'
+import { Badge } from '@ui/badge'
+import { CalendarIcon, XIcon } from 'lucide-react'
+import { createEventAction } from '@events/actions/create-event'
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/popover'
+import { Button } from '@ui/button'
+import { Calendar } from '@ui/calendar'
+import { useState } from 'react'
 
 export const CreateEventForm = () => {
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+
   const form = useForm<CreateEventInput>({
     resolver: valibotResolver(CreateEventSchema),
     defaultValues: {
@@ -58,6 +62,7 @@ export const CreateEventForm = () => {
   }
 
   const submit = async (values: CreateEventInput) => {
+    values.image = imageFile ? await convertImageToBase64(imageFile) : ''
     const res = await createEventAction(values)
 
     if (res?.error) console.log('[error]:', res.error)
@@ -100,12 +105,49 @@ export const CreateEventForm = () => {
         <FormField
           control={form.control}
           name='image'
-          render={({ field }) => (
+          render={({ field: { onChange, ...rest } }) => (
             <FormItem>
               <FormLabel>Image</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              {imagePreview ? (
+                <div className='relative h-32 w-full overflow-hidden rounded-sm'>
+                  <img
+                    src={imagePreview}
+                    alt='Profile preview'
+                    className='h-full w-full object-cover'
+                  />
+                  <button
+                    type='button'
+                    className='absolute right-2 top-2 text-white hover:text-red-500'
+                    onClick={() => {
+                      setImagePreview(null)
+                      setImageFile(null)
+                      setValue('image', '')
+                    }}
+                  >
+                    <XIcon size={20} />
+                  </button>
+                </div>
+              ) : (
+                <FormControl>
+                  <Input
+                    type='file'
+                    accept='image/*'
+                    {...rest}
+                    onChange={async (evt) => {
+                      const file = evt.target.files?.[0]
+                      if (file) {
+                        setImageFile(file)
+                        const reader = new FileReader()
+                        reader.onloadend = () => {
+                          setImagePreview(`${reader.result}`)
+                        }
+                        reader.readAsDataURL(file)
+                      }
+                      onChange(evt)
+                    }}
+                  />
+                </FormControl>
+              )}
               <FormMessage />
             </FormItem>
           )}
@@ -128,7 +170,7 @@ export const CreateEventForm = () => {
         <FormField
           control={form.control}
           name='dates'
-          render={({ field: { value, onChange, ...rest } }) => (
+          render={({ field: { value, ...rest } }) => (
             <FormItem className='flex flex-col'>
               <FormLabel>Dates</FormLabel>
               <Popover>
@@ -169,7 +211,7 @@ export const CreateEventForm = () => {
                       className='peer ml-2 text-destructive'
                       onClick={() => handleRemoveDate(index)}
                     >
-                      <XCircleIcon size={16} />
+                      <XIcon size={16} />
                     </button>
                     <span className='peer-hover:line-through'>
                       {formatDate(date instanceof Date ? date : new Date(date))}
@@ -194,4 +236,13 @@ export const CreateEventForm = () => {
       </form>
     </Form>
   )
+}
+
+async function convertImageToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 }

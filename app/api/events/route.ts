@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     take: TAKE_EVENTS_LIMIT,
     skip,
     cursor,
-    orderBy: { earliestAt: 'asc' },
+    // orderBy: { earliestAt: 'asc' },
   })
 
   const nextId = events[TAKE_EVENTS_LIMIT - 1]?.id

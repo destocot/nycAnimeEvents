@@ -21,6 +21,7 @@ import { cn, formatDate } from '@/lib/utils'
 import { badgeVariants } from '@/components/ui/badge'
 import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
+import { approveEventAction } from '@/actions/approve-event'
 // import { CleanupEventsButton } from '@/components/admin/cleanup-events-button'
 
 export const metadata: Metadata = {
@@ -42,7 +43,7 @@ export default async function AdminManagerPage() {
           orderBy: { date: 'asc' },
         },
       },
-      orderBy: { earliestAt: 'asc' },
+      // orderBy: { earliestAt: 'asc' },
     }),
     db.event.findMany({
       where: { isApproved: true },
@@ -51,7 +52,7 @@ export default async function AdminManagerPage() {
           orderBy: { date: 'asc' },
         },
       },
-      orderBy: { earliestAt: 'asc' },
+      // orderBy: { earliestAt: 'asc' },
     }),
   ])
 
@@ -97,9 +98,9 @@ export default async function AdminManagerPage() {
                   <TableCell className='align-top'>
                     <form
                       className='flex items-center justify-center'
-                      // action={approveEventAction.bind(null, {
-                      //   eventId: event.id,
-                      // })}
+                      action={approveEventAction.bind(null, {
+                        eventId: event.id,
+                      })}
                     >
                       <Button
                         type='submit'

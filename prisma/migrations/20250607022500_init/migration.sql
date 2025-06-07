@@ -1,3 +1,9 @@
+-- DropTable
+DROP TABLE IF EXISTS "event_dates";
+
+-- DropTable
+DROP TABLE IF EXISTS "events";
+
 -- CreateTable
 CREATE TABLE "events" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -7,8 +13,7 @@ CREATE TABLE "events" (
     "source" TEXT NOT NULL,
     "description" TEXT,
     "image" TEXT,
-    "is_approved" BOOLEAN NOT NULL DEFAULT false,
-    "earliest_at" DATETIME NOT NULL
+    "is_approved" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable

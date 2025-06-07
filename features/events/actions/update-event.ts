@@ -3,7 +3,6 @@
 import db from '@/lib/db'
 import { UpdateEventSchema } from '@/lib/validators'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { safeParse, flatten } from 'valibot'
 
 export const updateEventAction = async (values: unknown) => {
@@ -17,10 +16,6 @@ export const updateEventAction = async (values: unknown) => {
     return { error: nested[Object.keys(nested)[0] as keyof typeof nested]?.[0] }
   }
 
-  const earliestAt = parsedValues.output.dates.reduce((earliest, date) => {
-    return date < earliest ? date : earliest
-  })
-
   const { output } = parsedValues
 
   await db.event.update({
@@ -30,7 +25,6 @@ export const updateEventAction = async (values: unknown) => {
       ...(output.source ? { source: output.source } : {}),
       ...(output.image ? { image: output.image } : {}),
       ...(output.description ? { description: output.description } : {}),
-      earliestAt,
       dates: {
         deleteMany: { eventId: output.eventId },
         createMany: {

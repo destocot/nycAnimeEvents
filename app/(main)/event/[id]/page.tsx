@@ -43,7 +43,7 @@ export async function generateStaticParams() {
   const events = await db.event.findMany({
     select: { id: true },
     where: { isApproved: true },
-    orderBy: { earliestAt: 'asc' },
+    // orderBy: { earliestAt: 'asc' },
     take: TAKE_EVENTS_LIMIT,
   })
 

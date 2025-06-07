@@ -17,19 +17,15 @@ export const createEventAction = async (values: unknown) => {
     return { error: nested[Object.keys(nested)[0] as keyof typeof nested]?.[0] }
   }
 
-  const earliestAt = parsedValues.output.dates.reduce((earliest, date) => {
-    return date < earliest ? date : earliest
-  })
-
   const { output } = parsedValues
 
   await db.event.create({
     data: {
+      isApproved: true,
       title: output.title,
       source: output.source,
       ...(output.image ? { image: output.image } : {}),
       ...(output.description ? { description: output.description } : {}),
-      earliestAt,
       dates: {
         createMany: {
           data: output.dates.map((date) => ({ date })),
