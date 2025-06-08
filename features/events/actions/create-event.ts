@@ -21,7 +21,7 @@ export const createEventAction = async (values: unknown) => {
 
   await db.event.create({
     data: {
-      isApproved: true,
+      // isApproved: true,
       title: output.title,
       source: output.source,
       ...(output.image ? { image: output.image } : {}),

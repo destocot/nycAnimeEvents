@@ -41,9 +41,9 @@ export const MobileNav = () => {
             <Link href='/'>Home</Link>
           </Button>
 
-          <Button size='sm' className='font-semibold' asChild>
+          {/* <Button size='sm' className='font-semibold' asChild>
             <Link href='/events'>Search</Link>
-          </Button>
+          </Button> */}
 
           <Button
             size='sm'
