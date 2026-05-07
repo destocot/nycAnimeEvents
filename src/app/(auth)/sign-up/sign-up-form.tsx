@@ -1,0 +1,111 @@
+"use client";
+
+import { Link } from "next-view-transitions";
+import { useTransitionRouter } from "next-view-transitions";
+import { useForm, Form, Field, setErrors } from "@formisch/react";
+import * as v from "valibot";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
+import { SignUpSchema } from "@/resources/auth/validators";
+
+export const SignUpForm = () => {
+  const router = useTransitionRouter();
+  const form = useForm({ schema: SignUpSchema });
+
+  async function handleSubmit(values: v.InferOutput<typeof SignUpSchema>) {
+    const { error } = await authClient.signUp.email({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    });
+    if (error) {
+      setErrors(form, { errors: [error.message ?? "Something went wrong"] });
+      return;
+    }
+    router.push("/sign-in");
+  }
+
+  return (
+    <main className="flex-1 flex items-center justify-center px-4 py-16">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Create account</CardTitle>
+          <CardDescription>Join NYC Anime Events</CardDescription>
+        </CardHeader>
+
+        <Form of={form} onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            <Field of={form} path={["name"]}>
+              {(field) => (
+                <div className="space-y-1.5">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Your name"
+                    {...field.props}
+                    value={field.input ?? ""}
+                  />
+                  {field.errors && (
+                    <p className="text-xs text-destructive">{field.errors[0]}</p>
+                  )}
+                </div>
+              )}
+            </Field>
+
+            <Field of={form} path={["email"]}>
+              {(field) => (
+                <div className="space-y-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    {...field.props}
+                    value={field.input ?? ""}
+                  />
+                  {field.errors && (
+                    <p className="text-xs text-destructive">{field.errors[0]}</p>
+                  )}
+                </div>
+              )}
+            </Field>
+
+            <Field of={form} path={["password"]}>
+              {(field) => (
+                <div className="space-y-1.5">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••"
+                    {...field.props}
+                    value={field.input ?? ""}
+                  />
+                  {field.errors && (
+                    <p className="text-xs text-destructive">{field.errors[0]}</p>
+                  )}
+                </div>
+              )}
+            </Field>
+          </CardContent>
+
+          <CardFooter className="flex-col gap-3 pt-2">
+            <Button type="submit" className="w-full">
+              Create account
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Already have an account?{" "}
+              <Link href="/sign-in" className="text-primary hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </CardFooter>
+        </Form>
+      </Card>
+    </main>
+  );
+};

@@ -1,0 +1,3322 @@
+# Formisch
+
+The modular and type-safe form library for any framework.
+
+## Get started (guides)
+
+### Introduction
+
+Formisch is a schema-based, headless form library for React. It manages form state and validation. It is type-safe, fast by default and its bundle size is small due to its modular design. Try it out in our <Link href="/playground/">playground</Link>!
+
+#### Highlights
+
+- Small bundle size starting at 2.5 kB
+- Schema-based validation with Valibot
+- Type safety with autocompletion in editor
+- It's fast – re-renders only if necessary
+- Minimal, readable and well thought out API
+- Supports all native HTML form fields
+
+#### Example
+
+Every form starts with the <Link href="/react/api/useForm/">`useForm`</Link> hook. It initializes your form's store based on the provided Valibot schema and infers its types. Next, wrap your form in the <Link href="/react/api/Form/">`<Form />`</Link> component. It's a thin layer around the native `<form />` element that handles form validation and submission. Then, you can access the state of a field with the <Link href="/react/api/useField/">`useField`</Link> hook or the <Link href="/react/api/Field/">`<Field />`</Link> component to connect your inputs.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function LoginPage() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  return (
+    <Form of={loginForm} onSubmit={(output, event) => console.log(output)}>
+      <Field of={loginForm} path={['email']}>
+        {(field) => (
+          <div>
+            <input {...field.props} value={field.input} type="email" />
+            {field.errors && <div>{field.errors[0]}</div>}
+          </div>
+        )}
+      </Field>
+      <Field of={loginForm} path={['password']}>
+        {(field) => (
+          <div>
+            <input {...field.props} value={field.input} type="password" />
+            {field.errors && <div>{field.errors[0]}</div>}
+          </div>
+        )}
+      </Field>
+      <button type="submit">Login</button>
+    </Form>
+  );
+}
+```
+
+In addition, Formisch offers several functions (we call them "methods") that can be used to read and manipulate the form state. These include <Link href="/methods/api/focus/">`focus`</Link>, <Link href="/methods/api/getAllErrors/">`getAllErrors`</Link>, <Link href="/methods/api/getErrors/">`getErrors`</Link>, <Link href="/methods/api/getInput/">`getInput`</Link>, <Link href="/methods/api/handleSubmit/">`handleSubmit`</Link>, <Link href="/methods/api/insert/">`insert`</Link>, <Link href="/methods/api/move/">`move`</Link>, <Link href="/methods/api/remove/">`remove`</Link>, <Link href="/methods/api/replace/">`replace`</Link>, <Link href="/methods/api/reset/">`reset`</Link>, <Link href="/methods/api/setErrors/">`setErrors`</Link>, <Link href="/methods/api/setInput/">`setInput`</Link>, <Link href="/methods/api/submit/">`submit`</Link>, <Link href="/methods/api/swap/">`swap`</Link> and <Link href="/methods/api/validate/">`validate`</Link>. These methods allow you to control the form programmatically.
+
+#### Comparison
+
+What makes Formisch unique is its framework-agnostic core, which is fully native to the framework you are using. It works by inserting framework-specific reactivity blocks when the core package is built. The result is a small bundle size and native performance for any UI update. This feature, along with a few others, distinguishes Formisch from other form libraries. My vision for Formisch is to create a framework-agnostic platform similar to <a href="https://vite.dev/" target="_blank" rel="noreferrer">Vite</a>, but for forms.
+
+#### Partners
+
+Thanks to our partners who support the development! <a href={import.meta.env.PUBLIC_GITHUB_SPONSORS_URL} target="_blank" rel="noreferrer">Join them</a> and contribute to the sustainability of open source software!
+
+<p>
+  <img
+    src={`${import.meta.env.PUBLIC_GITHUB_URL}/blob/main/partners.webp?raw=true`}
+    alt="Partners of Formisch"
+  />
+</p>
+
+#### Feedback
+
+Find a bug or have an idea how to improve the library? Please fill out an <a href={`${import.meta.env.PUBLIC_GITHUB_URL}/issues/new`} target="\_blank" rel="noreferrer">issue</a>. Together we can make forms even better!
+
+#### License
+
+This project is available free of charge and licensed under the <a href={`${import.meta.env.PUBLIC_GITHUB_URL}/blob/main/LICENSE.md`} target="\_blank" rel="noreferrer">MIT license</a>.
+
+### Installation
+
+Below you will learn how to add Formisch to your project.
+
+#### TypeScript
+
+If you are using TypeScript, we recommend that you enable strict mode in your `tsconfig.json` so that all types are calculated correctly.
+
+> The minimum required TypeScript version is v5.0.2.
+
+```ts
+{
+  "compilerOptions": {
+    "strict": true,
+    // ...
+  }
+}
+```
+
+#### Install Valibot
+
+Formisch uses [Valibot](https://valibot.dev/) for schema-based validation. You need to install it first because it is a peer dependency.
+
+```bash
+npm install valibot     # npm
+yarn add valibot        # yarn
+pnpm add valibot        # pnpm
+bun add valibot         # bun
+deno add npm:valibot    # deno
+```
+
+#### Install Formisch
+
+You can add Formisch to your project with a single command using your favorite package manager.
+
+```bash
+npm install @formisch/react     # npm
+yarn add @formisch/react        # yarn
+pnpm add @formisch/react        # pnpm
+bun add @formisch/react         # bun
+deno add npm:@formisch/react    # deno
+```
+
+Then you can import it into any JavaScript or TypeScript file.
+
+```ts
+import { … } from '@formisch/react';
+```
+
+#### For AI Agents
+
+We provide agent skills that teach AI agents the correct patterns for working with Valibot and Formisch. You can install them by running the following command in your terminal:
+
+```bash
+npx skills add open-circle/agent-skills
+```
+
+You can learn more about the Valibot and Formisch agent skill [here](https://github.com/open-circle/agent-skills).
+
+### LLMs.txt
+
+If you are using AI to generate forms with Formisch, you can use our LLMs.txt files to help the AI better understand the library.
+
+#### What is LLMs.txt?
+
+An [LLMs.txt](https://llmstxt.org/) file is a plain text file that provides instructions or metadata for large language models (LLMs). It often specifies how the LLMs should process or interact with content. It is similar to a robots.txt file, but is tailored for AI models.
+
+#### Available routes
+
+We provide several LLMs.txt routes. Use the route that works best with your AI tool.
+
+- [`llms.txt`](/llms.txt) contains a table of contents with links to all Markdown files
+- [`llms-react.txt`](/llms-react.txt) contains a table of contents with links to React related files
+- [`llms-react-full.txt`](/llms-react-full.txt) contains the Markdown content of the entire React docs
+- [`llms-react-guides.txt`](/llms-react-guides.txt) contains the Markdown content of the React guides
+- [`llms-react-api.txt`](/llms-react-api.txt) contains the Markdown content of the React API reference
+
+> We also provide a Markdown version of every documentation page. You can access it by replacing the trailing slash (`/`) in the URL with `.md`. For example, `/react/guides/installation/` becomes `/react/guides/installation.md`.
+
+#### For AI Agents
+
+Our [`SKILL.md`](https://github.com/open-circle/agent-skills/blob/main/skills/formisch/SKILL.md) contains specialized instructions for AI agents to build forms and manage state.
+
+#### How to use it
+
+To help you get started, here are some examples of how the LLMs.txt files can be used with various AI tools.
+
+> Please help us by adding more examples of other AI tools. If you use a tool that supports LLMs.txt files, please [open a pull request](https://github.com/fabian-hiller/valibot/pulls) to add it to this page.
+
+##### Cursor
+
+You can add a custom documentation as context in Cursor using the `@Docs` feature. Read more about it [here](https://docs.cursor.com/context/@-symbols/@-docs).
+
+## Main concepts (guides)
+
+### Define your form
+
+Creating a form in Formisch starts with defining a Valibot schema. The schema serves as the blueprint for your form, outlining the structure, data types, and validation rules for each field.
+
+#### Schema definition
+
+Formisch is a schema-first form library built on top of [Valibot](https://valibot.dev/). When you create a form with <Link href="/react/api/useForm/">`useForm`</Link>, TypeScript types are automatically inferred from your schema, giving you full autocompletion and type safety throughout your form without needing to write any manual type definitions.
+
+##### Example schema
+
+The following schema defines a form with two required string fields. The `email` field must be a valid email format, and the `password` field must be at least 8 characters long. Each validation includes custom error messages that will be displayed when validation fails.
+
+> For more complex schema examples, check out the schemas of our <Link href="/playground/">playground</Link>.
+
+```ts
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(
+    v.string('Please enter your email.'),
+    v.nonEmpty('Please enter your email.'),
+    v.email('The email address is badly formatted.')
+  ),
+  password: v.pipe(
+    v.string('Please enter your password.'),
+    v.nonEmpty('Please enter your password.'),
+    v.minLength(8, 'Your password must have 8 characters or more.')
+  ),
+});
+```
+
+#### Schema validation
+
+Your schema definition should reflect exactly the data you expect when submitting the form. For example, if the value of a field is optional and will only be submitted in certain cases, your schema should reflect this information by using `v.optional(…)`.
+
+```ts
+import * as v from 'valibot';
+
+const ProfileSchema = v.object({
+  name: v.pipe(v.string(), v.nonEmpty()),
+  bio: v.optional(v.string()), // <- Optional field
+});
+```
+
+Formisch validates your form values against the schema before submission, ensuring that your form can only be submitted if it matches your schema definition.
+
+#### Next steps
+
+Now that you understand how to define your form schema, continue to the <Link href="/react/guides/create-your-form/">create your form</Link> guide to learn how to initialize your form with <Link href="/react/api/useForm/">`useForm`</Link>.
+
+### Create your form
+
+Formisch consists of hooks, components and methods. To create a form you use the <Link href="/react/api/useForm/">`useForm`</Link> hook.
+
+#### Form hook
+
+The <Link href="/react/api/useForm/">`useForm`</Link> hook initializes and returns the store of your form. The store contains the state of the form and can be used with other Formisch hooks, components and methods to build your form.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function App() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  return <Form of={loginForm}>{/* Form fields will go here */}</Form>;
+}
+```
+
+##### Configuration options
+
+The <Link href="/react/api/useForm/">`useForm`</Link> hook accepts a configuration object with the following options:
+
+- `schema`: Your Valibot schema that defines the form
+- `initialInput`: Initial values for your form fields (optional)
+- `validate`: When validation first occurs (optional, defaults to `'submit'`)
+- `revalidate`: When revalidation occurs after initial validation (optional, defaults to `'input'`)
+
+```tsx
+const loginForm = useForm({
+  schema: LoginSchema,
+  initialInput: {
+    email: 'user@example.com',
+  },
+  validate: 'initial',
+  revalidate: 'input',
+});
+```
+
+Formisch tracks two inputs for every field: the **initial input** (baseline for dirty tracking) and the **current input** (what the user is editing). In many apps, the initial input represents the server state while the current input represents the client state.
+
+`isDirty` becomes `true` when a field's current input differs from its initial input. Use <Link href="/methods/api/setInput/">`setInput`</Link> to update the current input (client state), and use <Link href="/methods/api/reset/">`reset`</Link> to update the initial input (baseline) when your server data changes or is refreshed.
+
+##### Multiple forms
+
+When a page contains multiple forms, you can create separate form stores for each one:
+
+```tsx
+import { Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+const RegisterSchema = v.object({
+  username: v.pipe(v.string(), v.minLength(3)),
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function App() {
+  const loginForm = useForm({ schema: LoginSchema });
+  const registerForm = useForm({ schema: RegisterSchema });
+
+  return (
+    <>
+      <Form of={loginForm}>{/* … */}</Form>
+      <Form of={registerForm}>{/* … */}</Form>
+    </>
+  );
+}
+```
+
+#### Next steps
+
+Now that you know how to create a form, continue to the <Link href="/react/guides/add-form-fields/">add form fields</Link> guide to learn how to connect your input elements to the form using the <Link href="/react/api/Field/">`Field`</Link> component.
+
+### Add form fields
+
+To add a field to your form, you can use the <Link href="/react/api/Field/">`Field`</Link> component or the <Link href="/react/api/useField/">`useField`</Link> hook. Both are headless and provide access to field state for building your form UI.
+
+#### Field component
+
+The <Link href="/react/api/Field/">`Field`</Link> component has two mandatory properties: `of` which accepts the form store, and `path` which specifies which field to connect. If you use TypeScript, you get full autocompletion for the path based on your schema.
+
+##### Children prop
+
+As a child, you pass a function to the <Link href="/react/api/Field/">`Field`</Link> component that returns JSX. The function receives the field store as its parameter, which includes the current value, error messages, and props to spread onto your input element.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function App() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  return (
+    <Form of={loginForm}>
+      <Field of={loginForm} path={['email']}>
+        {(field) => <input {...field.props} value={field.input} type="email" />}
+      </Field>
+      <Field of={loginForm} path={['password']}>
+        {(field) => (
+          <input {...field.props} value={field.input} type="password" />
+        )}
+      </Field>
+      <button type="submit">Login</button>
+    </Form>
+  );
+}
+```
+
+> **Important:** If you plan to set initial values with `initialInput` or programmatically control field values using methods like <Link href="/methods/api/setInput/">`setInput`</Link> or <Link href="/methods/api/reset/">`reset`</Link>, you must make your fields controlled by setting the appropriate attributes (like `value`, `checked`, or `selected`). See the <Link href="/react/guides/controlled-fields/">controlled fields</Link> guide to learn more.
+
+##### Headless design
+
+The <Link href="/react/api/Field/">`Field`</Link> component does not render its own UI elements. It is headless and provides only the data layer of the field. This allows you to freely define your user interface. You can use HTML elements, custom components or an external UI library.
+
+##### Path array
+
+The `path` property accepts an array of strings and numbers that represents the path to the field in your schema. For top-level fields, it's simply the field name wrapped in an array:
+
+```tsx
+<Field of={loginForm} path={['email']}>
+  {(field) => <input {...field.props} value={field.input} type="email" />}
+</Field>
+```
+
+For nested fields, the path reflects the structure of your schema:
+
+```tsx
+// For a schema like: v.object({ user: v.object({ email: v.string() }) })
+<Field of={form} path={['user', 'email']}>
+  {(field) => <input {...field.props} value={field.input} type="email" />}
+</Field>
+```
+
+##### Type safety
+
+The API design of the <Link href="/react/api/Field/">`Field`</Link> component results in a fully type-safe form. For example, if you change your schema, TypeScript will immediately alert you if the path is invalid. The field state is also fully typed based on your schema, giving you autocompletion for properties like `field.input`.
+
+#### useField hook
+
+For very complex forms where you create individual components for each form field, Formisch provides the <Link href="/react/api/useField/">`useField`</Link> hook. It allows you to access the field state directly within your component logic.
+
+```tsx
+import { useField } from '@formisch/react';
+import type { FormStore } from '@formisch/react';
+import * as v from 'valibot';
+
+type EmailInputProps = {
+  form: FormStore<v.GenericSchema<{ email: string }>>;
+};
+
+function EmailInput(props: EmailInputProps) {
+  const field = useField(props.form, { path: ['email'] });
+
+  return (
+    <div>
+      <input {...field.props} value={field.input} type="email" />
+      {field.errors && <div>{field.errors[0]}</div>}
+    </div>
+  );
+}
+```
+
+##### When to use which
+
+- **Use <Link href="/react/api/Field/">`Field`</Link> component**: When defining multiple fields in the same component. It ensures you don't accidentally access the wrong field store.
+- **Use <Link href="/react/api/useField/">`useField`</Link> hook**: When creating field components for single fields. It allows you to access field state in your component logic.
+
+The <Link href="/react/api/Field/">`Field`</Link> component is essentially a thin wrapper around <Link href="/react/api/useField/">`useField`</Link> that allows you to access the field state within JSX code.
+
+#### Field store
+
+The field store provides access to the following properties. They are plain values, but because Formisch wires into React's rendering, your components re-render when they change.
+
+- `props`: JSX props to spread onto your input element (includes event handlers, ref callback, name attribute, and `autoFocus` to automatically focus fields with errors).
+- `input`: The current input value of the field.
+- `errors`: The current array of error messages if validation fails.
+- `isTouched`: Whether the field has been touched.
+- `isDirty`: Whether the current input differs from the initial input.
+- `isValid`: Whether the field passes all validation rules.
+- `onChange`: Sets the field input value programmatically. Use this when the field cannot be connected to a native HTML element (e.g., complex custom inputs or component libraries that don't expose the underlying element).
+
+#### Next steps
+
+Now that you know how to add fields to your form, continue to the <Link href="/react/guides/input-components/">input components</Link> guide to learn about creating reusable input components for your forms.
+
+### Input components
+
+To make your code more readable, we recommend that you develop your own input components if you are not using a prebuilt UI library. There you can encapsulate logic to display error messages, for example.
+
+> If you're already a bit more experienced, you can use the input components we developed for our <Link href="/playground/">playground</Link> as a starting point. You can find the code in our GitHub repository <a href={`${import.meta.env.PUBLIC_GITHUB_URL}/tree/main/playgrounds/react/src/components`} target="\_blank" rel="noreferrer">here</a>.
+
+#### Why input components?
+
+Currently, your fields might look something like this:
+
+```tsx
+<Field of={loginForm} path={['email']}>
+  {(field) => (
+    <div>
+      <label htmlFor={field.props.name}>Email</label>
+      <input
+        {...field.props}
+        id={field.props.name}
+        value={field.input}
+        type="email"
+        required
+      />
+      {field.errors && <div>{field.errors[0]}</div>}
+    </div>
+  )}
+</Field>
+```
+
+If CSS and a few more functionalities are added here, the code quickly becomes confusing. In addition, you have to rewrite the same code for almost every form field.
+
+Our goal is to develop a `TextInput` component so that the code ends up looking like this:
+
+```tsx
+<Field of={loginForm} path={['email']}>
+  {(field) => (
+    <TextInput
+      {...field.props}
+      type="email"
+      label="Email"
+      input={field.input}
+      errors={field.errors}
+      required
+    />
+  )}
+</Field>
+```
+
+#### Create an input component
+
+In the first step, you create a new file for the `TextInput` component and, if you use TypeScript, define its properties.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+
+interface TextInputProps extends FieldElementProps {
+  type: 'text' | 'email' | 'tel' | 'password' | 'url' | 'date';
+  label?: string;
+  placeholder?: string;
+  input: string | undefined;
+  errors: [string, ...string[]] | null;
+  required?: boolean;
+}
+```
+
+##### Component function
+
+In the next step, add the component function to the file. We can destructure props directly and spread the remaining props.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+
+interface TextInputProps extends FieldElementProps {
+  /* ... */
+}
+
+export function TextInput({ label, input, errors, ...props }: TextInputProps) {
+  // Component implementation
+}
+```
+
+##### JSX code
+
+After that, you can add the JSX code to the return statement.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+
+interface TextInputProps extends FieldElementProps {
+  /* ... */
+}
+
+export function TextInput({ label, input, errors, ...props }: TextInputProps) {
+  const { name, required } = props;
+  return (
+    <div>
+      {label && (
+        <label htmlFor={name}>
+          {label} {required && <span>*</span>}
+        </label>
+      )}
+      <input
+        {...props}
+        name={name}
+        id={name}
+        required={required}
+        value={input}
+        aria-invalid={!!errors}
+        aria-errormessage={`${name}-error`}
+      />
+      {errors && <div id={`${name}-error`}>{errors[0]}</div>}
+    </div>
+  );
+}
+```
+
+##### Next steps
+
+You can now build on this code and add CSS, for example. You can also follow the procedure to create other components such as `Checkbox`, `Slider`, `Select` and `FileInput`.
+
+##### Final code
+
+Below is an overview of the entire code of the `TextInput` component.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+
+interface TextInputProps extends FieldElementProps {
+  type: 'text' | 'email' | 'tel' | 'password' | 'url' | 'date';
+  label?: string;
+  placeholder?: string;
+  input: string | undefined;
+  errors: [string, ...string[]] | null;
+  required?: boolean;
+}
+
+export function TextInput({ label, input, errors, ...props }: TextInputProps) {
+  const { name, required } = props;
+  return (
+    <div>
+      {label && (
+        <label htmlFor={name}>
+          {label} {required && <span>*</span>}
+        </label>
+      )}
+      <input
+        {...props}
+        name={name}
+        id={name}
+        required={required}
+        value={input ?? ''}
+        aria-invalid={!!errors}
+        aria-errormessage={`${name}-error`}
+      />
+      {errors && <div id={`${name}-error`}>{errors[0]}</div>}
+    </div>
+  );
+}
+```
+
+#### Using component libraries
+
+When using component libraries that don't expose their underlying native HTML elements, you cannot spread `field.props` directly. Instead, use `field.onChange` to update the value programmatically:
+
+```tsx
+import { DatePicker } from 'some-component-library';
+
+<Field of={form} path={['date']}>
+  {(field) => (
+    <DatePicker
+      value={field.input}
+      onChange={(newDate) => field.onChange(newDate)}
+    />
+  )}
+</Field>;
+```
+
+The `field.onChange` method updates the field value and triggers validation. For more details, see the <Link href="/react/guides/controlled-fields/">controlled fields</Link> guide.
+
+#### Next steps
+
+Now that you know how to create reusable input components, continue to the <Link href="/react/guides/handle-submission/">handle submission</Link> guide to learn how to process form data when the user submits the form.
+
+### Handle submission
+
+Now your first form is almost ready. There is only one little thing missing and that is the data processing when the form is submitted.
+
+#### Submit event
+
+To process the values on submission, you need to pass a function to the `onSubmit` property of the <Link href="/react/api/Form/">`Form`</Link> component. The first parameter passed to the function contains the validated form values.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import type { SubmitHandler } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function App() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  const submitForm: SubmitHandler<typeof LoginSchema> = (values) => {
+    // Process the validated form values
+    console.log(values); // { email: string, password: string }
+  };
+
+  return (
+    <Form of={loginForm} onSubmit={submitForm}>
+      {/* Form fields will go here */}
+    </Form>
+  );
+}
+```
+
+The <Link href="/core/api/SubmitHandler/">`SubmitHandler`</Link> type ensures type safety for your submission handler, automatically inferring the types of validated values from your schema. If you need access to the submit event, use <Link href="/core/api/SubmitEventHandler/">`SubmitEventHandler`</Link> instead.
+
+##### Prevent default
+
+When the form is submitted, `event.preventDefault()` is executed by default to prevent the window from reloading so that the values can be processed directly in the browser and the state of the form is preserved.
+
+##### Loading state
+
+While the form is being submitted, you can use `loginForm.isSubmitting` to display a loading animation and disable the submit button:
+
+```tsx
+<button type="submit" disabled={loginForm.isSubmitting}>
+  {loginForm.isSubmitting ? 'Submitting...' : 'Login'}
+</button>
+```
+
+The form store also provides other reactive properties like `isSubmitted`, `isValidating`, `isTouched`, `isDirty`, `isValid`, and `errors` for tracking form state. Note that `errors` only contains validation errors at the root level of the form — to get all errors from all fields, use the <Link href="/methods/api/getAllErrors/">`getAllErrors`</Link> method.
+
+##### Async submission
+
+The submit handler can be asynchronous, allowing you to perform API calls or other async operations:
+
+```tsx
+const submitForm: SubmitHandler<typeof LoginSchema> = async (values) => {
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
+
+    if (response.ok) {
+      // Handle successful login
+      console.log('Login successful!');
+    } else {
+      // Handle error
+      console.error('Login failed');
+    }
+  } catch (error) {
+    console.error('Error during submission:', error);
+  }
+};
+```
+
+##### Trigger submission
+
+If you want to trigger submission programmatically from outside the form, you can use the <Link href="/methods/api/submit/">`submit`</Link> method. It calls `requestSubmit()` on the underlying form element:
+
+```tsx
+import { submit } from '@formisch/react';
+
+<button type="button" onClick={() => submit(loginForm)}>
+  Submit from outside
+</button>;
+```
+
+#### Submit without \<form /\>
+
+In some cases, you may not be able to wrap your fields in a `<form>` element — for example, when your form is rendered inside another form, since nesting `<form>` elements is invalid HTML. In these situations, you can use the <Link href="/methods/api/handleSubmit/">`handleSubmit`</Link> method directly to submit the form programmatically without the <Link href="/react/api/Form/">`Form`</Link> component.
+
+The returned function accepts no arguments and can be called from anywhere — for example, from a button's `onClick` handler:
+
+```tsx
+import { Field, handleSubmit, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function App() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  const submitForm = handleSubmit(loginForm, (values) => {
+    // Process the validated form values
+    console.log(values);
+  });
+
+  return (
+    <div>
+      {/* Form fields without a <Form /> wrapper */}
+      <button type="button" onClick={submitForm}>
+        Login
+      </button>
+    </div>
+  );
+}
+```
+
+#### Next steps
+
+Congratulations! You've learned the core concepts of building forms with Formisch. To learn more about advanced features, check out the <Link href="/react/guides/form-methods/">form methods</Link> guide to discover how to programmatically control your forms.
+
+### Form methods
+
+To retrieve the values of your form or to make changes to the form, Formisch provides you with several methods. These apply either to the entire form or to individual fields.
+
+#### Reading values
+
+To retrieve values from your form, you can use:
+
+- <Link href="/methods/api/getInput/">`getInput`</Link>: Get the current value
+  of a specific field
+- <Link href="/methods/api/getErrors/">`getErrors`</Link>: Get error messages
+  for a specific field
+- <Link href="/methods/api/getAllErrors/">`getAllErrors`</Link>: Get all error
+  messages across the entire form
+
+Formisch plugs into React's render cycle, so reading values with these methods inside components stays reactive. When the form state changes, components that rely on these values automatically re-render without manual subscriptions.
+
+#### Setting values
+
+To manually update form values or errors, use:
+
+- <Link href="/methods/api/setInput/">`setInput`</Link>: Manually update the
+  value of a specific field
+- <Link href="/methods/api/setErrors/">`setErrors`</Link>: Manually set error
+  messages for a specific field
+
+> When you have access to a field store (from <Link href="/react/api/useField/">`useField`</Link> or <Link href="/react/api/Field/">`Field`</Link>), you can use `field.onChange(value)` to update the value directly. This is especially useful for custom inputs or component libraries that don't expose native HTML elements.
+
+> If you need to update the form because the initial data has changed (e.g., remote data was refreshed), use <Link href="/methods/api/reset/">`reset`</Link> with a new `initialInput` instead of <Link href="/methods/api/setInput/">`setInput`</Link>. The <Link href="/methods/api/reset/">`reset`</Link> method properly reinitializes the form state, while <Link href="/methods/api/setInput/">`setInput`</Link> only changes the current input values without updating the initial state.
+
+#### Form control
+
+To control the form programmatically, use:
+
+- <Link href="/methods/api/handleSubmit/">`handleSubmit`</Link>: Create a submit
+  event handler that validates the form and calls your handler on success
+- <Link href="/methods/api/reset/">`reset`</Link>: Reset the form to its initial
+  state or update initial values
+- <Link href="/methods/api/validate/">`validate`</Link>: Manually trigger
+  validation for the entire form or specific fields
+- <Link href="/methods/api/submit/">`submit`</Link>: Programmatically trigger
+  form submission
+- <Link href="/methods/api/focus/">`focus`</Link>: Focus on a specific field
+
+#### Array operations
+
+For working with field arrays, Formisch provides:
+
+- <Link href="/methods/api/insert/">`insert`</Link>: Insert a new item into a
+  field array
+- <Link href="/methods/api/remove/">`remove`</Link>: Remove an item from a field
+  array
+- <Link href="/methods/api/move/">`move`</Link>: Move an item to a different
+  position in a field array
+- <Link href="/methods/api/swap/">`swap`</Link>: Swap two items in a field array
+- <Link href="/methods/api/replace/">`replace`</Link>: Replace an item in a
+  field array
+
+#### API design
+
+All methods in Formisch follow a consistent API pattern: the first parameter is always the form store, and the second parameter (if necessary) is always a config object. This design makes the API flexible and consistent across all methods. Once you understand this pattern, you basically understand the entire API design.
+
+Here are some examples:
+
+```tsx
+// Get the value of a field
+const emailInput = getInput(loginForm, { path: ['email'] });
+
+// Reset the form with new initial values
+reset(loginForm, { initialInput: { email: '', password: '' } });
+
+// Move an item in a field array
+move(loginForm, { path: ['items'], from: 0, to: 3 });
+```
+
+#### API reference
+
+You can find detailed documentation for each method in our <Link href="/react/api/">API reference</Link>.
+
+## Advanced guides (guides)
+
+### Special inputs
+
+As listed in our features, the library supports all native HTML form fields. This includes the HTML `<select />` element as well as special cases of the `<input />` element.
+
+> In our <Link href="/playground/special">playground</Link> you can take a look at such fields and test them out.
+
+#### Checkbox
+
+A simple checkbox represents a boolean and is `true` when checked or `false` otherwise.
+
+```tsx
+<Field of={form} path={['cookies']}>
+  {(field) => (
+    <label>
+      <input {...field.props} type="checkbox" checked={field.input} />
+      Yes, I want cookies
+    </label>
+  )}
+</Field>
+```
+
+However, you can also use multiple checkboxes to represent an array of strings. For this you simply have to add the `value` attribute to the HTML `<input />` element.
+
+```tsx
+{
+  [
+    { label: 'Bananas', value: 'bananas' },
+    { label: 'Apples', value: 'apples' },
+    { label: 'Grapes', value: 'grapes' },
+  ].map(({ label, value }) => (
+    <Field key={value} of={form} path={['fruits']}>
+      {(field) => (
+        <label>
+          <input
+            {...field.props}
+            type="checkbox"
+            value={value}
+            checked={field.input?.includes(value)}
+          />
+          {label}
+        </label>
+      )}
+    </Field>
+  ));
+}
+```
+
+#### Radio
+
+A group of radio buttons, while similar to an array of checkboxes, will only allow you to select one of the options based on which button is checked.
+
+```tsx
+<Field of={form} path={['color']}>
+  {(field) => (
+    <>
+      {[
+        { label: 'Red', value: 'red' },
+        { label: 'Green', value: 'green' },
+        { label: 'Blue', value: 'blue' },
+      ].map(({ label, value }) => (
+        <label key={value}>
+          <input
+            {...field.props}
+            type="radio"
+            value={value}
+            checked={field.input === value}
+          />
+          {label}
+        </label>
+      ))}
+    </>
+  )}
+</Field>
+```
+
+#### Select
+
+An HTML `<select />` element allows you to select a string from a predefined list of options.
+
+```tsx
+<Field of={form} path={['framework']}>
+  {(field) => (
+    <select {...field.props}>
+      {[
+        { label: 'React', value: 'react' },
+        { label: 'Solid', value: 'solid' },
+        { label: 'Qwik', value: 'qwik' },
+      ].map(({ label, value }) => (
+        <option key={value} value={value} selected={field.input === value}>
+          {label}
+        </option>
+      ))}
+    </select>
+  )}
+</Field>
+```
+
+However, if you set the `multiple` attribute, multiple options can be selected making the field represent an array of strings.
+
+```tsx
+<Field of={form} path={['frameworks']}>
+  {(field) => (
+    {/* Set "multiple" to "true" */}
+    <select {...field.props} multiple>
+      {[
+        { label: 'React', value: 'react' },
+        { label: 'Solid', value: 'solid' },
+        { label: 'Qwik', value: 'qwik' },
+      ].map(({ label, value }) => (
+        <option key={value} value={value} selected={field.input?.includes(value)}>
+          {label}
+        </option>
+      ))}
+    </select>
+  )}
+</Field>
+```
+
+#### File
+
+For the HTML `<input type="file" />` element it works similar to the HTML `<select />` element. Without the `multiple` attribute it represents a single file and with, a list of files.
+
+```tsx
+<Field of={form} path={['avatar']}>
+  {(field) => <input {...field.props} type="file" accept="image/*" />}
+</Field>
+```
+
+With the `multiple` attribute, users can select multiple files:
+
+```tsx
+<Field of={form} path={['documents']}>
+  {(field) => <input {...field.props} type="file" multiple />}
+</Field>
+```
+
+### Controlled fields
+
+By default, all form fields are uncontrolled because that's the default behavior of the browser. For a simple login or contact form this is quite sufficient.
+
+#### Why controlled?
+
+As soon as your forms become more complex, for example you set initial values or change the values of a form field via <Link href="/methods/api/setInput/">`setInput`</Link>, it becomes necessary that you control your fields yourself. For example, depending on which HTML form field you use, you may need to set the `value`, `checked` or `selected` attributes.
+
+##### Text input example
+
+For a text input field you simply add the `value` attribute and pass the field's input value:
+
+```tsx
+<Field of={loginForm} path={['firstName']}>
+  {(field) => <input {...field.props} type="text" value={field.input} />}
+</Field>
+```
+
+##### Exception for files
+
+The HTML `<input type="file" />` element is an exception because it cannot be controlled. However, you have the possibility to control the UI around it. For inspiration you can use the code of our <a href={`${import.meta.env.PUBLIC_GITHUB_URL}/blob/main/playgrounds/react/src/components/FileInput.tsx`} target="\_blank" rel="noreferrer">`FileInput`</a> component from our <Link href="/playground/">playground</Link>.
+
+#### Numbers and dates
+
+To make the fields of numbers and dates controlled, further steps are required, because the `<input />` element natively understands only strings as value.
+
+##### Number input example
+
+Since not every input into an `<input type="number" />` field is a valid number, for example when typing floating numbers, the value may be `NaN` in between. You have to catch this case, otherwise the whole input will be removed when `NaN` is passed. It is best to encapsulate this logic in a separate component as described in the <Link href="/react/guides/input-components/">input components</Link> guide.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+import { useMemo, useRef } from 'react';
+
+interface NumberInputProps extends FieldElementProps {
+  label?: string;
+  placeholder?: string;
+  input: number | undefined;
+  errors: [string, ...string[]] | null;
+  required?: boolean;
+}
+
+export function NumberInput({
+  label,
+  input,
+  errors,
+  name,
+  ...inputProps
+}: NumberInputProps) {
+  const prevValue = useRef<number | undefined>();
+
+  // Get value, keeping previous value if NaN
+  const value = useMemo(() => {
+    if (typeof input === 'number' && !Number.isNaN(input)) {
+      prevValue.current = input;
+      return input;
+    }
+    return prevValue.current;
+  }, [input]);
+
+  return (
+    <div>
+      {label && <label htmlFor={name}>{label}</label>}
+      <input
+        {...inputProps}
+        name={name}
+        id={name}
+        type="number"
+        value={value}
+        aria-invalid={!!errors}
+        aria-errormessage={`${name}-error`}
+      />
+      {errors && <div id={`${name}-error`}>{errors[0]}</div>}
+    </div>
+  );
+}
+```
+
+##### Date input example
+
+A date or a number representing a date must be converted to a string before it can be passed to an `<input type="date" />` field. Since it is a calculated value, you can use `useMemo` for this.
+
+```tsx
+import type { FieldElementProps } from '@formisch/react';
+import { useMemo } from 'react';
+
+interface DateInputProps extends FieldElementProps {
+  label?: string;
+  placeholder?: string;
+  input: Date | number | undefined;
+  errors: [string, ...string[]] | null;
+  required?: boolean;
+}
+
+export function DateInput({
+  label,
+  input,
+  errors,
+  name,
+  ...inputProps
+}: DateInputProps) {
+  // Transform date or number to string
+  const value = useMemo(() => {
+    return input &&
+      !Number.isNaN(typeof input === 'number' ? input : input.getTime())
+      ? new Date(input).toISOString().split('T', 1)[0]
+      : '';
+  }, [input]);
+
+  return (
+    <div>
+      {label && <label htmlFor={name}>{name}</label>}
+      <input
+        {...inputProps}
+        name={name}
+        id={name}
+        type="date"
+        value={value}
+        aria-invalid={!!errors}
+        aria-errormessage={`${name}-error`}
+      />
+      {errors && <div id={`${name}-error`}>{errors[0]}</div>}
+    </div>
+  );
+}
+```
+
+#### Custom inputs and component libraries
+
+Some component libraries don't expose the underlying native HTML element, which means you cannot spread `field.props` onto them. For these cases, use `field.onChange` to set the value programmatically.
+
+```tsx
+import { DatePicker } from 'some-component-library';
+
+<Field of={form} path={['date']}>
+  {(field) => (
+    <DatePicker
+      value={field.input}
+      onChange={(newDate) => field.onChange(newDate)}
+    />
+  )}
+</Field>;
+```
+
+This is useful for:
+
+- **Component libraries** that wrap native elements without exposing them
+- **Complex custom inputs** like date pickers, rich text editors, or color pickers
+
+The `field.onChange` method updates the field value and triggers validation, just like a native input would.
+
+#### Next steps
+
+Now that you understand controlled fields, you can explore more advanced topics like <Link href="/react/guides/nested-fields/">nested fields</Link> and <Link href="/react/guides/field-arrays/">field arrays</Link> to handle complex form structures.
+
+### Nested fields
+
+To add a little more structure to a complex form or to match the values of the form to your database, you can also nest your form fields in objects as deep as you like.
+
+#### Schema definition
+
+For example, in the schema below, the first and last name are grouped under the object with the key `name`.
+
+```tsx
+import * as v from 'valibot';
+
+const ContactSchema = v.object({
+  name: v.object({
+    first: v.pipe(v.string(), v.nonEmpty()),
+    last: v.pipe(v.string(), v.nonEmpty()),
+  }),
+  email: v.pipe(v.string(), v.email()),
+  message: v.pipe(v.string(), v.nonEmpty()),
+});
+```
+
+#### Path array
+
+When creating a nested field, use an array with multiple elements for the `path` property to refer to the nested field. The array represents the path through the nested structure.
+
+```tsx
+<Field of={contactForm} path={['name', 'first']}>
+  {(field) => <input {...field.props} value={field.input} type="text" />}
+</Field>
+```
+
+If you're using TypeScript, your editor will provide autocompletion for the path based on your schema structure.
+
+#### Deep nesting
+
+You can nest objects as deeply as needed. Simply extend the path array with additional keys:
+
+```tsx
+const ProfileSchema = v.object({
+  user: v.object({
+    address: v.object({
+      street: v.string(),
+      city: v.string(),
+      country: v.string(),
+    }),
+  }),
+});
+
+// Access deeply nested field
+<Field of={profileForm} path={['user', 'address', 'city']}>
+  {(field) => <input {...field.props} value={field.input} type="text" />}
+</Field>;
+```
+
+#### Type safety
+
+The path array is fully type-safe. TypeScript will validate that each element in your path corresponds to a valid key in your schema structure, providing autocompletion and compile-time errors if you reference a non-existent path.
+
+### Field arrays
+
+A somewhat more special case are dynamically generated form fields based on an array. Since adding, removing, swapping and moving items can be a big challenge here, the library provides the <Link href="/react/api/FieldArray/">`FieldArray`</Link> component which, in combination with various methods, makes it very easy for you to create such forms.
+
+> In our <Link href="/playground/todos">playground</Link> you can take a look at a form with a field array and test them out.
+
+#### Create a field array
+
+##### Schema definition
+
+In the following example we create a field array for a todo form with the following schema:
+
+```tsx
+import * as v from 'valibot';
+
+const TodoFormSchema = v.object({
+  heading: v.pipe(v.string(), v.nonEmpty()),
+  todos: v.pipe(
+    v.array(
+      v.object({
+        label: v.pipe(v.string(), v.nonEmpty()),
+        deadline: v.pipe(v.string(), v.nonEmpty()),
+      })
+    ),
+    v.nonEmpty(),
+    v.maxLength(10)
+  ),
+});
+```
+
+##### FieldArray component
+
+To dynamically generate the form fields for the todos, you use the <Link href="/react/api/FieldArray/">`FieldArray`</Link> component in combination with React's `Array.map()`. The field array provides an `items` array of unique string identifiers which are used to detect when an item is added, moved, or removed.
+
+```tsx
+import { Field, FieldArray, Form, useForm } from '@formisch/react';
+
+export default function TodoPage() {
+  const todoForm = useForm({
+    schema: TodoFormSchema,
+    initialInput: {
+      heading: '',
+      todos: [{ label: '', deadline: '' }],
+    },
+  });
+
+  return (
+    <Form of={todoForm} onSubmit={(output, event) => console.log(output)}>
+      <Field of={todoForm} path={['heading']}>
+        {(field) => (
+          <>
+            <input {...field.props} value={field.input} type="text" />
+            {field.errors && <div>{field.errors[0]}</div>}
+          </>
+        )}
+      </Field>
+
+      <FieldArray of={todoForm} path={['todos']}>
+        {(fieldArray) => (
+          <div>
+            {fieldArray.items.map((item, index) => (
+              <div key={item}>
+                <Field of={todoForm} path={['todos', index, 'label']}>
+                  {(field) => (
+                    <>
+                      <input {...field.props} value={field.input} type="text" />
+                      {field.errors && <div>{field.errors[0]}</div>}
+                    </>
+                  )}
+                </Field>
+
+                <Field of={todoForm} path={['todos', index, 'deadline']}>
+                  {(field) => (
+                    <>
+                      <input {...field.props} value={field.input} type="date" />
+                      {field.errors && <div>{field.errors[0]}</div>}
+                    </>
+                  )}
+                </Field>
+              </div>
+            ))}
+            {fieldArray.errors && <div>{fieldArray.errors[0]}</div>}
+          </div>
+        )}
+      </FieldArray>
+
+      <button type="submit">Submit</button>
+    </Form>
+  );
+}
+```
+
+##### Path array with index
+
+As with <Link href="/react/guides/nested-fields/">nested fields</Link>, you use an array for the `path` property. The key difference is that you include the index from the `map()` function to specify which array item you're referencing. This ensures the paths update correctly when items are added, moved, or removed.
+
+```tsx
+<Field of={todoForm} path={['todos', index, 'label']}>
+  {(field) => <input {...field.props} value={field.input} type="text" />}
+</Field>
+```
+
+#### Use array methods
+
+Now you can use the <Link href="/methods/api/insert/">`insert`</Link>, <Link href="/methods/api/move/">`move`</Link>, <Link href="/methods/api/remove/">`remove`</Link>, <Link href="/methods/api/replace/">`replace`</Link>, and <Link href="/methods/api/swap/">`swap`</Link> methods to make changes to the field array. These methods automatically take care of rearranging all the fields.
+
+##### Insert method
+
+Add a new item to the array:
+
+```tsx
+import { insert } from '@formisch/react';
+
+<button
+  type="button"
+  onClick={() =>
+    insert(todoForm, {
+      path: ['todos'],
+      initialInput: { label: '', deadline: '' },
+    })
+  }
+>
+  Add Todo
+</button>;
+```
+
+The `at` option can be used to specify the index where the item should be inserted. If not provided, the item is added to the end of the array.
+
+##### Remove method
+
+Remove an item from the array:
+
+```tsx
+import { remove } from '@formisch/react';
+
+<button
+  type="button"
+  onClick={() =>
+    remove(todoForm, {
+      path: ['todos'],
+      at: index,
+    })
+  }
+>
+  Delete
+</button>;
+```
+
+##### Move method
+
+Move an item from one position to another:
+
+```tsx
+import { move } from '@formisch/react';
+
+<button
+  type="button"
+  onClick={() =>
+    move(todoForm, {
+      path: ['todos'],
+      from: 0,
+      to: fieldArray.items.length - 1,
+    })
+  }
+>
+  Move first to end
+</button>;
+```
+
+##### Swap method
+
+Swap two items in the array:
+
+```tsx
+import { swap } from '@formisch/react';
+
+<button
+  type="button"
+  onClick={() =>
+    swap(todoForm, {
+      path: ['todos'],
+      at: 0,
+      and: 1,
+    })
+  }
+>
+  Swap first two
+</button>;
+```
+
+##### Replace method
+
+Replace an item with new data:
+
+```tsx
+import { replace } from '@formisch/react';
+
+<button
+  type="button"
+  onClick={() =>
+    replace(todoForm, {
+      path: ['todos'],
+      at: 0,
+      initialInput: {
+        label: 'New task',
+        deadline: new Date().toISOString().split('T')[0],
+      },
+    })
+  }
+>
+  Replace first
+</button>;
+```
+
+#### Nested field arrays
+
+If you need to nest multiple field arrays, the path array syntax makes it straightforward. Simply extend the path with additional array indices:
+
+```tsx
+const NestedSchema = v.object({
+  categories: v.array(
+    v.object({
+      name: v.string(),
+      items: v.array(
+        v.object({
+          title: v.string(),
+        })
+      ),
+    })
+  ),
+});
+
+<FieldArray of={form} path={['categories']}>
+  {(categoryArray) => (
+    <>
+      {categoryArray.items.map((categoryItem, categoryIndex) => (
+        <div key={categoryItem}>
+          <Field of={form} path={['categories', categoryIndex, 'name']}>
+            {(field) => <input {...field.props} value={field.input} />}
+          </Field>
+
+          <FieldArray of={form} path={['categories', categoryIndex, 'items']}>
+            {(itemArray) => (
+              <>
+                {itemArray.items.map((item, itemIndex) => (
+                  <Field
+                    key={item}
+                    of={form}
+                    path={[
+                      'categories',
+                      categoryIndex,
+                      'items',
+                      itemIndex,
+                      'title',
+                    ]}
+                  >
+                    {(field) => <input {...field.props} value={field.input} />}
+                  </Field>
+                ))}
+              </>
+            )}
+          </FieldArray>
+        </div>
+      ))}
+    </>
+  )}
+</FieldArray>;
+```
+
+You can nest field arrays as deeply as you like. You will also find a suitable example of this in our <Link href="/playground/nested">playground</Link>.
+
+#### Field array validation
+
+As with fields, you can validate field arrays using Valibot's array validation functions. For example, to limit the length of the array:
+
+```tsx
+const TodoFormSchema = v.object({
+  todos: v.pipe(
+    v.array(
+      v.object({
+        label: v.string(),
+        deadline: v.string(),
+      })
+    ),
+    v.minLength(1),
+    v.maxLength(10)
+  ),
+});
+```
+
+The validation errors for the field array itself are available in `fieldArray.errors` and can be displayed alongside the array.
+
+### TypeScript
+
+Since the library is written in TypeScript and we put a lot of emphasis on the development experience, you can expect maximum TypeScript support. Types are automatically inferred from your <Link href="/react/guides/define-your-form/">Valibot schemas</Link>, providing type safety throughout your forms.
+
+#### Type inference
+
+Formisch uses Valibot's type inference to automatically derive TypeScript types from your schemas. You don't need to define separate types—they're inferred automatically.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function LoginPage() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  // TypeScript knows the form structure from the schema
+  // loginForm is of type FormStore<typeof LoginSchema>
+
+  return (
+    <Form
+      of={loginForm}
+      onSubmit={(output, event) => {
+        // output is fully typed based on LoginSchema
+        console.log(output.email); // ✓ Type-safe
+        console.log(output.username); // ✗ TypeScript error
+      }}
+    >
+      {/* Form fields */}
+    </Form>
+  );
+}
+```
+
+##### Input and output types
+
+Valibot schemas can have different input and output types when using transformations. Formisch provides proper typing for both.
+
+```tsx
+import { Field, Form, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const ProfileSchema = v.object({
+  age: v.pipe(
+    v.string(), // Input type: string (from HTML input)
+    v.transform((input) => Number(input)), // Output type: number
+    v.number()
+  ),
+  birthDate: v.pipe(
+    v.string(), // Input type: string (ISO date string)
+    v.transform((input) => new Date(input)), // Output type: Date
+    v.date()
+  ),
+});
+
+export default function ProfilePage() {
+  const profileForm = useForm({
+    schema: ProfileSchema,
+  });
+
+  return (
+    <Form
+      of={profileForm}
+      onSubmit={(output, event) => {
+        // output is: { age: number; birthDate: Date }
+        console.log(output.age); // number
+        console.log(output.birthDate); // Date
+      }}
+    >
+      <Field of={profileForm} path={['age']}>
+        {(field) => (
+          // field.input is string
+          <input {...field.props} value={field.input} type="text" />
+        )}
+      </Field>
+
+      <Field of={profileForm} path={['birthDate']}>
+        {(field) => (
+          // field.input is string
+          <input {...field.props} value={field.input} type="date" />
+        )}
+      </Field>
+
+      <button type="submit">Submit</button>
+    </Form>
+  );
+}
+```
+
+##### Type-safe paths
+
+Field paths are fully type-checked. TypeScript will provide autocompletion and catch invalid paths at compile time.
+
+```tsx
+const UserSchema = v.object({
+  profile: v.object({
+    name: v.object({
+      first: v.string(),
+      last: v.string(),
+    }),
+    email: v.string(),
+  }),
+});
+
+const userForm = useForm({ schema: UserSchema });
+
+// ✓ Valid paths - TypeScript provides autocompletion
+<Field of={userForm} path={['profile', 'name', 'first']} />
+<Field of={userForm} path={['profile', 'email']} />
+
+// ✗ Invalid paths - TypeScript error
+<Field of={userForm} path={['profile', 'age']} />
+<Field of={userForm} path={['username']} />
+```
+
+#### Type-safe props
+
+To pass your form to another component via props, you can use the <Link href="/react/api/FormStore/">`FormStore`</Link> type along with your schema type to get full type safety.
+
+```tsx
+import { Form, type FormStore, useForm } from '@formisch/react';
+import * as v from 'valibot';
+
+const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+});
+
+export default function LoginPage() {
+  const loginForm = useForm({
+    schema: LoginSchema,
+  });
+
+  return <FormContent of={loginForm} />;
+}
+
+type FormContentProps = {
+  of: FormStore<typeof LoginSchema>;
+};
+
+function FormContent(props: FormContentProps) {
+  return (
+    <Form of={props.of} onSubmit={(output, event) => console.log(output)}>
+      {/* Form fields */}
+    </Form>
+  );
+}
+```
+
+#### Generic field components
+
+You can create generic field components with proper TypeScript typing using the <Link href="/react/api/FormStore/">`FormStore`</Link> type with Valibot's `GenericSchema`.
+
+```tsx
+import { type FormStore, useField } from '@formisch/react';
+import type { FunctionComponent } from 'react';
+import * as v from 'valibot';
+
+type EmailInputProps = {
+  of: FormStore<v.GenericSchema<{ email: string }>>;
+};
+
+const EmailInput: FunctionComponent<EmailInputProps> = (props) => {
+  const field = useField(props.of, { path: ['email'] });
+
+  return (
+    <div>
+      <label>
+        Email
+        <input {...field.props} value={field.input} type="email" />
+      </label>
+      {field.errors && <div>{field.errors[0]}</div>}
+    </div>
+  );
+};
+```
+
+The `v.GenericSchema<{ email: string }>` type ensures that the form passed to `EmailInput` must have an `email` field of type `string`. TypeScript will catch any type mismatches at compile time.
+
+#### Available types
+
+Most types you need can be imported from `@formisch/react`. You can find all available types in our <Link href="/react/api/">API reference</Link>.
+
+- <Link href="/react/api/FormStore/">`FormStore`</Link> - The form store type
+- <Link href="/react/api/FieldStore/">`FieldStore`</Link> - The field store type
+- <Link href="/react/api/FieldArrayStore/">`FieldArrayStore`</Link> - The field
+  array store type
+- <Link href="/core/api/ValidPath/">`ValidPath`</Link> - Type for valid field
+  paths
+- <Link href="/core/api/ValidArrayPath/">`ValidArrayPath`</Link> - Type for
+  valid array field paths
+- <Link href="/core/api/Schema/">`Schema`</Link> - Base schema type from Valibot
+- <Link href="/core/api/SubmitHandler/">`SubmitHandler`</Link> - Type for submit
+  handlers without the event
+- <Link href="/core/api/SubmitEventHandler/">`SubmitEventHandler`</Link> - Type
+  for submit handlers with the event
+
+## Hooks (API)
+
+### useForm
+
+Creates a reactive form store from a form configuration. The form store manages form state and provides reactive properties.
+
+```ts
+const form = useForm<TSchema>(config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Parameters
+
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+`useForm` creates a reactive form store that manages form state using the provided Valibot schema. Validation runs when a field is blurred or the form is submitted by default, but this can be customized with the `validate` and `revalidate` options.
+
+#### Returns
+
+- `form` <Property {...properties.FormStore} />
+
+#### Related
+
+The following APIs can be combined with `useForm`.
+
+##### Hooks
+
+<ApiList
+  items={[
+    { text: 'useField', href: '../useField/' },
+    { text: 'useFieldArray', href: '../useFieldArray/' },
+  ]}
+/>
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Field', href: '../Field/' },
+    { text: 'FieldArray', href: '../FieldArray/' },
+    { text: 'Form', href: '../Form/' },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '/methods/api/focus/' },
+    { text: 'getAllErrors', href: '/methods/api/getAllErrors/' },
+    { text: 'getErrors', href: '/methods/api/getErrors/' },
+    { text: 'getInput', href: '/methods/api/getInput/' },
+    { text: 'handleSubmit', href: '/methods/api/handleSubmit/' },
+    { text: 'insert', href: '/methods/api/insert/' },
+    { text: 'move', href: '/methods/api/move/' },
+    { text: 'remove', href: '/methods/api/remove/' },
+    { text: 'replace', href: '/methods/api/replace/' },
+    { text: 'reset', href: '/methods/api/reset/' },
+    { text: 'setErrors', href: '/methods/api/setErrors/' },
+    { text: 'setInput', href: '/methods/api/setInput/' },
+    { text: 'submit', href: '/methods/api/submit/' },
+    { text: 'swap', href: '/methods/api/swap/' },
+    { text: 'validate', href: '/methods/api/validate/' },
+  ]}
+/>
+
+### useField
+
+Creates a reactive field store of a specific field within a form store.
+
+```ts
+const field = useField<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+With `useField` you create a reactive field store for a specific field path within your form. The field store provides reactive access to the field's input value, validation errors, touched state, and more. It also includes a `props` object that you can spread onto an HTML input or textarea element to automatically handle user interactions like focus, blur, and input events.
+
+#### Returns
+
+- `field` <Property {...properties.FieldStore} />
+
+#### Related
+
+The following APIs can be combined with `useField`.
+
+##### Hooks
+
+<ApiList
+  items={[
+    { text: 'useForm', href: '../useForm/' },
+    { text: 'useFieldArray', href: '../useFieldArray/' },
+  ]}
+/>
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Field', href: '../Field/' },
+    { text: 'FieldArray', href: '../FieldArray/' },
+    { text: 'Form', href: '../Form/' },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '/methods/api/focus/' },
+    { text: 'getErrors', href: '/methods/api/getErrors/' },
+    { text: 'getInput', href: '/methods/api/getInput/' },
+    { text: 'setErrors', href: '/methods/api/setErrors/' },
+    { text: 'setInput', href: '/methods/api/setInput/' },
+    { text: 'validate', href: '/methods/api/validate/' },
+  ]}
+/>
+
+### useFieldArray
+
+Creates a reactive field array store of a specific field array within a form store.
+
+```ts
+const fieldArray = useFieldArray<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+With `useFieldArray` you create a reactive field array store for a specific array field within your form. The field array store provides reactive access to the array items (by their IDs), validation errors, touched state, and more. This is particularly useful when working with dynamic arrays of fields that users can add or remove.
+
+#### Returns
+
+- `fieldArray` <Property {...properties.FieldArrayStore} />
+
+#### Related
+
+The following APIs can be combined with `useFieldArray`.
+
+##### Hooks
+
+<ApiList
+  items={[
+    { text: 'useForm', href: '../useForm/' },
+    { text: 'useField', href: '../useField/' },
+  ]}
+/>
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Field', href: '../Field/' },
+    { text: 'FieldArray', href: '../FieldArray/' },
+    { text: 'Form', href: '../Form/' },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '/methods/api/focus/' },
+    { text: 'getAllErrors', href: '/methods/api/getAllErrors/' },
+    { text: 'getErrors', href: '/methods/api/getErrors/' },
+    { text: 'getInput', href: '/methods/api/getInput/' },
+    { text: 'insert', href: '/methods/api/insert/' },
+    { text: 'move', href: '/methods/api/move/' },
+    { text: 'remove', href: '/methods/api/remove/' },
+    { text: 'replace', href: '/methods/api/replace/' },
+    { text: 'reset', href: '/methods/api/reset/' },
+    { text: 'setErrors', href: '/methods/api/setErrors/' },
+    { text: 'setInput', href: '/methods/api/setInput/' },
+    { text: 'swap', href: '/methods/api/swap/' },
+    { text: 'validate', href: '/methods/api/validate/' },
+  ]}
+/>
+
+## Components (API)
+
+### Form
+
+Form component that manages form submission and applies internal state. Wraps form element and passes submission events to the provided handler.
+
+```tsx
+<Form of={…} onSubmit={…}>children</Form>
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Properties
+
+- `of` <Property {...properties.of} />
+- `children` <Property {...properties.children} />
+- `onSubmit` <Property {...properties.onSubmit} />
+
+##### Explanation
+
+The `Form` component wraps a native HTML `<form>` element and provides form submission handling. It automatically prevents the default form submission behavior and calls the `onSubmit` handler when the form is submitted and validation succeeds.
+
+The component uses the `of` prop to reference the form store and renders the `children` elements within the form. It also sets `novalidate` on the form element to disable browser validation, as Formisch handles validation internally.
+
+#### Related
+
+##### Hooks
+
+<ApiList items={[{ text: 'useForm', href: '../useForm/' }]} />
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Field', href: '../Field/' },
+    { text: 'FieldArray', href: '../FieldArray/' },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '/methods/api/focus/' },
+    { text: 'getAllErrors', href: '/methods/api/getAllErrors/' },
+    { text: 'getErrors', href: '/methods/api/getErrors/' },
+    { text: 'handleSubmit', href: '/methods/api/handleSubmit/' },
+    { text: 'reset', href: '/methods/api/reset/' },
+    { text: 'setErrors', href: '/methods/api/setErrors/' },
+    { text: 'setInput', href: '/methods/api/setInput/' },
+    { text: 'submit', href: '/methods/api/submit/' },
+    { text: 'validate', href: '/methods/api/validate/' },
+  ]}
+/>
+
+### Field
+
+Headless form field component that provides reactive properties and state. The field component takes a form store, path to field, and a render function that receives a field store to display field state and handle user interactions.
+
+```tsx
+<Field of={…} path={…}>children</Field>
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Properties
+
+- `of` <Property {...properties.of} />
+- `path` <Property {...properties.path} />
+- `children` <Property {...properties.children} />
+
+##### Explanation
+
+The `Field` component is a headless component that doesn't render any UI itself. Instead, it provides a render prop function via the `children` prop that receives a <Link href="../FieldStore/">`FieldStore`</Link> containing all the reactive state and props needed to render a form field.
+
+The component automatically handles field registration, validation, and state management through the `of` prop that references the form store.
+
+#### Related
+
+##### Hooks
+
+<ApiList
+  items={[
+    { text: 'useForm', href: '../useForm/' },
+    { text: 'useField', href: '../useField/' },
+  ]}
+/>
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Form', href: '../Form/' },
+    { text: 'FieldArray', href: '../FieldArray/' },
+  ]}
+/>
+
+### FieldArray
+
+Headless field array component that provides reactive properties and state for managing array fields. The field array component takes a form store, path to array field, and a render function that receives a field array store to manage array items and handle array operations.
+
+```tsx
+<FieldArray of={…} path={…}>children</FieldArray>
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Properties
+
+- `of` <Property {...properties.of} />
+- `path` <Property {...properties.path} />
+- `children` <Property {...properties.children} />
+
+##### Explanation
+
+The `FieldArray` component is a headless component that doesn't render any UI itself. Instead, it provides a render prop function via the `children` prop that receives a <Link href="../FieldArrayStore/">`FieldArrayStore`</Link> containing all the reactive state and methods needed to manage an array of form fields.
+
+The component automatically handles array field registration, validation, and state management through the `of` prop that references the form store.
+
+#### Related
+
+##### Hooks
+
+<ApiList
+  items={[
+    { text: 'useForm', href: '../useForm/' },
+    { text: 'useFieldArray', href: '../useFieldArray/' },
+  ]}
+/>
+
+##### Components
+
+<ApiList
+  items={[
+    { text: 'Field', href: '../Field/' },
+    { text: 'Form', href: '../Form/' },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'insert', href: '/methods/api/insert/' },
+    { text: 'move', href: '/methods/api/move/' },
+    { text: 'remove', href: '/methods/api/remove/' },
+    { text: 'replace', href: '/methods/api/replace/' },
+    { text: 'swap', href: '/methods/api/swap/' },
+  ]}
+/>
+
+## Methods (API)
+
+### focus
+
+Focuses the first input element of a field. This is useful for programmatically setting focus to a specific field, such as after validation errors or user interactions.
+
+```ts
+focus<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field to focus. The `config` parameter specifies which field to focus using the `path` property, and can optionally include additional focus options.
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'validate', href: '../validate/' },
+    { text: 'setErrors', href: '../setErrors/' },
+  ]}
+/>
+
+### getAllErrors
+
+Retrieves all error messages from all fields in the form by walking through the entire field store tree. This is useful for displaying a summary of all validation errors across the form.
+
+```ts
+const errors = getAllErrors(form);
+```
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+
+##### Explanation
+
+The `form` parameter is the form store to retrieve errors from. The function walks through the entire field store tree to collect all validation error messages from every field.
+
+#### Returns
+
+- `result` <Property {...properties.result} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'getErrors', href: '../getErrors/' },
+    { text: 'validate', href: '../validate/' },
+    { text: 'setErrors', href: '../setErrors/' },
+  ]}
+/>
+
+### getErrors
+
+Retrieves error messages from the form. When called without a config, returns form-level errors. When called with a path, returns errors for that specific field.
+
+```ts
+const errors = getErrors<TSchema>(form);
+const errors = getErrors<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store to retrieve errors from. The optional `config` parameter specifies which errors to retrieve - either form-level errors (when omitted) or field-specific errors (when a `path` is provided).
+
+#### Returns
+
+- `result` <Property {...properties.result} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'getAllErrors', href: '../getAllErrors/' },
+    { text: 'setErrors', href: '../setErrors/' },
+    { text: 'validate', href: '../validate/' },
+  ]}
+/>
+
+### getInput
+
+Retrieves the current input value of a specific field or the entire form. Returns a partial object as not all fields may have been set.
+
+```ts
+const input = getInput<TSchema>(form);
+const input = getInput<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store to retrieve input from. The optional `config` parameter specifies which field to get input from - if omitted, returns input from the entire form.
+
+#### Returns
+
+- `result` <Property {...properties.result} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'setInput', href: '../setInput/' },
+    { text: 'reset', href: '../reset/' },
+  ]}
+/>
+
+### handleSubmit
+
+Creates a submit event handler for the form that prevents default browser submission, validates the form input, and calls the provided handler if validation succeeds. This is designed to be used with the form's onsubmit event.
+
+```ts
+const result = handleSubmit<TSchema>(form, handler);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `handler` <Property {...properties.handler} />
+
+##### Explanation
+
+The `form` parameter is the form store to handle submission for. The `handler` parameter can be a `SubmitHandler` (no event) or a `SubmitEventHandler` (with event) that gets called with the validated form output if validation succeeds.
+
+#### Returns
+
+- `result` <Property {...properties.result} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'validate', href: '../validate/' },
+    { text: 'focus', href: '../focus/' },
+    { text: 'submit', href: '../submit/' },
+  ]}
+/>
+
+### insert
+
+Inserts a new item into a field array at the specified index. All items at or after the insertion point are shifted up by one index.
+
+```ts
+insert<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field array. The `config` parameter specifies the path to the field array, the index where to insert the new item, and optional initial input values for the new item.
+
+#### Related
+
+##### Primitives
+
+<ApiList
+  items={[
+    { text: 'createForm', href: '/solid/api/createForm/' },
+    {
+      text: 'useFieldArray',
+      href: '/solid/api/useFieldArray/',
+    },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'move', href: '../move/' },
+    { text: 'remove', href: '../remove/' },
+    { text: 'replace', href: '../replace/' },
+    { text: 'swap', href: '../swap/' },
+  ]}
+/>
+
+### move
+
+Moves an item within a field array from one index to another. All items between the old and new positions are shifted accordingly.
+
+```ts
+move<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field array. The `config` parameter specifies the path to the field array and the indices to move the item from and to.
+
+#### Related
+
+##### Primitives
+
+<ApiList
+  items={[
+    { text: 'createForm', href: '/solid/api/createForm/' },
+    {
+      text: 'useFieldArray',
+      href: '/solid/api/useFieldArray/',
+    },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'insert', href: '../insert/' },
+    { text: 'remove', href: '../remove/' },
+    { text: 'replace', href: '../replace/' },
+    { text: 'swap', href: '../swap/' },
+  ]}
+/>
+
+### remove
+
+Removes an item from a field array at the specified index. All items after the removed index are shifted down by one.
+
+```ts
+remove<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field array. The `config` parameter specifies the path to the field array and the index of the item to remove.
+
+#### Related
+
+##### Primitives
+
+<ApiList
+  items={[
+    { text: 'createForm', href: '/solid/api/createForm/' },
+    {
+      text: 'useFieldArray',
+      href: '/solid/api/useFieldArray/',
+    },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'insert', href: '../insert/' },
+    { text: 'move', href: '../move/' },
+    { text: 'replace', href: '../replace/' },
+    { text: 'swap', href: '../swap/' },
+  ]}
+/>
+
+### replace
+
+Replaces an item in a field array at the specified index with a new item.
+
+```ts
+replace<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field array. The `config` parameter specifies the path to the field array, the index of the item to replace, and the new item values.
+
+#### Related
+
+##### Primitives
+
+<ApiList
+  items={[
+    { text: 'createForm', href: '/solid/api/createForm/' },
+    {
+      text: 'useFieldArray',
+      href: '/solid/api/useFieldArray/',
+    },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'insert', href: '../insert/' },
+    { text: 'move', href: '../move/' },
+    { text: 'remove', href: '../remove/' },
+    { text: 'swap', href: '../swap/' },
+  ]}
+/>
+
+### reset
+
+Resets the form or a specific field to its initial state or to a new initial input. Optionally keeps certain states like input values, touched state, or errors.
+
+```ts
+reset(form);
+reset<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+When called without a config or with `path` set to `undefined`, the entire form is reset. When a `path` is provided, only that specific field and its nested fields are reset.
+
+By default, the form resets to its original initial input. However, you can pass a new `initialInput` in the config to update the form's baseline data. This is useful when remote data has changed and the form needs to reflect the updated values. Combined with `keepInput`, `keepTouched`, `keepErrors`, and `keepSubmitted`, you can update the initial state without overwriting the user's current edits.
+
+###### More context on dirty tracking
+
+Formisch distinguishes between two concepts:
+
+- **Initial input**: the baseline value used for dirty tracking (often the server state).
+- **Current input**: the value the user is currently editing (the client state).
+
+Calling `reset` updates the initial input (baseline). Depending on the `keep*` options, it can also overwrite the current input, or keep it and just recompute state like `isDirty` based on the new baseline.
+
+> If the initial input is `null` or `undefined`, Formisch does not treat an empty string or `NaN` as dirty. This helps when HTML inputs produce `''` or `NaN` for "empty" values.
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'setInput', href: '../setInput/' },
+    { text: 'getInput', href: '../getInput/' },
+    { text: 'setErrors', href: '../setErrors/' },
+    { text: 'validate', href: '../validate/' },
+  ]}
+/>
+
+### setErrors
+
+Sets or clears error messages on the form or a specific field. This is useful for setting custom validation errors that don't come from schema validation.
+
+```ts
+setErrors<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store to set errors on. The `config` parameter specifies the path and error messages to set, or can be set to null to clear existing errors.
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'getErrors', href: '../getErrors/' },
+    { text: 'getAllErrors', href: '../getAllErrors/' },
+    { text: 'validate', href: '../validate/' },
+  ]}
+/>
+
+### setInput
+
+Sets input values for the form or a specific field programmatically.
+
+```ts
+setInput<TSchema>(form, config);
+setInput<TSchema, TFieldPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store to set input on. The `config` parameter specifies the path to the field and the new input values to set.
+
+> `setInput` updates the **current input** (what the user is editing), but it does not change the **initial input** (the baseline used for `isDirty`). If your baseline data changes (e.g. after refetching from the server), prefer <Link href="../reset/">`reset`</Link> with a new `initialInput`.
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'getInput', href: '../getInput/' },
+    { text: 'reset', href: '../reset/' },
+  ]}
+/>
+
+### submit
+
+Programmatically requests form submission by calling the native `requestSubmit()` method on the underlying form element.
+
+```ts
+submit(form);
+```
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+
+##### Explanation
+
+The `form` parameter is the form store to submit. The function triggers form submission by calling the native `requestSubmit()` method on the underlying form element.
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'handleSubmit', href: '../handleSubmit/' },
+    { text: 'validate', href: '../validate/' },
+    { text: 'focus', href: '../focus/' },
+  ]}
+/>
+
+### swap
+
+Swaps two items in a field array at the specified indices.
+
+```ts
+swap<TSchema, TFieldArrayPath>(form, config);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store containing the field array. The `config` parameter specifies the path to the field array and the two indices of the items to swap.
+
+#### Related
+
+##### Primitives
+
+<ApiList
+  items={[
+    { text: 'createForm', href: '/solid/api/createForm/' },
+    {
+      text: 'useFieldArray',
+      href: '/solid/api/useFieldArray/',
+    },
+  ]}
+/>
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'insert', href: '../insert/' },
+    { text: 'move', href: '../move/' },
+    { text: 'remove', href: '../remove/' },
+    { text: 'replace', href: '../replace/' },
+  ]}
+/>
+
+### validate
+
+Validates the entire form input against its schema. Returns a safe parse result indicating success or failure with detailed issues. Optionally focuses the first field with validation errors.
+
+```ts
+const result = validate<TSchema>(form, config?);
+```
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Parameters
+
+- `form` <Property {...properties.form} />
+- `config` <Property {...properties.config} />
+
+##### Explanation
+
+The `form` parameter is the form store to validate. The optional `config` parameter allows specifying whether to automatically focus the first field with validation errors after validation.
+
+#### Returns
+
+- `result` <Property {...properties.result} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '../focus/' },
+    { text: 'handleSubmit', href: '../handleSubmit/' },
+    { text: 'setErrors', href: '../setErrors/' },
+    { text: 'getErrors', href: '../getErrors/' },
+    { text: 'getAllErrors', href: '../getAllErrors/' },
+  ]}
+/>
+
+## Types (API)
+
+### DeepPartial
+
+A utility type that recursively makes all properties and nested properties optional.
+
+> This type is too complex to display. Please refer to the [source code](https://github.com/open-circle/formisch/blob/main/packages/core/src/types/utils.ts).
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+### FieldArrayStore
+
+Reactive field array store interface with properties for managing array fields.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `FieldArrayStore`
+  - `path` <Property {...properties.path} />
+  - `items` <Property {...properties.items} />
+  - `errors` <Property {...properties.errors} />
+  - `isTouched` <Property {...properties.isTouched} />
+  - `isDirty` <Property {...properties.isDirty} />
+  - `isValid` <Property {...properties.isValid} />
+
+### FieldElement
+
+A union type representing form field elements that can be registered with a field store.
+
+#### Definition
+
+- `FieldElement` <Property {...properties.FieldElement} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'focus', href: '/methods/api/focus/' }]} />
+
+### FieldElementProps
+
+Props to spread onto a field element for integration with React form handling.
+
+#### Definition
+
+- `FieldElementProps`
+- `FieldElementProps`
+- `name` <Property {...properties.name} />
+- `autoFocus` <Property {...properties.autoFocus} />
+- `ref` <Property {...properties.ref} />
+- `onFocus` <Property {...properties.onFocus} />
+- `onChange` <Property {...properties.onChange} />
+- `onBlur` <Property {...properties.onBlur} />
+
+### FieldStore
+
+Reactive field store interface with properties and element props for field management.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `FieldStore`
+  - `path` <Property {...properties.path} />
+  - `input` <Property {...properties.input} />
+  - `errors` <Property {...properties.errors} />
+  - `isTouched` <Property {...properties.isTouched} />
+  - `isDirty` <Property {...properties.isDirty} />
+  - `isValid` <Property {...properties.isValid} />
+  - `onChange` <Property {...properties.onChange} />
+  - `props` <Property {...properties.props} />
+
+### FocusFieldConfig
+
+Configuration interface for focusing a field. Used by the `focus` method to specify which field to focus and any additional focus options.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `FocusFieldConfig`
+  - `path` <Property {...properties.path} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'focus', href: '../focus/' }]} />
+
+### FormConfig
+
+Form config interface that defines the configuration options for creating a form store with <Link href="../useForm/">`useForm`</Link>.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Definition
+
+- `FormConfig`
+  - `schema` <Property {...properties.schema} />
+  - `initialInput` <Property {...properties.initialInput} />
+  - `validate` <Property {...properties.validate} />
+  - `revalidate` <Property {...properties.revalidate} />
+
+##### Explanation
+
+The `FormConfig` object is passed to <Link href="../useForm/">`useForm`</Link> with a required `schema` property and optional properties for `initialInput`, `validate`, and `revalidate` to control form behavior and validation timing.
+
+### FormStore
+
+Form store interface that provides reactive access to the state of a form created with <Link href="../useForm/">`useForm`</Link>.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Definition
+
+- `FormStore`
+  - `isSubmitting` <Property {...properties.isSubmitting} />
+  - `isSubmitted` <Property {...properties.isSubmitted} />
+  - `isValidating` <Property {...properties.isValidating} />
+  - `isTouched` <Property {...properties.isTouched} />
+  - `isDirty` <Property {...properties.isDirty} />
+  - `isValid` <Property {...properties.isValid} />
+  - `errors` <Property {...properties.errors} />
+
+##### Explanation
+
+The `errors` property only contains validation errors at the root level of the form. These are errors from the root object schema validation itself, not errors from nested fields. To retrieve all validation errors from all fields across the entire form, use the <Link href="/methods/api/getAllErrors/">`getAllErrors`</Link> method instead.
+
+### GetFieldErrorsConfig
+
+Configuration interface for retrieving field-specific errors. Used by the `getErrors` method when a specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `GetFieldErrorsConfig`
+  - `path` <Property {...properties.path} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'getErrors', href: '../getErrors/' }]} />
+
+### GetFieldInputConfig
+
+Configuration interface for retrieving field-specific input. Used by the `getInput` method when a specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `GetFieldInputConfig`
+  - `path` <Property {...properties.path} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'getInput', href: '../getInput/' }]} />
+
+### GetFormErrorsConfig
+
+Configuration interface for retrieving form-level errors. Used by the `getErrors` method when no specific field path is provided.
+
+#### Definition
+
+- `GetFormErrorsConfig`
+  - `path` <Property {...properties.path} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'getErrors', href: '../getErrors/' }]} />
+
+### GetFormInputConfig
+
+Configuration interface for retrieving form-level input. Used by the `getInput` method when no specific field path is provided.
+
+#### Definition
+
+- `GetFormInputConfig`
+  - `path` <Property {...properties.path} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'getInput', href: '../getInput/' }]} />
+
+### InsertConfig
+
+Configuration interface for inserting items into array fields. Used by the `insert` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `InsertConfig`
+  - `path` <Property {...properties.path} />
+  - `at` <Property {...properties.at} />
+  - `initialInput` <Property {...properties.initialInput} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'insert', href: '../insert/' }]} />
+
+### PartialValues
+
+Utility type that recursively makes all value properties optional, including nested objects and arrays.
+
+#### Generics
+
+- `TValue` <Property {...properties.TValue} />
+
+#### Definition
+
+- `PartialValues` <Property {...properties.PartialValues} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'getInput', href: '/methods/api/getInput/' }]} />
+
+### Path
+
+Type definition for readonly arrays of path keys used to access nested properties.
+
+#### Definition
+
+- `Path` <Property {...properties.Path} />
+
+### PathKey
+
+Type definition for keys used in paths to access nested properties in objects and arrays.
+
+#### Definition
+
+- `PathKey` <Property {...properties.PathKey} />
+
+### MoveConfig
+
+Configuration interface for moving items within array fields. Used by the `move` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `MoveConfig`
+  - `path` <Property {...properties.path} />
+  - `from` <Property {...properties.from} />
+  - `to` <Property {...properties.to} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'move', href: '../move/' }]} />
+
+### RemoveConfig
+
+Configuration interface for removing items from array fields. Used by the `remove` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `RemoveConfig`
+  - `path` <Property {...properties.path} />
+  - `at` <Property {...properties.at} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'remove', href: '../remove/' }]} />
+
+### ReplaceConfig
+
+Configuration interface for replacing items in array fields. Used by the `replace` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `ReplaceConfig`
+  - `path` <Property {...properties.path} />
+  - `at` <Property {...properties.at} />
+  - `initialInput` <Property {...properties.initialInput} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'replace', href: '../replace/' }]} />
+
+### RequiredPath
+
+A type that represents a required path into an object structure with at least one key.
+
+> This type is too complex to display. Please refer to the [source code](https://github.com/open-circle/formisch/blob/main/packages/core/src/types/path.ts).
+
+#### Related
+
+##### Methods
+
+<ApiList
+  items={[
+    { text: 'focus', href: '/methods/api/focus/' },
+    { text: 'getErrors', href: '/methods/api/getErrors/' },
+    { text: 'getInput', href: '/methods/api/getInput/' },
+    { text: 'replace', href: '/methods/api/replace/' },
+    { text: 'setInput', href: '/methods/api/setInput/' },
+    { text: 'swap', href: '/methods/api/swap/' },
+  ]}
+/>
+
+### ResetFieldConfig
+
+Configuration interface for resetting field-specific input and errors. Used by the `reset` method when a specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `ResetFieldConfig`
+  - `path` <Property {...properties.path} />
+  - `initialInput` <Property {...properties.initialInput} />
+  - `keepErrors` <Property {...properties.keepErrors} />
+  - `keepInput` <Property {...properties.keepInput} />
+  - `keepTouched` <Property {...properties.keepTouched} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'reset', href: '../reset/' }]} />
+
+### ResetFormConfig
+
+Configuration interface for resetting form input and errors. Used by the `reset` method when no specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Definition
+
+- `ResetFormConfig`
+  - `initialInput` <Property {...properties.initialInput} />
+  - `keepErrors` <Property {...properties.keepErrors} />
+  - `keepInput` <Property {...properties.keepInput} />
+  - `keepSubmitted` <Property {...properties.keepSubmitted} />
+  - `keepTouched` <Property {...properties.keepTouched} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'reset', href: '../reset/' }]} />
+
+### Schema
+
+Schema type definition that represents any Valibot schema that can be used with Formisch.
+
+#### Definition
+
+- `Schema` <Property {...properties.Schema} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList items={[{ text: 'validate', href: '/methods/api/validate/' }]} />
+
+### SetFieldErrorsConfig
+
+Configuration interface for setting field-specific errors. Used by the `setErrors` method when a specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `SetFieldErrorsConfig`
+  - `path` <Property {...properties.path} />
+  - `errors` <Property {...properties.errors} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'setErrors', href: '../setErrors/' }]} />
+
+### SetFieldInputConfig
+
+Configuration interface for setting field-specific input. Used by the `setInput` method when a specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `SetFieldInputConfig`
+  - `path` <Property {...properties.path} />
+  - `input` <Property {...properties.input} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'setInput', href: '../setInput/' }]} />
+
+### SetFormErrorsConfig
+
+Configuration interface for setting form-level errors. Used by the `setErrors` method when no specific field path is provided.
+
+#### Definition
+
+- `SetFormErrorsConfig`
+  - `path` <Property {...properties.path} />
+  - `errors` <Property {...properties.errors} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'setErrors', href: '../setErrors/' }]} />
+
+### SetFormInputConfig
+
+Configuration interface for setting form-level input. Used by the `setInput` method when no specific field path is provided.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Definition
+
+- `SetFormInputConfig`
+  - `path` <Property {...properties.path} />
+  - `input` <Property {...properties.input} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'setInput', href: '../setInput/' }]} />
+
+### SubmitEventHandler
+
+Function type for handling form submission with the submit event. Used by the `handleSubmit` method and form components.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Parameters
+
+- `output` <Property {...properties.output} />
+- `event` <Property {...properties.event} />
+
+#### Related
+
+##### Methods
+
+<ApiList
+  items={[{ text: 'handleSubmit', href: '/methods/api/handleSubmit/' }]}
+/>
+
+##### Types
+
+<ApiList
+  items={[{ text: 'SubmitHandler', href: '/core/api/SubmitHandler/' }]}
+/>
+
+### SubmitHandler
+
+Function type for handling form submission without the submit event. Used by the `handleSubmit` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+
+#### Parameters
+
+- `output` <Property {...properties.output} />
+
+#### Related
+
+##### Methods
+
+<ApiList
+  items={[{ text: 'handleSubmit', href: '/methods/api/handleSubmit/' }]}
+/>
+
+##### Types
+
+<ApiList
+  items={[
+    { text: 'SubmitEventHandler', href: '/core/api/SubmitEventHandler/' },
+  ]}
+/>
+
+### SwapConfig
+
+Configuration interface for swapping items in array fields. Used by the `swap` method.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `SwapConfig`
+  - `path` <Property {...properties.path} />
+  - `at` <Property {...properties.at} />
+  - `and` <Property {...properties.and} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'swap', href: '../swap/' }]} />
+
+### UseFieldArrayConfig
+
+Configuration object for creating a field array store with <Link href="../useFieldArray/">`useFieldArray`</Link>.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldArrayPath` <Property {...properties.TFieldArrayPath} />
+
+#### Definition
+
+- `UseFieldArrayConfig`
+  - `path` <Property {...properties.path} />
+
+### UseFieldConfig
+
+Configuration object for creating a field store with <Link href="../useField/">`useField`</Link>.
+
+#### Generics
+
+- `TSchema` <Property {...properties.TSchema} />
+- `TFieldPath` <Property {...properties.TFieldPath} />
+
+#### Definition
+
+- `UseFieldConfig`
+  - `path` <Property {...properties.path} />
+
+### ValidArrayPath
+
+A utility type that validates array paths and returns the first possible valid array path based on the given value if the provided path is invalid.
+
+> This type is too complex to display. Please refer to the [source code](https://github.com/open-circle/formisch/blob/main/packages/core/src/types/path.ts).
+
+### ValidateFormConfig
+
+Configuration interface for form validation. Used by the `validate` method to specify validation behavior.
+
+#### Definition
+
+- `ValidateFormConfig`
+  - `shouldFocus` <Property {...properties.shouldFocus} />
+
+#### Related
+
+##### Methods
+
+<ApiList items={[{ text: 'validate', href: '../validate/' }]} />
+
+### ValidationMode
+
+Validation mode type that defines when and how form validation is triggered.
+
+#### Definition
+
+- `ValidationMode` <Property {...properties.ValidationMode} />
+
+#### Related
+
+##### Primitives
+
+<ApiList items={[{ text: 'createForm', href: '/solid/api/createForm/' }]} />
+
+##### Methods
+
+<ApiList items={[{ text: 'validate', href: '/methods/api/validate/' }]} />
