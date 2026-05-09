@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { EventCategory, EventStatus } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
+import { scheduleBatchArchival } from "@/resources/events/archival";
 
 const LIMIT = 12;
 
@@ -40,6 +41,8 @@ export async function GET(request: Request) {
   const hasMore = events.length > LIMIT;
   const items = hasMore ? events.slice(0, LIMIT) : events;
   const nextCursor = hasMore ? items.at(-1)?.id : undefined;
+
+  scheduleBatchArchival();
 
   return Response.json({ events: items, nextCursor, hasMore });
 }
