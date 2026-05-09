@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { formatEventDates } from "@/lib/event-utils";
 import { EventStatus } from "@/generated/prisma/client";
@@ -19,6 +20,8 @@ export function scheduleArchivalIfPassed(event: EventWithDates): void {
       where: { id: event.id },
       data: { passed: true, archivedDates, dates: { deleteMany: {} } },
     });
+    revalidatePath("/");
+    revalidatePath("/past-events");
   });
 }
 
@@ -36,7 +39,8 @@ export function scheduleBatchArchival(): void {
       include: { dates: { orderBy: { date: "asc" } } },
     });
 
-    for (const event of stale.filter((e) => e.dates.length > 0)) {
+    const toArchive = stale.filter((e) => e.dates.length > 0);
+    for (const event of toArchive) {
       await prisma.event.update({
         where: { id: event.id },
         data: {
@@ -45,6 +49,10 @@ export function scheduleBatchArchival(): void {
           dates: { deleteMany: {} },
         },
       });
+    }
+    if (toArchive.length > 0) {
+      revalidatePath("/");
+      revalidatePath("/past-events");
     }
   });
 }
