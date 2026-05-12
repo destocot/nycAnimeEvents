@@ -19,7 +19,7 @@ type PanelProps = {
 const FeaturedPanel = ({ event, active, onEnter, onLeave }: PanelProps) => (
   <Link
     href={`/events/${event.slug}`}
-    className="relative flex-1 h-full overflow-hidden"
+    className="relative h-44 sm:h-full overflow-hidden"
     style={{ transform: "skewX(-6deg)" }}
     onMouseEnter={onEnter}
     onMouseLeave={onLeave}
@@ -74,7 +74,7 @@ const FeaturedRow = ({ events }: RowProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <div className="flex gap-2 h-30 overflow-hidden">
+    <div className="grid grid-cols-1 sm:grid-cols-2 sm:h-30 gap-2 overflow-hidden">
       {events.map((event, i) => (
         <FeaturedPanel
           key={event.id}
@@ -96,7 +96,7 @@ export const FeaturedSection = ({ events }: Props) => {
   return (
     <section className="max-w-6xl mx-auto w-full px-4 pt-8 pb-2 overflow-hidden">
       <h2 className="text-lg font-semibold mb-4">Featured Events</h2>
-      <div className="space-y-3 -mx-8">
+      <div className="space-y-3 sm:-mx-8">
         <FeaturedRow events={events.slice(0, 2)} />
         {events.length >= 4 && <FeaturedRow events={events.slice(2, 4)} />}
       </div>

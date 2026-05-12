@@ -6,15 +6,19 @@ import { useTransitionRouter } from "next-view-transitions";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-const NavSearchBar = () => {
+export const NavSearchBar = () => {
   const router = useTransitionRouter();
   const searchParams = useSearchParams();
   const [value, setValue] = useState(() => searchParams.get("q") ?? "");
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (evt) => {
+    evt.preventDefault();
     const trimmed = value.trim();
-    router.push(trimmed.length >= 3 ? `/events?q=${encodeURIComponent(trimmed)}` : "/events");
+    router.push(
+      trimmed.length >= 3
+        ? `/events?q=${encodeURIComponent(trimmed)}`
+        : "/events",
+    );
   };
 
   return (
